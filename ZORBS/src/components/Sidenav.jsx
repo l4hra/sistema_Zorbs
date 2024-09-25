@@ -17,6 +17,7 @@ import DashboarIcon from "@mui/icons-material/DashboardRounded";
 import ComandaIcon from "@mui/icons-material/PointOfSaleRounded";
 import CashIcon from "@mui/icons-material/CurrencyExchangeRounded";
 import RelatorioIcon from "@mui/icons-material/AssessmentRounded";
+import ProductIcon from '@mui/icons-material/ProductionQuantityLimitsRounded';
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from '../appStore';
 
@@ -134,7 +135,7 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Dashboard")}}>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Dashboard")}}> 
             <ListItemButton
               sx={[
                 {
@@ -216,6 +217,53 @@ export default function Sidenav() {
               </ListItemIcon>
               <ListItemText
                 primary="Comandas"
+                sx={[
+                  open
+                    ? {
+                        opacity: 1,
+                      }
+                    : {
+                        opacity: 0,
+                      },
+                ]}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Produtos")}}>
+            <ListItemButton
+              sx={[
+                {
+                  minHeight: 48,
+                  px: 2.5,
+                },
+                open
+                  ? {
+                      justifyContent: "initial",
+                    }
+                  : {
+                      justifyContent: "center",
+                    },
+              ]}
+            >
+              <ListItemIcon
+                sx={[
+                  {
+                    minWidth: 0,
+                    justifyContent: "center",
+                  },
+                  open
+                    ? {
+                        mr: 3,
+                      }
+                    : {
+                        mr: "auto",
+                      },
+                ]}
+              >
+                <ProductIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Produtos"
                 sx={[
                   open
                     ? {

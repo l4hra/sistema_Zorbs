@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidenav from '../components/Sidenav';
-import Navbar from '../components/Navbar';
+import Sidenav from '../../components/Sidenav';
+import Navbar from '../../components/Navbar';
 import { Box } from '@mui/material';
 
 function Dashboard() {
