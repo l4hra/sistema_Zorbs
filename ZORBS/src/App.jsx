@@ -1,13 +1,18 @@
-import { useState } from 'react'
 import './App.css'
-import Sidenav from './components/Sidenav'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Dashboard from './pages/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <Sidenav />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' exact element={<Home />}></Route>
+          <Route path='/Dashboard' exact element={<Dashboard />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
