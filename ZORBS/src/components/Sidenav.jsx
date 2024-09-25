@@ -171,10 +171,7 @@ export default function Sidenav() {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
+              <ListItemButton sx={[{ minHeight: 48,
                     px: 2.5,
                   },
                   open
@@ -361,7 +358,7 @@ export default function Sidenav() {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-
+        
       </Box>
     </Box>
   );
