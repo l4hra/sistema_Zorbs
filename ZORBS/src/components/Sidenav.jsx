@@ -17,9 +17,15 @@ import DashboarIcon from "@mui/icons-material/DashboardRounded";
 import ComandaIcon from "@mui/icons-material/PointOfSaleRounded";
 import CashIcon from "@mui/icons-material/CurrencyExchangeRounded";
 import RelatorioIcon from "@mui/icons-material/AssessmentRounded";
-import ProductIcon from '@mui/icons-material/ProductionQuantityLimitsRounded';
+import ProductIcon from "@mui/icons-material/ProductionQuantityLimitsRounded";
 import { useNavigate } from "react-router-dom";
-import { useAppStore } from '../appStore';
+import { useAppStore } from "../appStore";
+import casinha from "../../public/assets/casinha.svg";
+import dashboard from "../../public/assets/dashboard.svg";
+import loja from "../../public/assets/loja.svg";
+import config from "../../public/assets/config.svg";
+import carrinho from "../../public/assets/carrinho.svg";
+import users from "../../public/assets/adicionar-usuario.svg";
 
 const drawerWidth = 240;
 
@@ -82,8 +88,8 @@ export default function Sidenav() {
   const theme = useTheme();
   //const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const  updateOpen = useAppStore((state)=> state.updateOpen)
-  const  open = useAppStore((state)=> state.dopen)
+  const updateOpen = useAppStore((state) => state.updateOpen);
+  const open = useAppStore((state) => state.dopen);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -103,8 +109,10 @@ export default function Sidenav() {
         <List>
           <ListItem
             disablePadding
-            sx={{ display: "block" }} 
-            onClick={()=>{navigate("/")}}
+            sx={{ display: "block" }}
+            onClick={() => {
+              navigate("/");
+            }}
           >
             <ListItemButton
               sx={[
@@ -127,7 +135,7 @@ export default function Sidenav() {
                   open ? { mr: 3 } : { mr: "auto" },
                 ]}
               >
-                <HomeIcon />
+                <img src={casinha} height={25} />
               </ListItemIcon>
               <ListItemText
                 primary="Home"
@@ -135,7 +143,13 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Dashboard")}}> 
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => {
+              navigate("/Dashboard");
+            }}
+          >
             <ListItemButton
               sx={[
                 {
@@ -166,7 +180,7 @@ export default function Sidenav() {
                       },
                 ]}
               >
-                <DashboarIcon />
+                <img src={dashboard} height={25} />
               </ListItemIcon>
               <ListItemText
                 primary="Dashboard"
@@ -182,7 +196,13 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => {
+              navigate("/NewCommands");
+            }}
+          >
             <ListItemButton
               sx={[
                 {
@@ -213,7 +233,7 @@ export default function Sidenav() {
                       },
                 ]}
               >
-                <ComandaIcon />
+                <img src={loja} height={25} />
               </ListItemIcon>
               <ListItemText
                 primary="Comandas"
@@ -229,7 +249,13 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Produtos")}}>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => {
+              navigate("/Produtos");
+            }}
+          >
             <ListItemButton
               sx={[
                 {
@@ -260,7 +286,7 @@ export default function Sidenav() {
                       },
                 ]}
               >
-                <ProductIcon />
+                <img src={carrinho} height={25} />
               </ListItemIcon>
               <ListItemText
                 primary="Produtos"
@@ -307,10 +333,10 @@ export default function Sidenav() {
                       },
                 ]}
               >
-                <CashIcon />
+                <img src={users} height={25} />
               </ListItemIcon>
               <ListItemText
-                primary="Cash"
+                primary="Usuários"
                 sx={[
                   open
                     ? {
@@ -354,10 +380,10 @@ export default function Sidenav() {
                       },
                 ]}
               >
-                <RelatorioIcon />
+                <img src={config} height={25} />
               </ListItemIcon>
               <ListItemText
-                primary="Relatórios"
+                primary="Configuração"
                 sx={[
                   open
                     ? {
