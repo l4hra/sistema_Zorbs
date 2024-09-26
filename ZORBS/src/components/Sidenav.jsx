@@ -86,7 +86,7 @@ export default function Sidenav() {
   const  open = useAppStore((state)=> state.dopen)
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex"}}>
       <CssBaseline />
       <Box height={30} />
       <Drawer variant="permanent" open={open}>
@@ -101,11 +101,7 @@ export default function Sidenav() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }} 
-            onClick={()=>{navigate("/")}}
-          >
+          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/")}}>
             <ListItemButton
               sx={[
                 {
