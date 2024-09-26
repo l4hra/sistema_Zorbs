@@ -82,11 +82,11 @@ export default function Sidenav() {
   const theme = useTheme();
   //const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const  updateOpen = useAppStore((state)=> state.updateOpen)
-  const  open = useAppStore((state)=> state.dopen)
+  const updateOpen = useAppStore((state) => state.updateOpen)
+  const open = useAppStore((state) => state.dopen)
 
   return (
-    <Box sx={{ display: "flex"}}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <Box height={30} />
       <Drawer variant="permanent" open={open}>
@@ -100,8 +100,8 @@ export default function Sidenav() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/")}}>
+        <List sx={{ background: "#9FD6D2", height: 100 + 'vh', color: "#fff" }}>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/") }}>
             <ListItemButton
               sx={[
                 {
@@ -110,11 +110,11 @@ export default function Sidenav() {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -123,7 +123,7 @@ export default function Sidenav() {
                   open ? { mr: 3 } : { mr: "auto" },
                 ]}
               >
-                <HomeIcon />
+                <HomeIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText
                 primary="Home"
@@ -131,7 +131,7 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Dashboard")}}> 
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/Dashboard") }}>
             <ListItemButton
               sx={[
                 {
@@ -140,11 +140,11 @@ export default function Sidenav() {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -155,25 +155,25 @@ export default function Sidenav() {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
-                <DashboarIcon />
+                <DashboarIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText
                 primary="Dashboard"
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
@@ -187,11 +187,11 @@ export default function Sidenav() {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -202,30 +202,30 @@ export default function Sidenav() {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
-                <ComandaIcon />
+                <ComandaIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText
                 primary="Comandas"
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Produtos")}}>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/Produtos") }}>
             <ListItemButton
               sx={[
                 {
@@ -234,11 +234,11 @@ export default function Sidenav() {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -249,25 +249,25 @@ export default function Sidenav() {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
-                <ProductIcon />
+                <ProductIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText
                 primary="Produtos"
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
@@ -281,11 +281,11 @@ export default function Sidenav() {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -296,25 +296,25 @@ export default function Sidenav() {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
-                <CashIcon />
+                <CashIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText
                 primary="Cash"
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
@@ -328,11 +328,11 @@ export default function Sidenav() {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -343,25 +343,25 @@ export default function Sidenav() {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
-                <RelatorioIcon />
+                <RelatorioIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText
                 primary="Relatórios"
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
