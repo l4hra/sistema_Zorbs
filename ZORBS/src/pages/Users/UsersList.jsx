@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import {Box, Button, Divider, TextField, Typography } from '@mui/material';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -58,8 +59,9 @@ const rows = [
 ];
 
 export default function UsersList() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm]= useState('');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -72,6 +74,26 @@ export default function UsersList() {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <Typography
+        gutterBottom
+        variant='h5'
+        component="div"
+        sx= {{padding: "10px", fontWeight:"bold", fontSize: "30px"}} >
+        Usuários Cadastrados  
+      </Typography>
+      <Divider/>
+      <Box sx={{display: "flex", justifyContent: "space-between", padding: 2}}>
+        <TextField
+            variant='outlined'
+            label="Pesquisar produtos"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{width: "300px"}}
+          />
+        <Button variant="contained" sx={{background: "#9FD6D2"}}>
+          + Novo Produto
+        </Button>
+      </Box>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
