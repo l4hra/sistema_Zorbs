@@ -100,7 +100,7 @@ export default function Sidenav() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{ background: "#9FD6D2", height: 100 + 'vh', color: "#fff" }}>
+        <List sx={{ background: "#00617a", height: 100 + 'vh', color: "#fff" }}>
           <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/") }}>
             <ListItemButton
               sx={[
