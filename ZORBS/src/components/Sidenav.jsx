@@ -12,12 +12,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import HomeIcon from "@mui/icons-material/HomeRounded";
-import DashboarIcon from "@mui/icons-material/DashboardRounded";
-import ComandaIcon from "@mui/icons-material/PointOfSaleRounded";
-import CashIcon from "@mui/icons-material/CurrencyExchangeRounded";
-import RelatorioIcon from "@mui/icons-material/AssessmentRounded";
-import ProductIcon from "@mui/icons-material/ProductionQuantityLimitsRounded";
+
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../appStore";
 import casinha from "../../public/assets/casinha.svg";
