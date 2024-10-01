@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+
 const rows = [
 
 ];
@@ -93,34 +94,34 @@ export default function ProductsList() {
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow >
                             <TableCell
                                 align="left"
-                                style={{ minWidth: "100px" }}
+                                style={{ minWidth: "100px", backgroundColor: "#136b69", color: "#fff", fontWeight: "bold", fontSize: "18px" }}
                             >
                                 Nome
                             </TableCell>
                             <TableCell
                                 align="center"
-                                style={{ minWidth: "100px" }}
+                                style={{ minWidth: "100px", backgroundColor: "#136b69", color: "#fff", fontWeight: "bold", fontSize: "18px" }}
                             >
                                 Tipo
                             </TableCell>
                             <TableCell
                                 align="center"
-                                style={{ minWidth: "100px" }}
+                                style={{ minWidth: "100px", backgroundColor: "#136b69", color: "#fff", fontWeight: "bold", fontSize: "18px" }}
                             >
                                 Preço de Custo
                             </TableCell>
                             <TableCell
                                 align="center"
-                                style={{ minWidth: "100px" }}
+                                style={{ minWidth: "100px", backgroundColor: "#136b69", color: "#fff", fontWeight: "bold", fontSize: "18px" }}
                             >
                                 Preço de Venda
                             </TableCell>
                             <TableCell
                                 align="center"
-                                style={{ minWidth: "100px" }}
+                                style={{ minWidth: "100px", backgroundColor: "#136b69", color: "#fff", fontWeight: "bold", fontSize: "18px" }}
                             >
                                 Opções
                             </TableCell>
