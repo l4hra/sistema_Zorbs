@@ -1,5 +1,5 @@
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { Draggable } from "@hello-pangea/dnd";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 export default function Command({ task, index }) {
   return (
@@ -15,18 +15,34 @@ export default function Command({ task, index }) {
           >
             <div
               style={{
-                display: "flex",
-                justifyContent: "start",
-                padding: 2,
-                backgroundColor: "#D9D9D9",
+                padding: "0.8rem",
+                backgroundColor: "#eeebeb",
                 borderRadius: "5px",
                 marginBottom: "6px",
               }}
             >
-              <span>
-                <small>#{task.id}</small>
+              <span
+                style={{
+                  display: "flex",
+
+                  justifyContent: "space-between",
+                }}
+              >
+                <h3>#{task.id}</h3>
+
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontFamily: "Electrolize",
+                    display: "flex",
+                    gap: "5px",
+                  }}
+                >
+                  18:00
+                  <AccessTimeIcon style={{ width: "1rem" }} />
+                </div>
               </span>
-              <h3>{task.title}</h3>
+              <p>{task.title}</p>
             </div>
             {provided.placeholder}
           </div>

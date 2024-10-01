@@ -12,7 +12,7 @@ export default function NewCommands() {
       <Box height={30} />
       <Box sx={{ display: "flex" }}>
         <Sidenav />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 3, overflowX: "hidden" }}>
           <h1>Comandas</h1>
           <CommandModal />
           <Kanban />

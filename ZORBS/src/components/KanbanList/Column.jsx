@@ -1,7 +1,7 @@
 import { Droppable } from "@hello-pangea/dnd";
 import Command from "../KanbanList/Command";
 
-export default function Columns({ title, tasks, id, color }) {
+export default function Columns({ title, tasks, id, color, hours }) {
   return (
     <>
       <div
