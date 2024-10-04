@@ -297,7 +297,13 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }} onClick={()=>{navigate("/Usuarios")}}>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => {
+              navigate("/Usuarios");
+            }}
+          >
             <ListItemButton
               sx={[
                 {
@@ -391,7 +397,7 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          {/* <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={[
                 {
@@ -437,7 +443,7 @@ export default function Sidenav() {
                 ]}
               />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
         </List>
       </Drawer>
     </Box>
