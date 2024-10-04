@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Sidenav from "../../components/Sidenav";
 import Navbar from "../../components/Navbar";
 import Kanban from "../../components/KanbanList/KanbanBoard";
-import CommandModal from "../../components/CommandModal";
+import CommandModal from "../../components/CreateCommand/CommandModal";
 
 export default function NewCommands() {
   return (

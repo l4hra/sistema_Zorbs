@@ -49,7 +49,7 @@ export default function TableComponent() {
               <Typography
                 variant="h6"
                 component="div"
-                style={{ padding: "10px", color: "#fff", fontWeight: "bold" }}
+                style={{ color: "#fff", fontWeight: "bold" }}
               >
                 Items
               </Typography>

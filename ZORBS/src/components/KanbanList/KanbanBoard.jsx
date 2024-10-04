@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { DragDropContext } from "@hello-pangea/dnd";
 import Columns from "../KanbanList/Column";
+import AlarmIcon from "@mui/icons-material/Alarm";
+import ClearIcon from "@mui/icons-material/Clear";
+import CheckIcon from "@mui/icons-material/Check";
 
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);
@@ -8,12 +11,59 @@ export default function Kanban() {
   const [backlog, setBacklog] = useState([]);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/todos")
-      .then((response) => response.json())
-      .then((json) => {
-        setCompleted(json.filter((task) => task.completed));
-        setIncomplete(json.filter((task) => !task.completed));
-      });
+    const sorvetes = [
+      {
+        id: 1,
+        title: "Pedido 1",
+        hora: "14:00",
+        produtos: ["Casquinha", "Sundae", "Milkshake"],
+        totalPrice: "15,99",
+        completed: true,
+      },
+      {
+        id: 2,
+        title: "Pedido 2",
+        hora: "14:30",
+        produtos: ["Casquinha", "Açaí", "Milkshake"],
+        totalPrice: "30,00",
+        completed: false,
+      },
+      {
+        id: 3,
+        title: "Pedido 3",
+        hora: "15:00",
+        produtos: ["Sorvete de Copo", "Sundae", "Sorvete de Palito"],
+        totalPrice: "58,99",
+        completed: true,
+      },
+      {
+        id: 4,
+        title: "Pedido 4",
+        hora: "15:30",
+        produtos: ["Casquinha", "Sorvete de Palito", "Milkshake"],
+        totalPrice: "32,60",
+        completed: false,
+      },
+      {
+        id: 5,
+        title: "Pedido 5",
+        hora: "16:00",
+        produtos: ["Sorvete de Copo", "Açaí", "Sundae"],
+        totalPrice: "10,15",
+        completed: true,
+      },
+      {
+        id: 6,
+        title: "Pedido 6",
+        hora: "16:30",
+        produtos: ["Casquinha", "Açaí", "Sorvete de Palito"],
+        totalPrice: "47,50",
+        completed: false,
+      },
+    ];
+
+    setCompleted(sorvetes.filter((pedido) => pedido.completed));
+    setIncomplete(sorvetes.filter((pedido) => !pedido.completed));
   }, []);
 
   const handleDragEnd = (result) => {
@@ -89,22 +139,25 @@ export default function Kanban() {
           }}
         >
           <Columns
-            title={"EM ESPERA"}
+            title={"PENDENTE"}
             tasks={incomplete}
             id={"1"}
-            color={"#BA1D1D"}
-          />
-          <Columns
-            title={"PENDENTE"}
-            tasks={completed}
-            id={"2"}
             color={"#f0ca00"}
+            icon={<AlarmIcon />}
           />
           <Columns
             title={"FINALIZADO"}
+            tasks={completed}
+            id={"2"}
+            color={"#08dd00"}
+            icon={<CheckIcon />}
+          />
+          <Columns
+            title={"CANCELADO"}
             tasks={backlog}
             id={"3"}
-            color={"#08dd00"}
+            color={"#BA1D1D"}
+            icon={<ClearIcon />}
           />
         </div>
       </DragDropContext>

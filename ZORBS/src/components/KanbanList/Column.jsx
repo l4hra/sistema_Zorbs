@@ -1,7 +1,7 @@
 import { Droppable } from "@hello-pangea/dnd";
 import Command from "../KanbanList/Command";
 
-export default function Columns({ title, tasks, id, color, hours }) {
+export default function Columns({ title, tasks, id, color, hours, icon }) {
   return (
     <>
       <div
@@ -20,14 +20,20 @@ export default function Columns({ title, tasks, id, color, hours }) {
         <h3
           className="title"
           style={{
-            padding: "8px",
+            padding: "15px",
             textAlign: "center",
+            margin: "0",
+            marginBottom: "7px",
             backgroundColor: `${color}`,
             color: "#fff",
             borderRadius: "5px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "15px",
           }}
         >
-          {title}
+          {title} {icon}
         </h3>
 
         <Droppable droppableId={id}>
