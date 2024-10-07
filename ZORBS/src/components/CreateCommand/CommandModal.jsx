@@ -4,20 +4,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
-import { InputAdornment, TextField } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
+import { TextField } from "@mui/material";
 import TableComponent from "./TableCommand";
-import CreateIcon from "@mui/icons-material/Create";
 import IceCreamModal from "./IceCreamModal";
 import AcaiModal from "./AcaiModal";
 
 export default function CommandModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
+  const [iceCreams, setIceCreams] = useState([]);
+  
+  const handleClose = () => {
+    setOpen(false);
+    setIceCreams([]);
+  }
   const listItems = [
     { id: 1, title: "Coca-cola" },
     { id: 2, title: "Água com gás" },
@@ -29,6 +29,13 @@ export default function CommandModal() {
     { id: 2, title: "Doces" },
     { id: 3, title: "Bala" },
   ];
+
+  const handleIceCreamDataChange = (data) => {
+    setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
+    console.log('sorvetes', iceCreams)
+   
+  };
+
   return (
     <div
       style={{ display: "flex", flexDirection: "row-reverse", margin: "2rem" }}
@@ -99,14 +106,19 @@ export default function CommandModal() {
               className="sorvete"
               style={{ display: "flex", gap: "5px", alignItems: "center" }}
             >
-              <TextField
+               <Autocomplete
                 sx={{ width: "90%" }}
-                id="outlined-basic"
-                label="Sorvete self-service"
-                variant="outlined"
+                multiple
+                id="tags-outlined"
+                getOptionLabel={(option) => option.name}
+                options={iceCreams}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField {...params} label="Sorvetes" placeholder="Sorvetes" />
+                )}
               />
 
-              <IceCreamModal />
+              <IceCreamModal onDataChange={handleIceCreamDataChange}/>
             </div>
 
             <div

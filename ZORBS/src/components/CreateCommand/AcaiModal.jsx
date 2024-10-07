@@ -10,12 +10,28 @@ import CreateIcon from "@mui/icons-material/Create";
 
 export default function AcaiModal() {
   const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState('Açaí#1');
   const handleOpenChild = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleBlur = () => {
+    setIsEditing(false);
+  };
+
 
   return (
     <>
@@ -46,13 +62,22 @@ export default function AcaiModal() {
             p: 3,
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2 style={{ margin: 0 }}>Açaí#1</h2>
-
-            <IconButton>
-              <CreateIcon />
-            </IconButton>
-          </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          {isEditing ? (
+            <TextField
+            id="standard-basic"  variant="standard" 
+              value={name}
+              onChange={handleNameChange}
+              onBlur={handleBlur}
+              autoFocus
+            />
+          ) : (
+            <h2 style={{ margin: 0 }}>{name}</h2>
+          )}
+          <IconButton onClick={handleEditClick}>
+            <CreateIcon />
+          </IconButton>
+        </div>
           <div>
             <div
               className="acai"

@@ -3,8 +3,8 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Button, IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
+
 function NotaFiscalButton() {
-  // Função para gerar o conteúdo da nota fiscal
   const gerarConteudoNotaFiscal = () => {
     const notaFiscal = `
       Sorveteria Zorbs
@@ -23,7 +23,6 @@ function NotaFiscalButton() {
     return notaFiscal;
   };
 
-  // Função para gerar e baixar o arquivo .txt
   const gerarTxtNotaFiscal = () => {
     const conteudo = gerarConteudoNotaFiscal();
     const blob = new Blob([conteudo], { type: "text/plain" });
@@ -35,19 +34,26 @@ function NotaFiscalButton() {
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+     
         <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
           <DownloadIcon />
         </IconButton>
 
-        <IconButton variant="contained">
-          <EditIcon />
-        </IconButton>
-      </div>
+     
     </>
   );
 }
 
+
+function EditCommand(){
+  return(
+    <>
+    <IconButton variant="contained">
+    <EditIcon />
+  </IconButton>
+    </>
+  )
+}
 export default function Command({ task, index }) {
   return (
     <>
@@ -98,7 +104,11 @@ export default function Command({ task, index }) {
                 <p>{task.produtos.join(",")}</p>
                 <h4>Total: R${task.totalPrice}</h4>
               </div>
+               
+              <div style={{ display: "flex", flexDirection: "row-reverse" }}>
               <NotaFiscalButton />
+              <EditCommand />
+              </div>
             </div>
             {provided.placeholder}
           </div>
