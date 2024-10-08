@@ -79,7 +79,7 @@ const Drawer = styled(MuiDrawer, {
   ],
 }));
 
-export default function Sidenav() {
+export default function Sidenav({ color }) {
   const theme = useTheme();
   //const [open, setOpen] = useState(true);
   const navigate = useNavigate();
@@ -344,7 +344,13 @@ export default function Sidenav() {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => {
+              navigate("/Config");
+            }}
+          >
             <ListItemButton
               sx={[
                 {

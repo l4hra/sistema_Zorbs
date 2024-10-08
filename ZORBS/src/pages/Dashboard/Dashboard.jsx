@@ -6,11 +6,23 @@ import CommandCard from "../../components/Reports/CommandCard";
 import Autocomplete from "@mui/joy/Autocomplete";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
+import TableDashboard from "../../components/Dashboard/TableDashboard";
+import LineChart from "../../components/Dashboard/LinesChart";
 
 export default function Dashboard({ title, color }) {
   const opt = [
-    { id: 1, label: "Setembro" },
-    { id: 2, label: "Agosto" },
+    { id: 1, label: "Janeiro" },
+    { id: 2, label: "Fevereiro" },
+    { id: 3, label: "Março" },
+    { id: 4, label: "Abril" },
+    { id: 5, label: "Maio" },
+    { id: 6, label: "Junho" },
+    { id: 7, label: "Julho" },
+    { id: 8, label: "Agosto" },
+    { id: 9, label: "Setembro" },
+    { id: 10, label: "Outubro" },
+    { id: 11, label: "Novembro" },
+    { id: 12, label: "Dezembro" },
   ];
   return (
     <>
@@ -45,6 +57,19 @@ export default function Dashboard({ title, color }) {
               subColor={"#C64444"}
               qtdPedidos={"6 pedidos"}
             />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "5rem",
+              flexDirection: "column",
+            }}
+          >
+            {/* <LineChart /> */}
+
+            <TableDashboard />
           </div>
         </Box>
       </Box>
