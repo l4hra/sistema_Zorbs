@@ -13,11 +13,13 @@ export default function CommandModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const [iceCreams, setIceCreams] = useState([]);
-  
+  const [acai, setAcai] = useState([]);
+
   const handleClose = () => {
     setOpen(false);
     setIceCreams([]);
-  }
+    setAcai([]);
+  };
   const listItems = [
     { id: 1, title: "Coca-cola" },
     { id: 2, title: "Água com gás" },
@@ -32,20 +34,38 @@ export default function CommandModal() {
 
   const handleIceCreamDataChange = (data) => {
     setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
-    console.log('sorvetes', iceCreams)
-   
+    // console.log("sorvetes", iceCreams);
+  };
+
+  const handleAcaiDataChange = (data) => {
+    setAcai((prevAcai) => [...prevAcai, data]);
   };
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "row-reverse", margin: "2rem" }}
-    >
-      <Button
-        onClick={handleOpen}
-        sx={{ backgroundColor: "#9FD6D2", color: "#fff", width: "10%" }}
+    <>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row-reverse",
+          margin: "2rem",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+        }}
       >
-        + Nova comanda
-      </Button>
+        <Button
+          onClick={handleOpen}
+          sx={{
+            backgroundColor: "#9FD6D2",
+            color: "#fff",
+            width: "10%",
+            padding: "10px",
+          }}
+        >
+          + Nova comanda
+        </Button>
+
+        <h2>Comandas</h2>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -106,33 +126,44 @@ export default function CommandModal() {
               className="sorvete"
               style={{ display: "flex", gap: "5px", alignItems: "center" }}
             >
-               <Autocomplete
+              <Autocomplete
                 sx={{ width: "90%" }}
                 multiple
                 id="tags-outlined"
                 getOptionLabel={(option) => option.name}
                 options={iceCreams}
                 filterSelectedOptions
+                noOptionsText="Nenhum sorvete"
                 renderInput={(params) => (
-                  <TextField {...params} label="Sorvetes" placeholder="Sorvetes" />
+                  <TextField
+                    {...params}
+                    label="Sorvetes"
+                    placeholder="Sorvetes"
+                  />
                 )}
               />
 
-              <IceCreamModal onDataChange={handleIceCreamDataChange}/>
+              <IceCreamModal onDataChange={handleIceCreamDataChange} />
             </div>
 
             <div
               className="acai"
               style={{ display: "flex", gap: "5px", alignItems: "center" }}
             >
-              <TextField
+              <Autocomplete
                 sx={{ width: "90%" }}
-                id="outlined-basic"
-                label="Açaí"
-                variant="outlined"
+                multiple
+                id="tags-outlined"
+                getOptionLabel={(option) => option.name}
+                options={acai}
+                filterSelectedOptions
+                noOptionsText="Nenhum açaí"
+                renderInput={(params) => (
+                  <TextField {...params} label="Açaí" placeholder="Açaí" />
+                )}
               />
 
-              <AcaiModal />
+              <AcaiModal onDataChange={handleAcaiDataChange} />
             </div>
           </div>
 
@@ -170,6 +201,6 @@ export default function CommandModal() {
           </div>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }

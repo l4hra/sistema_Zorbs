@@ -31,8 +31,18 @@ export default function Dashboard({ title, color }) {
       <Box sx={{ display: "flex" }}>
         <Sidenav />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <h1>Dashboard</h1>
-          <Autocomplete placeholder="Mês" options={opt} sx={{ width: 300 }} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              margin: "2rem",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
+          >
+            <h2>Dashboard</h2>
+            <Autocomplete placeholder="Mês" options={opt} sx={{ width: 300 }} />
+          </div>
           <div
             style={{
               display: "flex",

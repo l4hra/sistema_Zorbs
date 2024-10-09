@@ -8,10 +8,22 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 
-export default function AcaiModal() {
+import Avatar from "@mui/joy/Avatar";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Radio from "@mui/joy/Radio";
+import RadioGroup from "@mui/joy/RadioGroup";
+import Sheet from "@mui/joy/Sheet";
+import Typography from "@mui/joy/Typography";
+
+export default function AcaiModal({ onDataChange }) {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('Açaí#1');
+  const [name, setName] = useState("Açaí#1");
+  const [weight, setWeight] = useState("");
+  const [price, setPrice] = useState("");
+  const [observation, setObservation] = useState("");
+
   const handleOpenChild = () => {
     setOpen(true);
   };
@@ -19,19 +31,33 @@ export default function AcaiModal() {
     setOpen(false);
   };
 
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  const handleEditClick = () => setIsEditing(true);
+  const handleBlur = () => setIsEditing(false);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
 
-  const handleBlur = () => {
-    setIsEditing(false);
+  const handleWeightChange = (event) => {
+    setWeight(event.target.value);
   };
 
+  const handlePriceChange = (event) => {
+    setPrice(event.target.value);
+  };
+
+  const handleObservationChange = (event) => {
+    setObservation(event.target.value);
+  };
+
+  const handleCreateClick = () => {
+    onDataChange({ name, weight, price, observation });
+    handleClose(true);
+    setObservation("");
+    setPrice("");
+    setName("Sorvete#1");
+    setWeight("");
+  };
 
   return (
     <>
@@ -55,29 +81,30 @@ export default function AcaiModal() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "300px",
-            height: "400px",
+            height: "auto",
             bgcolor: "background.paper",
             boxShadow: 20,
             borderRadius: "5px",
             p: 3,
           }}
         >
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {isEditing ? (
-            <TextField
-            id="standard-basic"  variant="standard" 
-              value={name}
-              onChange={handleNameChange}
-              onBlur={handleBlur}
-              autoFocus
-            />
-          ) : (
-            <h2 style={{ margin: 0 }}>{name}</h2>
-          )}
-          <IconButton onClick={handleEditClick}>
-            <CreateIcon />
-          </IconButton>
-        </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            {isEditing ? (
+              <TextField
+                id="standard-basic"
+                variant="standard"
+                value={name}
+                onChange={handleNameChange}
+                onBlur={handleBlur}
+                autoFocus
+              />
+            ) : (
+              <h2 style={{ margin: 0 }}>{name}</h2>
+            )}
+            <IconButton onClick={handleEditClick}>
+              <CreateIcon />
+            </IconButton>
+          </div>
           <div>
             <div
               className="acai"
@@ -89,25 +116,45 @@ export default function AcaiModal() {
                 marginTop: "15px",
               }}
             >
-              <TextField
-                label="Peso do sorvete"
-                id="outlined-start-adornment"
-                sx={{ width: "90%" }}
-                placeholder="00.000"
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">kg</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-
-              <IconButton
-                style={{ backgroundColor: "#9FD6D2", borderRadius: "5px" }}
-              >
-                <SearchIcon />
-              </IconButton>
+              <FormControl>
+                <FormLabel>Tamanho:</FormLabel>
+                <RadioGroup
+                  overlay
+                  name="member"
+                  defaultValue="person1"
+                  orientation="horizontal"
+                  sx={{ gap: 2 }}
+                >
+                  {[1, 2, 3].map((num) => (
+                    <Sheet
+                      component="label"
+                      key={num}
+                      variant="outlined"
+                      sx={{
+                        p: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        boxShadow: "sm",
+                        borderRadius: "md",
+                      }}
+                    >
+                      <Radio
+                        value={`person${num}`}
+                        variant="soft"
+                        sx={{ mb: 2 }}
+                      />
+                      <Avatar
+                        alt={`person${num}`}
+                        src={`/static/images/avatar/${num}.jpg`}
+                      />
+                      <Typography level="body-sm" sx={{ mt: 1 }}>
+                        Person {num}
+                      </Typography>
+                    </Sheet>
+                  ))}
+                </RadioGroup>
+              </FormControl>
             </div>
 
             <div
@@ -122,6 +169,10 @@ export default function AcaiModal() {
               <TextField
                 label="Preço do sorvete"
                 id="outlined-start-adornment"
+                value={price}
+                maxRows={1}
+                minRows={1}
+                onChange={handlePriceChange}
                 placeholder="00,00"
                 sx={{ width: "90%" }}
                 slotProps={{
@@ -144,6 +195,8 @@ export default function AcaiModal() {
               sx={{ width: "100%" }}
               id="outlined-multiline-flexible"
               label="Obs"
+              value={observation}
+              onChange={handleObservationChange}
               multiline
               rows={3}
               maxRows={3}
@@ -159,7 +212,10 @@ export default function AcaiModal() {
               marginTop: "1rem",
             }}
           >
-            <Button style={{ backgroundColor: "#F9A7AB", color: "#fff" }}>
+            <Button
+              style={{ backgroundColor: "#F9A7AB", color: "#fff" }}
+              onClick={handleCreateClick}
+            >
               Criar
             </Button>
 

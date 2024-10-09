@@ -14,7 +14,7 @@ export default function Config({ color }) {
       <Box sx={{ display: "flex" }}>
         <Sidenav color={hex} />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <h1>Configuração</h1>
+          <h2>Configuração</h2>
           <Sketch
             style={{ marginLeft: 20 }}
             color={hex}
