@@ -4,11 +4,17 @@ import Columns from "../KanbanList/Column";
 import AlarmIcon from "@mui/icons-material/Alarm";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
+import ModalPagamento from "./CommandPaga";
 
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
   const [backlog, setBacklog] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
     const sorvetes = [
@@ -75,6 +81,9 @@ export default function Kanban() {
       source.droppableId === destination.droppableId
     )
       return;
+    if (destination.droppableId === "2") {
+      setOpenDialog(true);
+    }
 
     deletePreviousState(source.droppableId, draggableId);
 
@@ -160,6 +169,7 @@ export default function Kanban() {
             icon={<ClearIcon />}
           />
         </div>
+        <ModalPagamento open={openDialog} handleClose={handleClose} />
       </DragDropContext>
     </>
   );

@@ -7,7 +7,6 @@ import Autocomplete from "@mui/joy/Autocomplete";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import TableDashboard from "../../components/Dashboard/TableDashboard";
-import LineChart from "../../components/Dashboard/LinesChart";
 
 export default function Dashboard({ title, color }) {
   const opt = [
