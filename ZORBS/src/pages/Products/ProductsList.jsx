@@ -293,7 +293,7 @@ export default function ProductsList() {
                             color: "#578eda",
                             cursor: "pointer",
                           }}
-                          onClick={() => handleEditOpen(row)} // Chamando a função para abrir o modal de edição
+                          onClick={() => handleEditOpen(row)} 
                         />
                         <DeleteIcon
                           style={{
@@ -301,7 +301,7 @@ export default function ProductsList() {
                             color: "#f8615b",
                             cursor: "pointer",
                           }}
-                          onClick={() => deleteProduct(row.id)} // Chamando a função para deletar um produto
+                          onClick={() => deleteProduct(row.id)} 
                         />
                       </Stack>
                     </TableCell>

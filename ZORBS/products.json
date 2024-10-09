@@ -9,6 +9,56 @@
       "preco_venda": 5.2,
       "observacao": "obs",
       "id": "5492"
+    },
+    {
+      "id": "8ee8",
+      "name": "Guarana 1L",
+      "type": "Refrigerante",
+      "category": "Bebida",
+      "unidade_medida": "Unidade",
+      "preco_custo": 6,
+      "preco_venda": 12,
+      "observacao": ""
+    },
+    {
+      "id": "4c4d",
+      "name": "Fandangos",
+      "type": "Chipes",
+      "category": "Comida",
+      "unidade_medida": "Unidade",
+      "preco_custo": 0.5,
+      "preco_venda": 2,
+      "observacao": ""
+    },
+    {
+      "id": "b94a",
+      "name": "Picolé de Abacate",
+      "type": "Picolé Simples",
+      "category": "Picolé",
+      "unidade_medida": "Unidade",
+      "preco_custo": 1.5,
+      "preco_venda": 3,
+      "observacao": ""
+    },
+    {
+      "name": "Picolé de Ninho Nutelado",
+      "type": "Picolé Recheado",
+      "category": "Picolé",
+      "unidade_medida": "Unidade",
+      "preco_custo": 2.5,
+      "preco_venda": 5.5,
+      "observacao": "a",
+      "id": "fcd9"
+    },
+    {
+      "id": "ad00",
+      "name": "Açai 500ml",
+      "type": "Açai",
+      "category": "Açai",
+      "unidade_medida": "Unidade",
+      "preco_custo": 8,
+      "preco_venda": 12,
+      "observacao": ""
     }
   ]
 }
