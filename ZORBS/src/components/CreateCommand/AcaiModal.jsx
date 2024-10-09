@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { InputAdornment, TextField } from "@mui/material";
+import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 
-import Avatar from "@mui/joy/Avatar";
+import AcaiImg from "../../../public/assets/mirtilo.png";
+
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Radio from "@mui/joy/Radio";
@@ -59,6 +60,23 @@ export default function AcaiModal({ onDataChange }) {
     setWeight("");
   };
 
+  const frutas = [
+    { id: 1, title: "Manga" },
+    { id: 2, title: "Morango" },
+    { id: 3, title: "Banana" },
+  ];
+
+  const complementos = [
+    { id: 1, title: "Leite em pó" },
+    { id: 2, title: "Sucrilhos" },
+    { id: 3, title: "M&M" },
+  ];
+
+  const adicionais = [
+    { id: 1, title: "Nutella" },
+    { id: 2, title: "Mousse" },
+  ];
+
   return (
     <>
       <IconButton
@@ -80,12 +98,22 @@ export default function AcaiModal({ onDataChange }) {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "300px",
+            width: "auto",
             height: "auto",
             bgcolor: "background.paper",
+            maxHeight: "60vh",
+            overflowY: "auto",
+            outline: "none",
             boxShadow: 20,
             borderRadius: "5px",
             p: 3,
+            // Adicionando estilização para esconder o scrollbar
+            "&::-webkit-scrollbar": {
+              width: "0px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "transparent",
+            },
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -106,18 +134,18 @@ export default function AcaiModal({ onDataChange }) {
             </IconButton>
           </div>
           <div>
+            <FormLabel>Tamanho:</FormLabel>
             <div
               className="acai"
               style={{
                 display: "flex",
                 gap: "5px",
+                justifyContent: "center",
                 alignItems: "center",
                 marginBottom: "25px",
-                marginTop: "15px",
               }}
             >
               <FormControl>
-                <FormLabel>Tamanho:</FormLabel>
                 <RadioGroup
                   overlay
                   name="member"
@@ -125,7 +153,7 @@ export default function AcaiModal({ onDataChange }) {
                   orientation="horizontal"
                   sx={{ gap: 2 }}
                 >
-                  {[1, 2, 3].map((num) => (
+                  {[3, 5, 7, 1].map((num) => (
                     <Sheet
                       component="label"
                       key={num}
@@ -144,12 +172,12 @@ export default function AcaiModal({ onDataChange }) {
                         variant="soft"
                         sx={{ mb: 2 }}
                       />
-                      <Avatar
-                        alt={`person${num}`}
-                        src={`/static/images/avatar/${num}.jpg`}
-                      />
+
+                      <span>
+                        <img src={AcaiImg} width={40} />
+                      </span>
                       <Typography level="body-sm" sx={{ mt: 1 }}>
-                        Person {num}
+                        Açaí {num}00ml
                       </Typography>
                     </Sheet>
                   ))}
@@ -161,46 +189,49 @@ export default function AcaiModal({ onDataChange }) {
               className="acai"
               style={{
                 display: "flex",
-                gap: "5px",
+                flexDirection: "column",
+                gap: "25px",
                 alignItems: "center",
                 marginBottom: "20px",
               }}
             >
-              <TextField
-                label="Preço do sorvete"
-                id="outlined-start-adornment"
-                value={price}
-                maxRows={1}
-                minRows={1}
-                onChange={handlePriceChange}
-                placeholder="00,00"
-                sx={{ width: "90%" }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">R$</InputAdornment>
-                    ),
-                  },
-                }}
+              <Autocomplete
+                sx={{ width: "100%" }}
+                multiple
+                id="tags-outlined"
+                getOptionLabel={(option) => option.title}
+                options={frutas}
+                filterSelectedOptions
+                noOptionsText="Nenhuma fruta"
+                renderInput={(params) => (
+                  <TextField {...params} label="Frutas" placeholder="" />
+                )}
               />
-
-              <IconButton
-                style={{ backgroundColor: "#9FD6D2", borderRadius: "5px" }}
-              >
-                <SearchIcon />
-              </IconButton>
+              <Autocomplete
+                sx={{ width: "100%" }}
+                multiple
+                id="tags-outlined"
+                getOptionLabel={(option) => option.title}
+                options={complementos}
+                filterSelectedOptions
+                noOptionsText="Nenhuma fruta"
+                renderInput={(params) => (
+                  <TextField {...params} label="Complementos" />
+                )}
+              />
+              <Autocomplete
+                sx={{ width: "100%" }}
+                multiple
+                id="tags-outlined"
+                getOptionLabel={(option) => option.title}
+                options={adicionais}
+                filterSelectedOptions
+                noOptionsText="Nenhuma fruta"
+                renderInput={(params) => (
+                  <TextField {...params} label="Adicionais" />
+                )}
+              />
             </div>
-
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-multiline-flexible"
-              label="Obs"
-              value={observation}
-              onChange={handleObservationChange}
-              multiline
-              rows={3}
-              maxRows={3}
-            />
           </div>
 
           <div

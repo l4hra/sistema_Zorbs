@@ -3,6 +3,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Button, IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
+import EditCommand from "../EditCommand/EditCommand";
 
 function NotaFiscalButton() {
   const gerarConteudoNotaFiscal = () => {
@@ -34,26 +35,13 @@ function NotaFiscalButton() {
 
   return (
     <>
-     
-        <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
-          <DownloadIcon />
-        </IconButton>
-
-     
+      <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
+        <DownloadIcon />
+      </IconButton>
     </>
   );
 }
 
-
-function EditCommand(){
-  return(
-    <>
-    <IconButton variant="contained">
-    <EditIcon />
-  </IconButton>
-    </>
-  )
-}
 export default function Command({ task, index }) {
   return (
     <>
@@ -104,10 +92,10 @@ export default function Command({ task, index }) {
                 <p>{task.produtos.join(",")}</p>
                 <h4>Total: R${task.totalPrice}</h4>
               </div>
-               
+
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-              <NotaFiscalButton />
-              <EditCommand />
+                <NotaFiscalButton />
+                <EditCommand />
               </div>
             </div>
             {provided.placeholder}

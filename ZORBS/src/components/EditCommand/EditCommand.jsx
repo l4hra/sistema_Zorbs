@@ -4,12 +4,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
-import { TextField } from "@mui/material";
-import TableComponent from "./TableCommand";
-import IceCreamModal from "./IceCreamModal";
-import AcaiModal from "./AcaiModal";
+import { IconButton, TextField } from "@mui/material";
+import TableComponent from "../CreateCommand/TableCommand";
+import IceCreamModal from "../CreateCommand/IceCreamModal";
+import AcaiModal from "../CreateCommand/AcaiModal";
+import EditIcon from "@mui/icons-material/Edit";
 
-export default function CommandModal() {
+export default function EditCommand() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const [iceCreams, setIceCreams] = useState([]);
@@ -43,6 +44,9 @@ export default function CommandModal() {
 
   return (
     <>
+      <IconButton variant="contained" onClick={handleOpen}>
+        <EditIcon />
+      </IconButton>
       <div
         style={{
           display: "flex",
@@ -51,21 +55,7 @@ export default function CommandModal() {
           justifyContent: "space-between",
           alignItems: "baseline",
         }}
-      >
-        <Button
-          onClick={handleOpen}
-          sx={{
-            backgroundColor: "#9FD6D2",
-            color: "#fff",
-            width: "10%",
-            padding: "10px",
-          }}
-        >
-          + Nova comanda
-        </Button>
-
-        <h2>Comandas</h2>
-      </div>
+      ></div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -83,21 +73,10 @@ export default function CommandModal() {
             borderRadius: "5px",
             boxShadow: 20,
             p: 4,
-            overflowY: "auto",
-            outline: "none",
-            boxShadow: 20,
-            borderRadius: "5px",
-            p: 3,
-            "&::-webkit-scrollbar": {
-              width: "0px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "transparent",
-            },
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            Nova comanda
+            Editar comanda
           </Typography>
 
           <div

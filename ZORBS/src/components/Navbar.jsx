@@ -157,8 +157,8 @@ export default function Navbar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1}}>
-      <AppBar position="fixed" sx={{background: '#fff', color: 'black'}}>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="fixed" sx={{ background: "#fff", color: "black" }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -179,7 +179,7 @@ export default function Navbar() {
             ZORBS
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
