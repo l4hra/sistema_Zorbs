@@ -83,8 +83,8 @@ export default function Sidenav({ color }) {
   const theme = useTheme();
   //const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const updateOpen = useAppStore((state) => state.updateOpen);
-  const open = useAppStore((state) => state.dopen);
+  const updateOpen = useAppStore((state) => state.updateOpen)
+  const open = useAppStore((state) => state.dopen)
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -101,14 +101,8 @@ export default function Sidenav({ color }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/");
-            }}
-          >
+        <List sx={{ background: "#136b69", height: 100 + 'vh', color: "#fff" }}>
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/") }}>
             <ListItemButton
               sx={[
                 {
@@ -117,11 +111,11 @@ export default function Sidenav({ color }) {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -138,13 +132,7 @@ export default function Sidenav({ color }) {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Dashboard");
-            }}
-          >
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/Dashboard") }}>
             <ListItemButton
               sx={[
                 {
@@ -153,11 +141,11 @@ export default function Sidenav({ color }) {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -168,11 +156,11 @@ export default function Sidenav({ color }) {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
                 <img src={dashboard} height={25} />
@@ -182,11 +170,11 @@ export default function Sidenav({ color }) {
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
@@ -206,11 +194,11 @@ export default function Sidenav({ color }) {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -221,11 +209,11 @@ export default function Sidenav({ color }) {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
                 <img src={loja} height={25} />
@@ -235,22 +223,16 @@ export default function Sidenav({ color }) {
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
           </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Produtos");
-            }}
-          >
+          <ListItem disablePadding sx={{ display: "block" }} onClick={() => { navigate("/Produtos") }}>
             <ListItemButton
               sx={[
                 {
@@ -259,11 +241,11 @@ export default function Sidenav({ color }) {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -274,11 +256,11 @@ export default function Sidenav({ color }) {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
                 <img src={carrinho} height={25} />
@@ -288,11 +270,11 @@ export default function Sidenav({ color }) {
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
@@ -306,11 +288,11 @@ export default function Sidenav({ color }) {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -321,11 +303,11 @@ export default function Sidenav({ color }) {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
                 <img src={users} height={25} />
@@ -335,11 +317,11 @@ export default function Sidenav({ color }) {
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
@@ -359,11 +341,11 @@ export default function Sidenav({ color }) {
                 },
                 open
                   ? {
-                      justifyContent: "initial",
-                    }
+                    justifyContent: "initial",
+                  }
                   : {
-                      justifyContent: "center",
-                    },
+                    justifyContent: "center",
+                  },
               ]}
             >
               <ListItemIcon
@@ -374,11 +356,11 @@ export default function Sidenav({ color }) {
                   },
                   open
                     ? {
-                        mr: 3,
-                      }
+                      mr: 3,
+                    }
                     : {
-                        mr: "auto",
-                      },
+                      mr: "auto",
+                    },
                 ]}
               >
                 <img src={config} height={25} />
@@ -388,11 +370,11 @@ export default function Sidenav({ color }) {
                 sx={[
                   open
                     ? {
-                        opacity: 1,
-                      }
+                      opacity: 1,
+                    }
                     : {
-                        opacity: 0,
-                      },
+                      opacity: 0,
+                    },
                 ]}
               />
             </ListItemButton>
