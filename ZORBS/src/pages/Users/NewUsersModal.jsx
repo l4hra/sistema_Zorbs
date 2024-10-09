@@ -77,6 +77,7 @@ export default function NewUsersModal({ closeEvent }) {
             <CloseIcon />
           </IconButton>
         </Typography>
+        
         <div
           style={{
             display: "grid",
