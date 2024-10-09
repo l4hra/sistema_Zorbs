@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 
-export default function AddProducts({ closeEvent, refreshProducts }) {
+export default function EditProduct({ closeEvent, refreshProducts, product }) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
@@ -17,31 +17,22 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
   const [preco_venda, setPreco_venda] = useState(0);
   const [observacao, setObservacao] = useState("");
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-  const handleTypeChange = (event) => {
-    setType(event.target.value);
-  };
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-  };
-  const handleUnidade_medidaChange = (event) => {
-    setUnidade_medida(event.target.value);
-  };
-  const handlePreco_custoChange = (event) => {
-    setPreco_custo(event.target.value);
-  };
-  const handlePreco_vendaChange = (event) => {
-    setPreco_venda(event.target.value);
-  };
-  const handleObservacaoChange = (event) => {
-    setObservacao(event.target.value);
-  };
+  useEffect(() => {
+    if (product) {
+      // Preenche os campos se um produto for passado como prop
+      setName(product.name);
+      setType(product.type);
+      setCategory(product.category);
+      setUnidade_medida(product.unidade_medida);
+      setPreco_custo(product.preco_custo);
+      setPreco_venda(product.preco_venda);
+      setObservacao(product.observacao);
+    }
+  }, [product]);
 
-  const createProduct = async () => {
-    const response = await fetch('http://localhost:3000/products', { // Alterado para usar a URL correta do JSON Server
-      method: 'POST',
+  const updateProduct = async () => {
+    const response = await fetch(`http://localhost:3000/products/${product.id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -57,41 +48,26 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
     });
 
     if (response.ok) {
-      Swal.fire("Criado com sucesso!", "Seu produto foi adicionado.", "success");
+      Swal.fire("Atualizado com sucesso!", "Seu produto foi atualizado.", "success");
       refreshProducts(); // Atualiza a lista de produtos
       closeEvent();
     } else {
-      Swal.fire("Erro!", "Não foi possível adicionar o produto.", "error");
+      Swal.fire("Erro!", "Não foi possível atualizar o produto.", "error");
     }
   };
 
   const currencies = [
-    {
-      value: "Bebida",
-      label: "Bebida",
-    },
-    {
-      value: "Comida",
-      label: "Comida",
-    },
-    {
-      value: "Sorvetes",
-      label: "Sorvetes",
-    },
-    {
-      value: "Açai",
-      label: "Açai",
-    },
-    {
-      value: "Picolé",
-      label: "Picolé",
-    },
+    { value: "Bebida", label: "Bebida" },
+    { value: "Comida", label: "Comida" },
+    { value: "Sorvetes", label: "Sorvetes" },
+    { value: "Açai", label: "Açai" },
+    { value: "Picolé", label: "Picolé" },
   ];
 
   return (
     <Box sx={{ m: 2 }}>
       <Typography variant="h5" align="left" sx={{ paddingBottom: "px" }}>
-        Adicionar Produto
+        Editar Produto
       </Typography>
 
       <Box height={30} />
@@ -104,7 +80,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             variant="outlined"
             size="small"
             fullWidth
-            onChange={handleNameChange}
+            onChange={(e) => setName(e.target.value)}
             value={name}
           />
         </div>
@@ -116,7 +92,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             variant="outlined"
             size="small"
             fullWidth
-            onChange={handleTypeChange}
+            onChange={(e) => setType(e.target.value)}
             value={type}
           />
         </div>
@@ -129,7 +105,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             size="small"
             fullWidth
             select
-            onChange={handleCategoryChange}
+            onChange={(e) => setCategory(e.target.value)}
             value={category}
           >
             {currencies.map((option) => (
@@ -147,7 +123,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             variant="outlined"
             size="small"
             fullWidth
-            onChange={handleUnidade_medidaChange}
+            onChange={(e) => setUnidade_medida(e.target.value)}
             value={unidade_medida}
           />
         </div>
@@ -155,11 +131,12 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
         <div style={{ gridColumn: 'span 1' }}>
           <TextField
             required
-            label="Preço de Custo"
+            label="Preço de Custo (R$)"
             variant="outlined"
             size="small"
             fullWidth
-            onChange={handlePreco_custoChange}
+            type="number"
+            onChange={(e) => setPreco_custo(e.target.value)}
             value={preco_custo}
           />
         </div>
@@ -167,11 +144,12 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
         <div style={{ gridColumn: 'span 1' }}>
           <TextField
             required
-            label="Preço de Venda"
+            label="Preço de Venda (R$)"
             variant="outlined"
             size="small"
             fullWidth
-            onChange={handlePreco_vendaChange}
+            type="number"
+            onChange={(e) => setPreco_venda(e.target.value)}
             value={preco_venda}
           />
         </div>
@@ -185,7 +163,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             fullWidth
             multiline
             rows={3}
-            onChange={handleObservacaoChange}
+            onChange={(e) => setObservacao(e.target.value)}
             value={observacao}
           />
         </div>
@@ -194,7 +172,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px', gap: '50px' }}>
         <Button
           variant="contained"
-          onClick={createProduct}
+          onClick={updateProduct}
           sx={{
             backgroundColor: "#1976d2",
             "&:hover": {
@@ -202,7 +180,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             },
           }}
         >
-          Cadastrar
+          Atualizar
         </Button>
         <Button
           variant="contained"
