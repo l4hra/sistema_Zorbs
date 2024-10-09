@@ -12,8 +12,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { db } from "../../firebase-config";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
@@ -21,36 +19,45 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import AddProducts from "./AddProducts";
+import EditProduct from "./EditProduct"; 
 
-//Style do modal
+// Style do modal
 const styleModal = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "auto",
-  bgcolor: "background.paper",
-  boxShadow: 24,
+  bgcolor: "#ffffff", 
+  borderRadius: "12px", 
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)", 
   p: 4,
+  outline: "none", 
+  maxHeight: "90vh", 
+  overflowY: "auto", 
 };
 
 export default function ProductsList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para armazenar o termo de pesquisa
-  const empCollectionRef = collection(db, "products");
+  const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
+  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para o produto selecionado
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    getUsers();
+    getProducts();
   }, []);
 
-  const getUsers = async () => {
-    const data = await getDocs(empCollectionRef);
-    setRows(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  // Função para obter produtos do arquivo JSON
+  const getProducts = async () => {
+    const response = await fetch('http://localhost:3000/products'); // Altere o caminho conforme necessário
+    const data = await response.json();
+    setRows(data);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -62,10 +69,10 @@ export default function ProductsList() {
     setPage(0);
   };
 
-  const deleteUser = (id) => {
+  const deleteProduct = (id) => {
     Swal.fire({
       title: "Tem certeza?",
-      text: "Confirme para deletar produto!",
+      text: "Confirme para deletar o produto!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -79,10 +86,11 @@ export default function ProductsList() {
   };
 
   const deleteApi = async (id) => {
-    const userDoc = doc(db, "products", id);
-    await deleteDoc(userDoc);
+    await fetch(`http://localhost:3000/products/${id}`, {
+      method: 'DELETE'
+    });
     Swal.fire("Deletado com sucesso!", "Seu produto foi deletado.", "success");
-    getUsers();
+    getProducts();
   };
 
   // Função para formatar os preços como "R$"
@@ -98,20 +106,54 @@ export default function ProductsList() {
     row.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Funções para editar produtos
+  const handleEditOpen = (product) => {
+    setSelectedProduct(product);
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEditOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <>
       <div>
         <Modal
           open={open}
-          onClose={handleClose}
+          onClose={(event, reason) => {
+            if (reason !== "backdropClick") {
+              handleClose();
+            }
+          }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
           <Box sx={styleModal}>
-            <AddProducts closeEvent={handleClose} />
+            <AddProducts closeEvent={handleClose} refreshProducts={getProducts} />
+          </Box>
+        </Modal>
+        <Modal
+          open={editOpen}
+          onClose={(event, reason) => {
+            if (reason !== "backdropClick") {
+              handleEditClose();
+            }
+          }}
+          aria-labelledby="modal-edit-title"
+          aria-describedby="modal-edit-description"
+        >
+          <Box sx={styleModal}>
+            <EditProduct 
+              product={selectedProduct} 
+              closeEvent={handleEditClose} 
+              refreshProducts={getProducts} 
+            />
           </Box>
         </Modal>
       </div>
+
       <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
         <Typography
           gutterBottom
@@ -127,7 +169,6 @@ export default function ProductsList() {
         </Typography>
         <Box height={10} />
 
-        {/* Layout flex para o botão e o campo de pesquisa */}
         <Box
           sx={{
             display: "flex",
@@ -135,20 +176,18 @@ export default function ProductsList() {
             alignItems: "center",
             marginBottom: 2,
             paddingLeft: "16px",
-            paddingRight: "16px", // Espaçamento lateral
+            paddingRight: "16px",
           }}
         >
-          {/* Campo de pesquisa */}
           <TextField
             label="Pesquisar Produtos"
             variant="outlined"
             size="small"
-            value={searchTerm} // Conectado ao estado de pesquisa
-            onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o estado ao digitar
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 300 }}
           />
 
-          {/* Botão de Cadastrar Produtos */}
           <Button
             variant="contained"
             endIcon={<AddCircleIcon />}
@@ -166,7 +205,6 @@ export default function ProductsList() {
         <Box height={10} />
         <Divider />
 
-        {/* Tabela de Produtos */}
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -240,13 +278,8 @@ export default function ProductsList() {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     <TableCell align="left">{row.name}</TableCell>
                     <TableCell align="center">{row.type}</TableCell>
-                    {/* Formatação dos preços */}
-                    <TableCell align="center">
-                      {formatPrice(row.preco_custo)}
-                    </TableCell>
-                    <TableCell align="center">
-                      {formatPrice(row.preco_venda)}
-                    </TableCell>
+                    <TableCell align="center">{formatPrice(row.preco_custo)}</TableCell>
+                    <TableCell align="center">{formatPrice(row.preco_venda)}</TableCell>
                     <TableCell align="center">
                       <Stack
                         spacing={2}
@@ -260,6 +293,7 @@ export default function ProductsList() {
                             color: "#578eda",
                             cursor: "pointer",
                           }}
+                          onClick={() => handleEditOpen(row)} // Chamando a função para abrir o modal de edição
                         />
                         <DeleteIcon
                           style={{
@@ -267,7 +301,7 @@ export default function ProductsList() {
                             color: "#f8615b",
                             cursor: "pointer",
                           }}
-                          onClick={() => deleteUser(row.id)}
+                          onClick={() => deleteProduct(row.id)} // Chamando a função para deletar um produto
                         />
                       </Stack>
                     </TableCell>
@@ -276,8 +310,6 @@ export default function ProductsList() {
             </TableBody>
           </Table>
         </TableContainer>
-
-        {/* Paginação com tradução */}
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
