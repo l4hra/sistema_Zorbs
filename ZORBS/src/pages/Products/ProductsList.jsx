@@ -27,7 +27,8 @@ const styleModal = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "auto",
+  width: "80%", // Aumente para 80% da largura da tela
+  maxWidth: "800px", // Limite a largura máxima
   bgcolor: "#ffffff", 
   borderRadius: "12px", 
   boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)", 

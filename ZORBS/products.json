@@ -51,14 +51,14 @@
       "id": "fcd9"
     },
     {
-      "id": "ad00",
       "name": "Açai 500ml",
       "type": "Açai",
       "category": "Açai",
       "unidade_medida": "Unidade",
       "preco_custo": 8,
       "preco_venda": 12,
-      "observacao": ""
+      "observacao": "",
+      "id": "ad00"
     }
   ]
 }

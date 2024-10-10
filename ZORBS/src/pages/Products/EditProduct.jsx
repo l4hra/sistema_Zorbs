@@ -13,9 +13,18 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [unidade_medida, setUnidade_medida] = useState("");
-  const [preco_custo, setPreco_custo] = useState(0);
-  const [preco_venda, setPreco_venda] = useState(0);
+  const [preco_custo, setPreco_custo] = useState("");
+  const [preco_venda, setPreco_venda] = useState("");
   const [observacao, setObservacao] = useState("");
+
+  const [errors, setErrors] = useState({
+    name: false,
+    type: false,
+    category: false,
+    unidade_medida: false,
+    preco_custo: false,
+    preco_venda: false,
+  });
 
   useEffect(() => {
     if (product) {
@@ -30,7 +39,26 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
     }
   }, [product]);
 
+  const handleValidation = () => {
+    let newErrors = {
+      name: !name,
+      type: !type,
+      category: !category,
+      unidade_medida: !unidade_medida,
+      preco_custo: isNaN(Number(preco_custo)) || !preco_custo,
+      preco_venda: isNaN(Number(preco_venda)) || !preco_venda,
+    };
+    setErrors(newErrors);
+
+    // Verifica se há algum erro
+    return !Object.values(newErrors).includes(true);
+  };
+
   const updateProduct = async () => {
+    if (!handleValidation()) {
+      return;
+    }
+
     const response = await fetch(`http://localhost:3000/products/${product.id}`, {
       method: 'PUT',
       headers: {
@@ -80,6 +108,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
+            error={errors.name}
+            helperText={errors.name && "Campo obrigatório"}
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
@@ -92,6 +122,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
+            error={errors.type}
+            helperText={errors.type && "Campo obrigatório"}
             onChange={(e) => setType(e.target.value)}
             value={type}
           />
@@ -105,6 +137,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             size="small"
             fullWidth
             select
+            error={errors.category}
+            helperText={errors.category && "Campo obrigatório"}
             onChange={(e) => setCategory(e.target.value)}
             value={category}
           >
@@ -123,6 +157,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
+            error={errors.unidade_medida}
+            helperText={errors.unidade_medida && "Campo obrigatório"}
             onChange={(e) => setUnidade_medida(e.target.value)}
             value={unidade_medida}
           />
@@ -135,7 +171,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
-            type="number"
+            error={errors.preco_custo}
+            helperText={errors.preco_custo ? "Insira um valor numérico válido" : ""}
             onChange={(e) => setPreco_custo(e.target.value)}
             value={preco_custo}
           />
@@ -148,7 +185,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
-            type="number"
+            error={errors.preco_venda}
+            helperText={errors.preco_venda ? "Insira um valor numérico válido" : ""}
             onChange={(e) => setPreco_venda(e.target.value)}
             value={preco_venda}
           />
@@ -156,7 +194,6 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
 
         <div style={{ gridColumn: '1 / span 2' }}>
           <TextField
-            required
             label="Observação"
             variant="outlined"
             size="small"
