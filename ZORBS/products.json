@@ -59,6 +59,16 @@
       "preco_venda": 12,
       "observacao": "",
       "id": "ad00"
+    },
+    {
+      "name": "Torta chocolate",
+      "type": "Torta",
+      "category": "Comida",
+      "unidade_medida": "unidade",
+      "preco_custo": 10,
+      "preco_venda": 15,
+      "observacao": "de limão",
+      "id": "e258"
     }
   ]
 }

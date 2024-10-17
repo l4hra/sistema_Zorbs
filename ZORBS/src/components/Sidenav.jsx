@@ -101,7 +101,7 @@ export default function Sidenav({ color }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{ background: "#136b69", height: 100 + "vh", color: "#fff" }}>
+        <List sx={{ background: "#054f77", height: 100 + "vh", color: "#fff" }}>
           <ListItem
             disablePadding
             sx={{ display: "block" }}

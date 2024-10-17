@@ -214,7 +214,7 @@ export default function ProductsList() {
                   align="left"
                   style={{
                     minWidth: "100px",
-                    backgroundColor: "#136b69",
+                    backgroundColor: "#054f77",
                     color: "#fff",
                     fontWeight: "bold",
                     fontSize: "18px",
@@ -226,7 +226,7 @@ export default function ProductsList() {
                   align="center"
                   style={{
                     minWidth: "100px",
-                    backgroundColor: "#136b69",
+                    backgroundColor: "#054f77",
                     color: "#fff",
                     fontWeight: "bold",
                     fontSize: "18px",
@@ -238,7 +238,7 @@ export default function ProductsList() {
                   align="center"
                   style={{
                     minWidth: "100px",
-                    backgroundColor: "#136b69",
+                    backgroundColor: "#054f77",
                     color: "#fff",
                     fontWeight: "bold",
                     fontSize: "18px",
@@ -250,7 +250,7 @@ export default function ProductsList() {
                   align="center"
                   style={{
                     minWidth: "100px",
-                    backgroundColor: "#136b69",
+                    backgroundColor: "#054f77",
                     color: "#fff",
                     fontWeight: "bold",
                     fontSize: "18px",
@@ -262,7 +262,7 @@ export default function ProductsList() {
                   align="center"
                   style={{
                     minWidth: "100px",
-                    backgroundColor: "#136b69",
+                    backgroundColor: "#054f77",
                     color: "#fff",
                     fontWeight: "bold",
                     fontSize: "18px",
