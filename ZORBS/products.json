@@ -59,6 +59,16 @@
       "preco_custo": 8,
       "preco_venda": 12,
       "observacao": ""
+    },
+    {
+      "id": "2494",
+      "name": "",
+      "type": "",
+      "category": "",
+      "unidade_medida": "",
+      "preco_custo": 0,
+      "preco_venda": 0,
+      "observacao": ""
     }
   ]
 }
