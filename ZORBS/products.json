@@ -61,7 +61,7 @@
       "observacao": ""
     },
     {
-      "id": "2494",
+      "id": "2387",
       "name": "",
       "type": "",
       "category": "",
@@ -69,6 +69,58 @@
       "preco_custo": 0,
       "preco_venda": 0,
       "observacao": ""
+    }
+  ],
+  "user": [
+    {
+      "name": "Luiz Felipe",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "felipe@gmail.com",
+      "telefone": "27996482011",
+      "type_of_acess": "Administrador",
+      "status": "Ativo",
+      "id": "1"
+    },
+    {
+      "name": "Raiane",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "Raiane@gmail.com",
+      "telefone": "27996482011",
+      "type_of_acess": "Funcionnário",
+      "status": "Ativo",
+      "id": "2"
+    },
+    {
+      "name": "Igor",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "felipe@gmail.com",
+      "telefone": "27996482011",
+      "type_of_acess": "Administrador",
+      "status": "Ativo",
+      "id": "3"
+    },
+    {
+      "id": "cf20",
+      "name": "Jose Antonio Bizio",
+      "passaword": "321",
+      "confirm_ps": "321",
+      "email": "jose@gmail.com",
+      "telefone": "27999999999",
+      "type_of_acess": "Funcionário",
+      "status": "Ativo"
+    },
+    {
+      "id": "91c5",
+      "name": "Neli Bizio",
+      "passaword": "111",
+      "confirm_ps": "111",
+      "email": "neli@gmail.com",
+      "telefone": "2788888888",
+      "type_of_acess": "Administrador",
+      "status": "Inativo"
     }
   ]
 }

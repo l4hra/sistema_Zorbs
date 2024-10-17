@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -20,6 +20,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import NewUsersModal from "./NewUsersModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
+import Swal from "sweetalert2";
 
 const columns = [
   { id: "code", label: "Código", minWidth: 170 },
@@ -29,26 +30,9 @@ const columns = [
   { id: "option", label: "Opções", minWidth: 170 },
 ];
 
-const rows = [
-  { pais: "Brasil", sigla: "BR", numero1: 210147125, numero2: 8515767 },
-  { pais: "Índia", sigla: "IN", numero1: 1324171354, numero2: 3287263 },
-  { pais: "China", sigla: "CN", numero1: 1403500365, numero2: 9596961 },
-  { pais: "Estados Unidos", sigla: "US", numero1: 327167434, numero2: 9833520 },
-  { pais: "Canadá", sigla: "CA", numero1: 37602103, numero2: 9984670 },
-  { pais: "Austrália", sigla: "AU", numero1: 25475400, numero2: 7692024 },
-  { pais: "Alemanha", sigla: "DE", numero1: 83019200, numero2: 357578 },
-  { pais: "Irlanda", sigla: "IE", numero1: 4857000, numero2: 70273 },
-  { pais: "México", sigla: "MX", numero1: 126577691, numero2: 1972550 },
-  { pais: "Japão", sigla: "JP", numero1: 126317000, numero2: 377973 },
-  { pais: "França", sigla: "FR", numero1: 67022000, numero2: 640679 },
-  { pais: "Reino Unido", sigla: "GB", numero1: 67545757, numero2: 242495 },
-  { pais: "Rússia", sigla: "RU", numero1: 146793744, numero2: 17098246 },
-  { pais: "Nigéria", sigla: "NG", numero1: 200962417, numero2: 923768 },
-  { pais: "Itália", sigla: "IT", numero1: 60483973, numero2: 301340 },
-];
-
 export default function UsersList() {
   const [page, setPage] = useState(0);
+  const [rows, setRows] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
@@ -59,6 +43,20 @@ export default function UsersList() {
     setOpen(false);
   };
 
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const filteredRows = rows.filter((row) =>
+    row.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const getUser = async () => {
+    const response = await fetch('http://localhost:3000/user');
+    const data = await response.json();
+    setRows(data);
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -68,10 +66,10 @@ export default function UsersList() {
     setPage(0);
   };
 
-  const deleteProduct = (id) => {
+  const deleteUser = (id) => {
     Swal.fire({
       title: "Tem certeza?",
-      text: "Confirme para deletar o produto!",
+      text: "Confirme para deletar o usuário!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -84,8 +82,17 @@ export default function UsersList() {
     });
   };
 
-   // Funções para editar produtos
-   const handleEditOpen = (product) => {
+  //Função delete
+  const deleteApi = async (id) => {
+    await fetch(`http://localhost:3000/user/${id}`, {
+      method: 'DELETE'
+    });
+    Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
+    getUser();
+  };
+
+  // Funções para editar produtos
+  const handleEditOpen = (product) => {
     setSelectedProduct(product);
     setEditOpen(true);
   };
@@ -103,7 +110,7 @@ export default function UsersList() {
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
       >
-        <NewUsersModal closeEvent={handleClose} />
+        <NewUsersModal closeEvent={handleClose} refreshUser={getUser} />
       </Dialog>
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -130,7 +137,11 @@ export default function UsersList() {
             variant="contained"
             startIcon={<AddCircleIcon />}
             onClick={handleClickOpen}
-            sx={{ background: "#9FD6D2" }}
+            sx={{
+              backgroundColor: "#578eda",
+              ":hover": { backgroundColor: "#174aa4" },
+              height: "40px",
+            }}
           >
             Novo Usuário
           </Button>
@@ -157,43 +168,41 @@ export default function UsersList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.sigla}>
-                  <TableCell align="center">{row.pais}</TableCell>
-                  <TableCell align="center">{row.sigla}</TableCell>
-                  <TableCell align="center">
-                    {row.numero1.toLocaleString()}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.numero2.toLocaleString()}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Stack
-                      spacing={2}
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <EditIcon
-                        style={{
-                          fontSize: "20px",
-                          color: "#578eda",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => handleEditOpen(row)}
-                      />
-                      <DeleteIcon
-                        style={{
-                          fontSize: "20px",
-                          color: "#f8615b",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => deleteProduct(row.id)}
-                      />
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filteredRows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
+                    <TableCell align="center">{row.id}</TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
+                    <TableCell align="center">{row.type_of_acess}</TableCell>
+                    <TableCell align="center">{row.status}</TableCell>
+                    <TableCell align="center">
+                      <Stack
+                        spacing={2}
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <EditIcon
+                          style={{
+                            fontSize: "20px",
+                            color: "#578eda",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleEditOpen(row)}
+                        />
+                        <DeleteIcon
+                          style={{
+                            fontSize: "20px",
+                            color: "#f8615b",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => deleteUser(row.id)}
+                        />
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
