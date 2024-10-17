@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Products from "./pages/Products/Products";
 import NewCommands from "./pages/NewCommands/NewCommands";
 import Config from "./pages/ConfigLayout/Config";
+import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 
 function App() {
   return (
@@ -13,9 +14,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" exact element={<Home />}></Route>
-
           <Route path="/Usuarios" exact element={<Users />}></Route>
-
+          <Route path="/Profile-settings" element={<ProfileSettings />}></Route>
           <Route path="/Dashboard" exact element={<Dashboard />}></Route>
           <Route path="/Produtos" exact element={<Products />}></Route>
           <Route path="/NewCommands" exact element={<NewCommands />}></Route>

@@ -277,11 +277,11 @@ export default function ProductsList() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    <TableCell align="left">{row.name}</TableCell>
-                    <TableCell align="center">{row.type}</TableCell>
-                    <TableCell align="center">{formatPrice(row.preco_custo)}</TableCell>
-                    <TableCell align="center">{formatPrice(row.preco_venda)}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left" style={{fontSize: "17px"}}>{row.name}</TableCell>
+                    <TableCell align="center" style={{fontSize: "17px"}}>{row.type}</TableCell>
+                    <TableCell align="center" style={{fontSize: "17px"}}>{formatPrice(row.preco_custo)}</TableCell>
+                    <TableCell align="center" style={{fontSize: "17px"}}>{formatPrice(row.preco_venda)}</TableCell>
+                    <TableCell align="center" style={{fontSize: "17px"}}>
                       <Stack
                         spacing={2}
                         direction="row"

@@ -7,6 +7,7 @@ import { Sketch } from "@uiw/react-color";
 export default function Config({ color }) {
   const [hex, setHex] = useState("#fff");
 
+  
   return (
     <>
       <Navbar />
