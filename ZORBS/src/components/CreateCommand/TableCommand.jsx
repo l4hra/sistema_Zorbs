@@ -88,7 +88,7 @@ export default function TableComponent({
             </TableCell>
             <TableCell align="right">
               <Typography variant="h6" component="div">
-                R${total.toFixed(2)}
+                R${total}
               </Typography>
             </TableCell>
           </TableRow>
