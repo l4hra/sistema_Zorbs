@@ -42,35 +42,35 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
     return !Object.values(newErrors).includes(true);
   };
 
-  const createProduct = async () => {
-    if (!handleValidation()) {
-      return;
-    }
-
-    const response = await fetch("http://localhost:3000/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        type,
-        category,
-        unidade_medida,
-        preco_custo: Number(preco_custo),
-        preco_venda: Number(preco_venda),
-        observacao,
-      }),
-    });
-
-    if (response.ok) {
-      Swal.fire("Criado com sucesso!", "Seu produto foi adicionado.", "success");
-      refreshProducts(); // Atualiza a lista de produtos
-      closeEvent();
-    } else {
-      Swal.fire("Erro!", "Não foi possível adicionar o produto.", "error");
-    }
-  };
+    const createProduct = async () => {
+      if (!handleValidation()) {
+        return;
+      }
+  
+      const response = await fetch("http://localhost:5000/registerProduct", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          type,
+          category,
+          unidade_medida,
+          preco_custo: Number(preco_custo),
+          preco_venda: Number(preco_venda),
+          observacao,
+        }),
+      });
+  
+      if (response.ok) {
+        Swal.fire("Criado com sucesso!", "Seu produto foi adicionado.", "success");
+        refreshProducts(); // Atualiza a lista de produtos
+        closeEvent();
+      } else {
+        Swal.fire("Erro!", "Não foi possível adicionar o produto.", "error");
+      }
+    };
 
   const currencies = [
     { value: "Bebida", label: "Bebida" },

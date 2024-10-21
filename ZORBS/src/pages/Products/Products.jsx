@@ -10,7 +10,7 @@ function Products() {
   // Função para buscar os produtos
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:3000/products'); // Alterado para o JSON Server
+      const response = await fetch('http://localhost:5000/products');
       if (!response.ok) {
         throw new Error("Erro ao buscar produtos");
       }

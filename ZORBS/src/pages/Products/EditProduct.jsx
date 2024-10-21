@@ -9,13 +9,13 @@ import {
 import Swal from "sweetalert2";
 
 export default function EditProduct({ closeEvent, refreshProducts, product }) {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
-  const [category, setCategory] = useState("");
-  const [unidade_medida, setUnidade_medida] = useState("");
-  const [preco_custo, setPreco_custo] = useState("");
-  const [preco_venda, setPreco_venda] = useState("");
-  const [observacao, setObservacao] = useState("");
+  const [name, setName] = useState(product?.name || "");
+  const [type, setType] = useState(product?.type || "");
+  const [category, setCategory] = useState(product?.category || "");
+  const [unidade_medida, setUnidade_medida] = useState(product?.unidade_medida || "");
+  const [preco_custo, setPreco_custo] = useState(product?.preco_custo?.toString() || "");
+  const [preco_venda, setPreco_venda] = useState(product?.preco_venda?.toString() || "");
+  const [observacao, setObservacao] = useState(product?.observacao || "");
 
   const [errors, setErrors] = useState({
     name: false,
@@ -29,13 +29,13 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
   useEffect(() => {
     if (product) {
       // Preenche os campos se um produto for passado como prop
-      setName(product.name);
-      setType(product.type);
-      setCategory(product.category);
-      setUnidade_medida(product.unidade_medida);
-      setPreco_custo(product.preco_custo);
-      setPreco_venda(product.preco_venda);
-      setObservacao(product.observacao);
+      setName(product.name || "");
+      setType(product.type || "");
+      setCategory(product.category || "");
+      setUnidade_medida(product.unidade_medida || "");
+      setPreco_custo(product.preco_custo?.toString() || "");
+      setPreco_venda(product.preco_venda?.toString() || "");
+      setObservacao(product.observacao || "");
     }
   }, [product]);
 
@@ -59,7 +59,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       return;
     }
 
-    const response = await fetch(`http://localhost:3000/products/${product.id}`, {
+    const response = await fetch(`http://localhost:5000/products/${product.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.name}
             helperText={errors.name && "Campo obrigatório"}
             onChange={(e) => setName(e.target.value)}
-            value={name}
+            value={name || ""}
           />
         </div>
 
@@ -125,7 +125,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.type}
             helperText={errors.type && "Campo obrigatório"}
             onChange={(e) => setType(e.target.value)}
-            value={type}
+            value={type || ""}
           />
         </div>
 
@@ -140,7 +140,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.category}
             helperText={errors.category && "Campo obrigatório"}
             onChange={(e) => setCategory(e.target.value)}
-            value={category}
+            value={category || ""}
           >
             {currencies.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -160,7 +160,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.unidade_medida}
             helperText={errors.unidade_medida && "Campo obrigatório"}
             onChange={(e) => setUnidade_medida(e.target.value)}
-            value={unidade_medida}
+            value={unidade_medida || ""}
           />
         </div>
 
@@ -174,7 +174,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.preco_custo}
             helperText={errors.preco_custo ? "Insira um valor numérico válido" : ""}
             onChange={(e) => setPreco_custo(e.target.value)}
-            value={preco_custo}
+            value={preco_custo || ""}
           />
         </div>
 
@@ -188,7 +188,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.preco_venda}
             helperText={errors.preco_venda ? "Insira um valor numérico válido" : ""}
             onChange={(e) => setPreco_venda(e.target.value)}
-            value={preco_venda}
+            value={preco_venda || ""}
           />
         </div>
 
@@ -201,7 +201,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             multiline
             rows={3}
             onChange={(e) => setObservacao(e.target.value)}
-            value={observacao}
+            value={observacao || ""}
           />
         </div>
       </div>

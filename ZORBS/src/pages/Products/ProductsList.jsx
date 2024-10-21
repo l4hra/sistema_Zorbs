@@ -19,7 +19,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import AddProducts from "./AddProducts";
-import EditProduct from "./EditProduct"; 
+import EditProduct from "./EditProduct";
 
 // Style do modal
 const styleModal = {
@@ -29,13 +29,13 @@ const styleModal = {
   transform: "translate(-50%, -50%)",
   width: "80%", // Aumente para 80% da largura da tela
   maxWidth: "800px", // Limite a largura máxima
-  bgcolor: "#ffffff", 
-  borderRadius: "12px", 
-  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)", 
+  bgcolor: "#ffffff",
+  borderRadius: "12px",
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
   p: 4,
-  outline: "none", 
-  maxHeight: "90vh", 
-  overflowY: "auto", 
+  outline: "none",
+  maxHeight: "90vh",
+  overflowY: "auto",
 };
 
 export default function ProductsList() {
@@ -56,9 +56,13 @@ export default function ProductsList() {
 
   // Função para obter produtos do arquivo JSON
   const getProducts = async () => {
-    const response = await fetch('http://localhost:3000/products'); // Altere o caminho conforme necessário
-    const data = await response.json();
-    setRows(data);
+    try {
+      const response = await fetch('http://localhost:5000/products');
+      const data = await response.json();
+      setRows(data);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -87,7 +91,7 @@ export default function ProductsList() {
   };
 
   const deleteApi = async (id) => {
-    await fetch(`http://localhost:3000/products/${id}`, {
+    await fetch(`http://localhost:5000/products/${id}`, {
       method: 'DELETE'
     });
     Swal.fire("Deletado com sucesso!", "Seu produto foi deletado.", "success");
@@ -146,10 +150,10 @@ export default function ProductsList() {
           aria-describedby="modal-edit-description"
         >
           <Box sx={styleModal}>
-            <EditProduct 
-              product={selectedProduct} 
-              closeEvent={handleEditClose} 
-              refreshProducts={getProducts} 
+            <EditProduct
+              product={selectedProduct}
+              closeEvent={handleEditClose}
+              refreshProducts={getProducts}
             />
           </Box>
         </Modal>
@@ -277,11 +281,11 @@ export default function ProductsList() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    <TableCell align="left" style={{fontSize: "17px"}}>{row.name}</TableCell>
-                    <TableCell align="center" style={{fontSize: "17px"}}>{row.type}</TableCell>
-                    <TableCell align="center" style={{fontSize: "17px"}}>{formatPrice(row.preco_custo)}</TableCell>
-                    <TableCell align="center" style={{fontSize: "17px"}}>{formatPrice(row.preco_venda)}</TableCell>
-                    <TableCell align="center" style={{fontSize: "17px"}}>
+                    <TableCell align="left" style={{ fontSize: "17px" }}>{row.name}</TableCell>
+                    <TableCell align="center" style={{ fontSize: "17px" }}>{row.type}</TableCell>
+                    <TableCell align="center" style={{ fontSize: "17px" }}>{formatPrice(row.preco_custo)}</TableCell>
+                    <TableCell align="center" style={{ fontSize: "17px" }}>{formatPrice(row.preco_venda)}</TableCell>
+                    <TableCell align="center" style={{ fontSize: "17px" }}>
                       <Stack
                         spacing={2}
                         direction="row"
@@ -294,7 +298,7 @@ export default function ProductsList() {
                             color: "#578eda",
                             cursor: "pointer",
                           }}
-                          onClick={() => handleEditOpen(row)} 
+                          onClick={() => handleEditOpen(row)}
                         />
                         <DeleteIcon
                           style={{
@@ -302,7 +306,7 @@ export default function ProductsList() {
                             color: "#f8615b",
                             cursor: "pointer",
                           }}
-                          onClick={() => deleteProduct(row.id)} 
+                          onClick={() => deleteProduct(row.id)}
                         />
                       </Stack>
                     </TableCell>
@@ -312,7 +316,7 @@ export default function ProductsList() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[15, 10, 25]}
           component="div"
           count={filteredRows.length}
           rowsPerPage={rowsPerPage}
