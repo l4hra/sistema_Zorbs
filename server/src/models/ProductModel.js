@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
 import db from '../../conexao.js';
 
+// Função para cadastrar produtos
 export async function addProducts(products) {
     const conexao = mysql.createPool(db);
     const sql = `INSERT INTO products (name, type, category, unidade_medida, preco_custo, preco_venda, observacao)
@@ -26,6 +27,7 @@ export async function addProducts(products) {
     }
 }
 
+// Função para vizualizar produtos
 export async function getProducts(req, res) {
     console.log('ProductsController getProducts');
     const conexao = mysql.createPool(db);
@@ -38,6 +40,7 @@ export async function getProducts(req, res) {
     }
 }
 
+// Função para deletar produtos
 export async function deleteProduct(id) {
     const conexao = mysql.createPool(db);
     const sql = 'DELETE FROM products WHERE id = ?';
@@ -53,5 +56,35 @@ export async function deleteProduct(id) {
     } catch (error) {
         console.log(error);
         return [500, 'Erro ao deletar o produto'];
+    }
+}
+
+// Função para editar produtos
+export async function updateProduct(id, product) {
+    const conexao = mysql.createPool(db);
+    const sql = `UPDATE products SET name = ?, type = ?, category = ?, unidade_medida = ?, preco_custo = ?, preco_venda = ?, observacao = ?
+                 WHERE id = ?`;
+    const params = [
+        product.name,
+        product.type,
+        product.category,
+        product.unidade_medida,
+        product.preco_custo,
+        product.preco_venda,
+        product.observacao,
+        id // Adicionando o id ao final para o WHERE
+    ];
+
+    try {
+        const [result] = await conexao.query(sql, params);
+        if (result.affectedRows > 0) {
+            console.log('Produto atualizado');
+            return [200, 'Produto atualizado com sucesso'];
+        } else {
+            return [404, 'Produto não encontrado'];
+        }
+    } catch (error) {
+        console.log(error);
+        return [500, 'Erro ao atualizar o produto'];
     }
 }

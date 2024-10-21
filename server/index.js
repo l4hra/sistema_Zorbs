@@ -1,5 +1,5 @@
 import express from 'express';
-import { cadastroProduct, excluirProduct } from './src/controllers/ProductsController.js';
+import { cadastroProduct, excluirProduct, atualizaProduct } from './src/controllers/ProductsController.js';
 import { getProducts } from './src/models/ProductModel.js';
 import cors from 'cors';
 
@@ -14,6 +14,7 @@ app.use(express.json());
 app.post('/registerProduct', cadastroProduct);
 app.get('/products', getProducts);
 app.delete('/products/:id', excluirProduct);
+app.put('/products/:id', atualizaProduct);
 
 app.get('/', (req, res) => {
     res.send('API funcionando');

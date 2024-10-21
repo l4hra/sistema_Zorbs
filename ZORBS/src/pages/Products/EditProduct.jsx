@@ -28,7 +28,6 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
 
   useEffect(() => {
     if (product) {
-      // Preenche os campos se um produto for passado como prop
       setName(product.name || "");
       setType(product.type || "");
       setCategory(product.category || "");

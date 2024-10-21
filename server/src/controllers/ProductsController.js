@@ -1,4 +1,4 @@
-import { addProducts, deleteProduct } from "../models/ProductModel.js";
+import { addProducts, deleteProduct, updateProduct } from "../models/ProductModel.js";
 
 export async function cadastroProduct(req, res){
     console.log('ProductsController cadastroProduto');
@@ -23,6 +23,20 @@ export async function excluirProduct(req, res) {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Erro ao deletar produto', error });
+    }
+}
+
+export async function atualizaProduct(req, res) {
+    console.log('ProductsController atualizaProduct');
+    const { id } = req.params;
+    const product = req.body;
+    
+    try {
+        const [status, resposta] = await updateProduct(id, product);
+        res.status(status).json(resposta);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Erro ao atualizar produto', error });
     }
 }
 
