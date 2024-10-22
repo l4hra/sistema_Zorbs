@@ -36,6 +36,8 @@ export default function UsersList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -216,6 +218,7 @@ export default function UsersList() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <NewUsersModal  open={handleOpen} />
     </>
   );
 }

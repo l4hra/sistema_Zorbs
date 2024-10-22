@@ -1,23 +1,14 @@
-import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-    IconButton,
-    Typography,
-    Box,
-    TextField,
-    Autocomplete,
-    Button,
-    MenuItem,
-    Modal,
-    FormControl,
-    InputLabel,
-    Select,
-    Grid2,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  MenuItem,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
-export default function NewUsersModal({ closeEvent, refreshUser }) {
+export default function NewUsersModal({ closeEvent, refreshUser, users, open }) {
     const [type_of_acess, setTypeOfAccess] = useState("");
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");
@@ -26,39 +17,25 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
 
+    useEffect(() => {
+        if (users) {
+            // Preenche os campos se um produto for passado como prop
+            setTypeOfAccess(users.type_of_acess);
+            setStatus(users.status);
+            setName(users.name);
+            setPassword(users.passaword);
+            setConfirmPs(users.confirm_ps);
+            setEmail(users.email);
+            setTelefone(users.telefone);
+        }
+    }, [users]);
 
-    const [errors, setErrors] = useState({
-        name: false,
-        passaword: false,
-        confirm_ps: false,
-        email: false,
-        telefone: false,
-        type_of_acess: false,
-        status: false,
-    });
-
-    const handleValidation = () => {
-        let newErrors = {
-            name: !name,
-            passaword: !passaword,
-            confirm_ps: !confirm_ps,
-            email: !email,
-            telefone: !telefone,
-            type_of_acess: !type_of_acess,
-            status: !status
-        };
-        setErrors(newErrors);
-
-        // Verifica se há algum erro
-        return !Object.values(newErrors).includes(true);
-    };
-
-    const createUser = async () => {
+    const updateUser = async () => {
         if (!handleValidation()) {
             return;
         }
 
-        const response = await fetch("http://localhost:3000/user", {
+        const response = await fetch(`http://localhost:3000/user/${users.id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -75,19 +52,12 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
         });
 
         if (response.ok) {
-            Swal.fire("Criado com sucesso!", "Seu usuário foi adicionado.", "success");
+            Swal.fire("Editado com sucesso!", "Seu usuário foi adicionado.", "success");
             refreshUser(); // Atualiza a lista de produtos
             closeEvent();
         } else {
             Swal.fire("Erro!", "Não foi possível adicionar o usuário.", "error");
         }
-    };
-
-    const handleChangeSetAccess = (event) => {
-        setAccess(event.target.value);
-    };
-    const handleChangeSetStatus = (event) => {
-        setStatus(event.target.value);
     };
 
     const typeAcess = [
@@ -100,9 +70,10 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
         { value: "Inativo", label: "Inativo" },
     ];
 
+
     return (
         <Modal
-            open={true}
+            open={open}
             onClose={closeEvent}
             aria-labelledby="modal-title"
             style={{
@@ -115,7 +86,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                 sx={{ width: 850, bgcolor: "background.paper", p: 9, boxShadow: 24 }}
             >
                 <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
-                    Adicionar Novo Usuário
+                    Editar Novo Usuário
                     <IconButton
                         style={{ position: "absolute", right: 8, top: 8 }}
                         onClick={closeEvent}
@@ -264,7 +235,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                         Cancelar
                     </Button>
                     <Button
-                        onClick={createUser}
+                        onClick={updateUser}
                         sx={{
                             width: 150,
                             color: "white",
@@ -274,19 +245,12 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                             },
                         }}
                     >
-                        Salvar
+                        Atualizar
                     </Button>
                 </Box>
             </Box>
         </Modal>
     );
-}
 
-/*
-                            <Button onClick={handleClose}>Cancelar</Button>
-                            <Button type="submit" onClick={handleClose}>Salvar</Button>
-                        </DialogActions>
 
-                        );
 }
-*/
