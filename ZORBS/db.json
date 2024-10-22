@@ -1,0 +1,25 @@
+{
+    "empresas": [
+    {
+      "id": "1300",
+      "razao_social": "zorbs.com",
+      "nome_fantasia": "zorbsinho",
+      "cnpj": "99.999.999.9999-99",
+      "status": "Ativo"
+    },
+    {
+        "id": "13000",
+        "razao_social": "lahra.com",
+        "nome_fantasia": "larinha",
+        "cnpj": "99.999.999.9999-99",
+        "status": "Ativo"
+    },
+    {
+        "id": "1000",
+        "razao_social": "Feliper.com",
+        "nome_fantasia": "Felipinho",
+        "cnpj": "99.999.999.9999-99",
+        "status": "Desativado"
+    }
+]
+}

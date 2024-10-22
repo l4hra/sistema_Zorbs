@@ -21,9 +21,8 @@ export async function addProducts(products) {
         console.log('Prouto cadastrado');
         return [201, 'Produto cadastrado']
     } catch (error) {
-        const msg = await error.json();
-        console.log(msg);
-        return [500, msg]
+        console.log(error);
+        return [500, error]
     }
 }
 
