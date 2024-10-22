@@ -99,7 +99,7 @@ export default function CommandModal() {
         <Button
           onClick={handleOpen}
           sx={{
-            backgroundColor: "#9FD6D2",
+            backgroundColor: "#054f77",
             color: "#fff",
             width: "10%",
             padding: "10px",
