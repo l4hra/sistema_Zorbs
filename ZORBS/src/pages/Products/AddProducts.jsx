@@ -42,7 +42,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
     return !Object.values(newErrors).includes(true);
   };
 
-    const createProduct = async () => {
+  const createProduct = async () => {
       if (!handleValidation()) {
         return;
       }
@@ -70,7 +70,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
       } else {
         Swal.fire("Erro!", "Não foi possível adicionar o produto.", "error");
       }
-    };
+  };
 
   const currencies = [
     { value: "Bebida", label: "Bebida" },

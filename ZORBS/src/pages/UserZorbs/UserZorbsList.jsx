@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,34 +17,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { Modal } from "@mui/material";
 import Swal from "sweetalert2";
 
-// Style do modal
-const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "80%", // Aumente para 80% da largura da tela
-  maxWidth: "800px", // Limite a largura máxima
-  bgcolor: "#ffffff",
-  borderRadius: "12px",
-  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-  p: 4,
-  outline: "none",
-  maxHeight: "90vh",
-  overflowY: "auto",
-};
-
 function UserZorbsList() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
-  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para o produto selecionado
+  const [selectedEmpresas, setSelectedEmpresas] = useState(null); // Estado para o produto selecionado
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -72,29 +56,29 @@ function UserZorbsList() {
     setPage(0);
   };
 
-  // const deleteEmpresa = (id) => {
-  //   Swal.fire({
-  //     title: "Tem certeza?",
-  //     text: "Confirme para deletar o produto!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Sim, deletar",
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       deleteApi(id);
-  //     }
-  //   });
-  // };
+  const deleteEmpresa = (id) => {
+    Swal.fire({
+      title: "Tem certeza?",
+      text: "Confirme para deletar a empresa!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, deletar",
+    }).then((result) => {
+      if (result.value) {
+        deleteApi(id);
+      }
+    });
+  };
 
-  // const deleteApi = async (id) => {
-  //   await fetch(`http://localhost:5002/empresa/${id}`, {
-  //     method: 'DELETE'
-  //   });
-  //   Swal.fire("Deletado com sucesso!", "Seu produto foi deletado.", "success");
-  //   getProducts();
-  // };
+  const deleteApi = async (id) => {
+    await fetch(`http://localhost:5002/empresas/${id}`, {
+      method: 'DELETE'
+    });
+    Swal.fire("Deletado com sucesso!", "A empresa foi deletado.", "success");
+    getEmpresas();
+  };
 
 
   // Função para filtrar os produtos com base no termo de busca
@@ -102,57 +86,22 @@ function UserZorbsList() {
     row.razao_social.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // // Funções para editar empresa
-  // const handleEditOpen = (product) => {
-  //   setSelectedProduct(product);
-  //   setEditOpen(true);
-  // };
+  // Funções para editar empresa
+  const handleEditOpen = (empresa) => {
+    setSelectedEmpresas(empresa);
+    setEditOpen(true);
+  };
 
   const handleEditClose = () => {
     setEditOpen(false);
-    setSelectedProduct(null);
+    setSelectedEmpresas(null);
   };
 
 
   return (
     <>
-      <div>
-        <Modal
-          open={open}
-          onClose={(event, reason) => {
-            if (reason !== "backdropClick") {
-              handleClose();
-            }
-          }}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={styleModal}>
-            {/* <AddProducts closeEvent={handleClose} refreshProducts={getProducts} /> */}
-          </Box>
-        </Modal>
-        <Modal
-          open={editOpen}
-          onClose={(event, reason) => {
-            if (reason !== "backdropClick") {
-              handleEditClose();
-            }
-          }}
-          aria-labelledby="modal-edit-title"
-          aria-describedby="modal-edit-description"
-        >
-          <Box sx={styleModal}>
-            {/* <EditProduct
-              product={selectedProduct}
-              closeEvent={handleEditClose}
-              refreshProducts={getEmpresas}
-            /> */}
-          </Box>
-        </Modal>
-      </div>
-
       <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
-      <Typography
+        <Typography
           gutterBottom
           variant="h5"
           component="div"
@@ -188,7 +137,9 @@ function UserZorbsList() {
           <Button
             variant="contained"
             endIcon={<AddCircleIcon />}
-            onClick={handleOpen}
+            onClick={() => {
+              navigate("/AddUsersZorbs");
+            }}
             sx={{
               backgroundColor: "#578eda",
               ":hover": { backgroundColor: "#174aa4" },
@@ -201,7 +152,7 @@ function UserZorbsList() {
 
         <Box height={10} />
         <Divider />
-        
+
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -275,7 +226,7 @@ function UserZorbsList() {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     <TableCell align="left" style={{ fontSize: "17px" }}>{row.razao_social}</TableCell>
                     <TableCell align="center" style={{ fontSize: "17px" }}>{row.nome_fantasia}</TableCell>
-                    <TableCell align="center" style={{ fontSize: "17px" }}>{row.cnpj}</TableCell>
+                    <TableCell align="center" style={{ fontSize: "17px" }}>{row.CNPJ}</TableCell>
                     <TableCell align="center" style={{ fontSize: "17px" }}>{row.status}</TableCell>
                     <TableCell align="center" style={{ fontSize: "17px" }}>
                       <Stack
@@ -298,7 +249,7 @@ function UserZorbsList() {
                             color: "#f8615b",
                             cursor: "pointer",
                           }}
-                          onClick={() => deleteProduct(row.id)}
+                          onClick={() => deleteEmpresa(row.id)}
                         />
                       </Stack>
                     </TableCell>

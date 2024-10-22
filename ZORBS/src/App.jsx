@@ -8,6 +8,7 @@ import NewCommands from "./pages/NewCommands/NewCommands";
 import Config from "./pages/ConfigLayout/Config";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import UserZorbs from "./pages/UserZorbs/UserZorbs";
+import AddUserZorbs from "./pages/UserZorbs/AddUserZorbs";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/NewCommands" exact element={<NewCommands />}></Route>
           <Route path="/Config" exact element={<Config />}></Route>
           <Route path="/Users-Zorbs" exact element={<UserZorbs />}></Route>
+          <Route path="/AddUsersZorbs" exact element={<AddUserZorbs />}></Route>
         </Routes>
       </BrowserRouter>
     </>
