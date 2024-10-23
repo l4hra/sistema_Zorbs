@@ -18,8 +18,8 @@ import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import AddProducts from "./AddProducts";
-import EditProduct from "./EditProduct";
+import AddProducts from "../../components/CreateProducts/AddProducts";
+import EditProduct from "../../components/EditProducts/EditProduct";
 
 // Style do modal
 const styleModal = {
@@ -159,7 +159,7 @@ export default function ProductsList() {
         </Modal>
       </div>
 
-      <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px", boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)" }}>
+      <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px", boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.50)" }}>
         <Typography
           gutterBottom
           variant="h5"

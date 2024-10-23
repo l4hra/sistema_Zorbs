@@ -1,56 +1,128 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import Sidenav from "../../components/Sidenav";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Navbar from "../Navbar";
+import Sidenav from "../Sidenav";
 import {
     Typography,
     Box,
     TextField,
     Button,
     MenuItem,
-    InputAdornment,
     Paper,
     FormControl,
     FormLabel,
-    IconButton,
+    IconButton, 
+    InputAdornment
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 
-function AddUserZorbs() {
+export default function EditUserZorbs() {
+    const location = useLocation();
     const navigate = useNavigate();
-    const [CNPJ, setCnpj] = useState("");
-    const [razao_social, setRazao_social] = useState("");
-    const [nome_fantasia, setNome_fantasia] = useState("");
-    const [inscricao_estadual, setInscricao_estadual] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const [senha_acesso, setSenha_acesso] = useState("");
-    const [data_abertura, setData_abertura] = useState("");
-    const [tipo_pessoa, setTipo_pessoa] = useState("");
-    const [tipo_plano, setTipo_plano] = useState("");
-    const [status, setStatus] = useState("");
-    const [CEP, setCep] = useState("");
-    const [RUA, setRua] = useState("");
-    const [numero, setNumero] = useState("");
-    const [bairro, setBairro] = useState("");
-    const [cidade, setCidade] = useState("");
-    const [estado, setEstado] = useState("");
-    const [complemento, setComplemento] = useState("");
-    const [observacoes, setObservacoes] = useState("");
+    const { empresa } = location.state || {};
+
+    const [CNPJ, setCnpj] = useState(empresa?.CNPJ || "");
+    const [razao_social, setRazao_social] = useState(empresa?.razao_social || "");
+    const [nome_fantasia, setNome_fantasia] = useState(empresa?.nome_fantasia || "");
+    const [inscricao_estadual, setInscricao_estadual] = useState(empresa?.inscricao_estadual || "");
+    const [email, setEmail] = useState(empresa?.email || "");
+    const [telefone, setTelefone] = useState(empresa?.telefone || "");
+    const [senha_acesso, setSenha_acesso] = useState(empresa?.senha_acesso || "");
+    const [data_abertura, setData_abertura] = useState(empresa?.data_abertura || "");
+    const [tipo_pessoa, setTipo_pessoa] = useState(empresa?.tipo_pessoa || "");
+    const [tipo_plano, setTipo_plano] = useState(empresa?.tipo_plano || "");
+    const [status, setStatus] = useState(empresa?.status || "");
+    const [CEP, setCep] = useState(empresa?.CEP || "");
+    const [RUA, setRua] = useState(empresa?.RUA || "");
+    const [numero, setNumero] = useState(empresa?.numero || "");
+    const [bairro, setBairro] = useState(empresa?.bairro || "");
+    const [cidade, setCidade] = useState(empresa?.cidade || "");
+    const [estado, setEstado] = useState(empresa?.estado || "");
+    const [complemento, setComplemento] = useState(empresa?.complemento || "");
+    const [observacoes, setObservacoes] = useState(empresa?.observacoes || "");
     const [showPassword, setShowPassword] = useState(false);
 
+    useEffect(() => {
+        if (empresa) {
+            setCnpj(empresa.CNPJ || "");
+            setRazao_social(empresa.razao_social || "");
+            setNome_fantasia(empresa.nome_fantasia || "");
+            setInscricao_estadual(empresa.inscricao_estadual || "");
+            setEmail(empresa.email || "");
+            setTelefone(empresa.telefone || "");
+            setSenha_acesso(empresa.senha_acesso || "");
+            setData_abertura(empresa.data_abertura || "");
+            setTipo_pessoa(empresa.tipo_pessoa || "");
+            setTipo_plano(empresa.tipo_plano || "");
+            setStatus(empresa.status || "");
+            setCep(empresa.CEP || "");
+            setRua(empresa.RUA || "");
+            setNumero(empresa.numero || "");
+            setBairro(empresa.bairro || "");
+            setCidade(empresa.cidade || "");
+            setEstado(empresa.estado || "");
+            setComplemento(empresa.complemento || "");
+            setObservacoes(empresa.observacoes || "");
+        }
+    }, [empresa]);
 
-    const createEmpresa = async () => {
+    const [errors, setErrors] = useState({
+        CNPJ: false,
+        razao_social: false,
+        nome_fantasia: false,
+        inscricao_estadual: false,
+        email: false,
+        telefone: false,
+        senha_acesso: false,
+        data_abertura: false,
+        tipo_pessoa: false,
+        tipo_plano: false,
+        status: false,
+        CEP: false,
+        RUA: false,
+        numero: false,
+        bairro: false,
+        cidade: false,
+        estado: false,
+    });
+
+    const handleValidation = () => {
+        let newErrors = {
+            CNPJ: !CNPJ,
+            razao_social: !razao_social,
+            nome_fantasia: !nome_fantasia,
+            inscricao_estadual: !inscricao_estadual,
+            email: !email,
+            telefone: !telefone,
+            senha_acesso: !senha_acesso,
+            data_abertura: !data_abertura,
+            tipo_pessoa: !tipo_pessoa,
+            tipo_plano: !tipo_plano,
+            status: !status,
+            CEP: !CEP,
+            RUA: !RUA,
+            numero: !numero,
+            bairro: !bairro,
+            cidade: !cidade,
+            estado: !estado,
+        };
+        setErrors(newErrors);
+
+        // Verifica se há algum erro
+        return !Object.values(newErrors).includes(true);
+    };
+
+    const updateUserZorbs = async () => {
         if (!handleValidation()) {
             return;
         }
 
-        const response = await fetch("http://localhost:5002/empresas", {
-            method: "POST",
+        const response = await fetch(`http://localhost:5002/empresas/${empresa.id}`, {
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 CNPJ,
@@ -74,58 +146,12 @@ function AddUserZorbs() {
                 observacoes,
             }),
         });
-
         if (response.ok) {
-            Swal.fire("Cadastrada com sucesso!", "Empresa foi adicionado.", "success");
+            Swal.fire("Atualizado com sucesso!", "Seu produto foi atualizado.", "success");
             navigate("/Users-Zorbs");
-            refreshEmpresas(); // Atualiza a lista 
         } else {
-            Swal.fire("Erro!", "Não foi possível cadastra empresa.", "error");
+            Swal.fire("Erro!", "Não foi possível atualizar o produto.", "error");
         }
-    };
-
-    const [errors, setErrors] = useState({
-        CNPJ: false,
-        razao_social: false,
-        nome_fantasia: false,
-        email: false,
-        telefone: false,
-        senha_acesso: false,
-        data_abertura: false,
-        tipo_pessoa: false,
-        tipo_plano: false,
-        status: false,
-        CEP: false,
-        RUA: false,
-        numero: false,
-        bairro: false,
-        cidade: false,
-        estado: false,
-    });
-
-    const handleValidation = () => {
-        let newErrors = {
-            CNPJ: !CNPJ,
-            razao_social: !razao_social,
-            nome_fantasia: !nome_fantasia,
-            email: !email,
-            telefone: !telefone,
-            senha_acesso: !senha_acesso,
-            data_abertura: !data_abertura,
-            tipo_pessoa: !tipo_pessoa,
-            tipo_plano: !tipo_plano,
-            status: !status,
-            CEP: !CEP,
-            RUA: !RUA,
-            numero: !numero,
-            bairro: !bairro,
-            cidade: !cidade,
-            estado: !estado,
-        };
-        setErrors(newErrors);
-
-        // Verifica se há algum erro
-        return !Object.values(newErrors).includes(true);
     };
 
     const handleClickShowPassword = () => {
@@ -134,57 +160,6 @@ function AddUserZorbs() {
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
-    };
-
-    const handleCnpjChange = (e) => {
-        const value = e.target.value.replace(/\D/g, ''); // Remove qualquer caractere não numérico
-        if (value.length <= 14) { // Limita o tamanho máximo do CNPJ
-            setCnpj(formatCNPJ(value));
-            setErrors({ CNPJ: value.length === 0 }); // Verifica se o campo está vazio
-        }
-    };
-
-    const formatCNPJ = (value) => {
-        // Formata o CNPJ no padrão: 00.000.000/0000-00
-        return value
-            .replace(/^(\d{2})(\d)/, '$1.$2')
-            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-            .replace(/\.(\d{3})(\d)/, '.$1/$2')
-            .replace(/(\d{4})(\d)/, '$1-$2');
-    };
-
-    const handleChange = (e) => {
-        const value = e.target.value;
-        setEmail(value);
-
-        // Valida o e-mail e atualiza os erros
-        if (value === '' || validateEmail(value)) {
-            setErrors({ email: false });
-        } else {
-            setErrors({ email: true });
-        }
-    };
-
-    const validateEmail = (value) => {
-        // Expressão regular para validar o formato de e-mail
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(value);
-    };
-
-    const formatPhone = (value) => {
-        // Remove tudo que não é número
-        value = value.replace(/\D/g, '');
-    
-        // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
-        return value
-            .replace(/^(\d{2})(\d)/g, '+$1 $2') // Adiciona o código do país
-            .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona o DDD entre parênteses
-            .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen no meio do número
-    };
-
-    const handleChangePhone = (e) => {
-        const formattedPhone = formatPhone(e.target.value);
-        setTelefone(formattedPhone);
     };
 
     const tipo_pessoas = [
@@ -210,6 +185,7 @@ function AddUserZorbs() {
             <Box height={70} />
 
             <Box sx={{ display: "flex" }}>
+                
                 <Sidenav />
 
                 <Box component="main" sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
@@ -224,7 +200,7 @@ function AddUserZorbs() {
                                 fontWeight: "bold",
                             }}
                         >
-                            Cadastrar nova empresa
+                            Perfil da empresa: {nome_fantasia}
                         </Typography>
 
                         <Box height={10} />
@@ -238,7 +214,7 @@ function AddUserZorbs() {
                                 width: "100%",
                             }}
                         >
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="CNPJ"
@@ -247,11 +223,11 @@ function AddUserZorbs() {
                                     fullWidth
                                     error={errors.CNPJ}
                                     helperText={errors.CNPJ && "Campo obrigatório"}
-                                    onChange={handleCnpjChange}
+                                    onChange={(e) => setCnpj(e.target.value)}
                                     value={CNPJ}
                                 />
                             </div>
-                            <div style={{ width: "350px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Nome Fantasia"
@@ -264,7 +240,7 @@ function AddUserZorbs() {
                                     value={nome_fantasia}
                                 />
                             </div>
-                            <div style={{ width: "350px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Razão Social"
@@ -277,13 +253,15 @@ function AddUserZorbs() {
                                     value={razao_social}
                                 />
                             </div>
-                            <div style={{ width: "350px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
+                                    required
                                     label="Inscrição Estadual"
                                     variant="outlined"
                                     size="small"
                                     fullWidth
                                     error={errors.inscricao_estadual}
+                                    helperText={errors.inscricao_estadual && "Campo obrigatório"}
                                     onChange={(e) => setInscricao_estadual(e.target.value)}
                                     value={inscricao_estadual}
                                 />
@@ -297,7 +275,7 @@ function AddUserZorbs() {
                                 gap: "105px",
                             }}
                         >
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="E-mail"
@@ -306,12 +284,12 @@ function AddUserZorbs() {
                                     size="small"
                                     fullWidth
                                     error={errors.email}
-                                    helperText={errors.email && "Campo obrigatório ou formato inválido"}
-                                    onChange={handleChange}
+                                    helperText={errors.email && "Campo obrigatório"}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     value={email}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Telefone"
@@ -321,12 +299,11 @@ function AddUserZorbs() {
                                     fullWidth
                                     error={errors.telefone}
                                     helperText={errors.telefone && "Campo obrigatório"}
-                                    onChange={handleChangePhone}
+                                    onChange={(e) => setTelefone(e.target.value)}
                                     value={telefone}
-                                    placeholder="+55 (11) 99999-9999"
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Senha de acesso"
@@ -362,7 +339,7 @@ function AddUserZorbs() {
                                 gap: "20px",
                             }}
                         >
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <FormControl fullWidth variant="outlined" size="small">
                                     <FormLabel style={{ marginBottom: "3px" }}>Data de Abertura</FormLabel>
                                     <TextField
@@ -382,7 +359,7 @@ function AddUserZorbs() {
                                     />
                                 </FormControl>
                             </div>
-                            <div style={{ width: "350px", marginTop: "25px" }}>
+                            <div style={{ width: "100%", marginTop: "25px" }}>
                                 <TextField
                                     required
                                     label="Tipo de Pessoa"
@@ -402,7 +379,7 @@ function AddUserZorbs() {
                                     ))}
                                 </TextField>
                             </div>
-                            <div style={{ width: "350px", marginTop: "25px" }}>
+                            <div style={{ width: "100%", marginTop: "25px" }}>
                                 <TextField
                                     required
                                     label="Tipo do plano"
@@ -422,7 +399,7 @@ function AddUserZorbs() {
                                     ))}
                                 </TextField>
                             </div>
-                            <div style={{ width: "350px", marginTop: "25px" }}>
+                            <div style={{ width: "100%", marginTop: "25px" }}>
                                 <TextField
                                     required
                                     label="Status"
@@ -464,7 +441,7 @@ function AddUserZorbs() {
                                 gap: "100px",
                             }}
                         >
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="CEP"
@@ -477,7 +454,7 @@ function AddUserZorbs() {
                                     value={CEP}
                                 />
                             </div>
-                            <div style={{ width: "605px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Rua / Endereço"
@@ -490,7 +467,7 @@ function AddUserZorbs() {
                                     value={RUA}
                                 />
                             </div>
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Numero"
@@ -511,7 +488,7 @@ function AddUserZorbs() {
                                 gap: "105px",
                             }}
                         >
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Bairro"
@@ -524,7 +501,7 @@ function AddUserZorbs() {
                                     value={bairro}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Cidade"
@@ -537,7 +514,7 @@ function AddUserZorbs() {
                                     value={cidade}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Estado"
@@ -560,12 +537,12 @@ function AddUserZorbs() {
                         >
                             <div style={{ width: "100%" }}>
                                 <TextField
+                                    required
                                     label="Complemento"
                                     variant="outlined"
                                     size="small"
                                     fullWidth
                                     error={errors.complemento}
-                                    helperText={errors.complemento && "Campo obrigatório"}
                                     onChange={(e) => setComplemento(e.target.value)}
                                     value={complemento}
                                 />
@@ -616,7 +593,7 @@ function AddUserZorbs() {
                         >
                             <Button
                                 variant="contained"
-                                onClick={createEmpresa}
+                                onClick={updateUserZorbs}
                                 sx={{
                                     backgroundColor: "#1976d2",
                                     "&:hover": {
@@ -624,7 +601,7 @@ function AddUserZorbs() {
                                     },
                                 }}
                             >
-                                Cadastrar
+                                Editar
                             </Button>
                             <Button
                                 variant="contained"
@@ -647,5 +624,3 @@ function AddUserZorbs() {
         </>
     )
 }
-
-export default AddUserZorbs
