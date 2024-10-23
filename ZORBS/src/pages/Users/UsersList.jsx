@@ -14,12 +14,14 @@ import {
   TextField,
   Typography,
   Dialog,
+  Modal,
   Stack,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import NewUsersModal from "./NewUsersModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
+import EditUsers from "./EditUsers";
 import Swal from "sweetalert2";
 
 const columns = [
@@ -30,13 +32,15 @@ const columns = [
   { id: "option", label: "Opções", minWidth: 170 },
 ];
 
+
 export default function UsersList() {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
+  const [selectedUser, setSelectedUser] = useState(null); // Estado para o produto selecionado
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -94,18 +98,34 @@ export default function UsersList() {
   };
 
   // Funções para editar produtos
-  const handleEditOpen = (product) => {
-    setSelectedProduct(product);
+  const handleEditOpen = (user) => {
+    setSelectedUser(user);
     setEditOpen(true);
   };
 
   const handleEditClose = () => {
     setEditOpen(false);
-    setSelectedProduct(null);
+    setSelectedUser(null);
   };
 
   return (
     <>
+       <Modal
+            open={editOpen}
+            aria-labelledby="modal-title"
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+         <EditUsers
+         user={selectedUser} 
+         closeEvent={handleEditClose} 
+         refreshUser={getUser} />
+
+        </Modal>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -218,7 +238,6 @@ export default function UsersList() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <NewUsersModal  open={handleOpen} />
     </>
   );
 }

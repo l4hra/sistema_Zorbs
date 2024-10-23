@@ -69,6 +69,16 @@
       "preco_custo": 0,
       "preco_venda": 0,
       "observacao": ""
+    },
+    {
+      "id": "5296",
+      "name": "",
+      "type": "",
+      "category": "",
+      "unidade_medida": "",
+      "preco_custo": 0,
+      "preco_venda": 0,
+      "observacao": ""
     }
   ],
   "user": [

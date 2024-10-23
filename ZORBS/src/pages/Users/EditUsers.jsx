@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 
-export default function NewUsersModal({ closeEvent, refreshUser, users, open }) {
+export default function EditUsers({ closeEvent, refreshUser, user }) {
     const [type_of_acess, setTypeOfAccess] = useState("");
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");
@@ -20,22 +20,22 @@ export default function NewUsersModal({ closeEvent, refreshUser, users, open }) 
     useEffect(() => {
         if (users) {
             // Preenche os campos se um produto for passado como prop
-            setTypeOfAccess(users.type_of_acess);
-            setStatus(users.status);
-            setName(users.name);
-            setPassword(users.passaword);
-            setConfirmPs(users.confirm_ps);
-            setEmail(users.email);
-            setTelefone(users.telefone);
+            setTypeOfAccess(user.type_of_acess);
+            setStatus(user.status);
+            setName(user.name);
+            setPassword(user.passaword);
+            setConfirmPs(user.confirm_ps);
+            setEmail(user.email);
+            setTelefone(user.telefone);
         }
-    }, [users]);
+    }, [user]);
 
     const updateUser = async () => {
         if (!handleValidation()) {
             return;
         }
 
-        const response = await fetch(`http://localhost:3000/user/${users.id}`, {
+        const response = await fetch(`http://localhost:3000/user/${user.id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -72,16 +72,7 @@ export default function NewUsersModal({ closeEvent, refreshUser, users, open }) 
 
 
     return (
-        <Modal
-            open={open}
-            onClose={closeEvent}
-            aria-labelledby="modal-title"
-            style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-        >
+       
             <Box
                 sx={{ width: 850, bgcolor: "background.paper", p: 9, boxShadow: 24 }}
             >
@@ -249,7 +240,7 @@ export default function NewUsersModal({ closeEvent, refreshUser, users, open }) 
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        
     );
 
 
