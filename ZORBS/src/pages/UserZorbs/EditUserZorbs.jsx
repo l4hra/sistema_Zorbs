@@ -189,7 +189,7 @@ export default function EditUserZorbs() {
                 <Sidenav />
 
                 <Box component="main" sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
-                    <Paper sx={{ width: "100%", overflow: "hidden", padding: "15px", boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)" }}>
+                    <Paper sx={{ width: "100%", overflow: "hidden", padding: "15px", boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.50)" }}>
                         <Typography
                             gutterBottom
                             variant="h5"
