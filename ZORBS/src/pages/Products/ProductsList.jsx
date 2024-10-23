@@ -159,7 +159,7 @@ export default function ProductsList() {
         </Modal>
       </div>
 
-      <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
+      <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px", boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)" }}>
         <Typography
           gutterBottom
           variant="h5"

@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { NumericFormat } from "react-number-format";
 import {
   Typography,
   Box,
   TextField,
   Button,
   MenuItem,
+  InputAdornment,
 } from "@mui/material";
 import Swal from "sweetalert2";
 
@@ -68,8 +70,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
         type,
         category,
         unidade_medida,
-        preco_custo: Number(preco_custo),
-        preco_venda: Number(preco_venda),
+        preco_custo: Number(preco_custo.replace(",", ".")),
+        preco_venda: Number(preco_venda.replace(",", ".")),
         observacao,
       }),
     });
@@ -164,30 +166,48 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
         </div>
 
         <div style={{ gridColumn: 'span 1' }}>
-          <TextField
+          <NumericFormat
+            customInput={TextField}
             required
-            label="Preço de Custo (R$)"
+            label="Preço de Custo"
+            placeholder="00,00"
             variant="outlined"
             size="small"
             fullWidth
+            thousandSeparator="."
+            decimalSeparator=","
+            decimalScale={2}
+            fixedDecimalScale
+            InputProps={{
+              startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+            }}
             error={errors.preco_custo}
-            helperText={errors.preco_custo ? "Insira um valor numérico válido" : ""}
-            onChange={(e) => setPreco_custo(e.target.value)}
-            value={preco_custo || ""}
+            helperText={errors.preco_custo && "Campo obrigatório"}
+            onValueChange={(values) => setPreco_custo(values.value)}
+            value={preco_custo}
           />
         </div>
 
         <div style={{ gridColumn: 'span 1' }}>
-          <TextField
+          <NumericFormat
+            customInput={TextField}
             required
-            label="Preço de Venda (R$)"
+            label="Preço de Venda"
+            placeholder="00,00"
             variant="outlined"
             size="small"
             fullWidth
+            thousandSeparator="."
+            decimalSeparator=","
+            decimalScale={2}
+            fixedDecimalScale
+            InputProps={{
+              startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+            }}
             error={errors.preco_venda}
-            helperText={errors.preco_venda ? "Insira um valor numérico válido" : ""}
-            onChange={(e) => setPreco_venda(e.target.value)}
-            value={preco_venda || ""}
+            helperText={errors.preco_venda && "Campo obrigatório"}
+            onValueChange={(values) => setPreco_venda(values.value)}
+            value={preco_venda}
           />
         </div>
 

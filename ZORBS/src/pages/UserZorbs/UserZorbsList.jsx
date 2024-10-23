@@ -25,12 +25,6 @@ function UserZorbsList() {
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
-  const [selectedEmpresas, setSelectedEmpresas] = useState(null); // Estado para o produto selecionado
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getEmpresas();
@@ -86,21 +80,15 @@ function UserZorbsList() {
     row.razao_social.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Funções para editar empresa
+  // Funções para editar empresa passando por navegação
   const handleEditOpen = (empresa) => {
-    setSelectedEmpresas(empresa);
-    setEditOpen(true);
-  };
-
-  const handleEditClose = () => {
-    setEditOpen(false);
-    setSelectedEmpresas(null);
+    navigate("/EditUsersZorbs", { state: { empresa } });
   };
 
 
   return (
     <>
-      <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
+      <Paper sx={{ width: "100%", overflow: "hidden", padding: "16px", boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)" }}>
         <Typography
           gutterBottom
           variant="h5"

@@ -9,6 +9,7 @@ import Config from "./pages/ConfigLayout/Config";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import UserZorbs from "./pages/UserZorbs/UserZorbs";
 import AddUserZorbs from "./pages/UserZorbs/AddUserZorbs";
+import EditUserZorbs from "./pages/UserZorbs/EditUserZorbs";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/Config" exact element={<Config />}></Route>
           <Route path="/Users-Zorbs" exact element={<UserZorbs />}></Route>
           <Route path="/AddUsersZorbs" exact element={<AddUserZorbs />}></Route>
+          <Route path="/EditUsersZorbs" exact element={<EditUserZorbs />}></Route>
         </Routes>
       </BrowserRouter>
     </>

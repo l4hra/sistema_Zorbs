@@ -8,7 +8,6 @@
       "status": "Ativo"
     },
     {
-      "id": "b7fd",
       "CNPJ": "99.999.999.9999-99",
       "razao_social": "teste",
       "nome_fantasia": "teste",
@@ -27,7 +26,8 @@
       "cidade": "cidade",
       "estado": "estado",
       "complemento": "complemento",
-      "observacoes": "obs"
+      "observacoes": "obsss",
+      "id": "b7fd"
     }
   ]
 }
