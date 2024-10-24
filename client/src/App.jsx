@@ -8,8 +8,8 @@ import NewCommands from "./pages/NewCommands/NewCommands";
 import Config from "./pages/ConfigLayout/Config";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import UserZorbs from "./pages/UserZorbs/UserZorbs";
-import AddUserZorbs from "./pages/UserZorbs/AddUserZorbs";
-import EditUserZorbs from "./pages/UserZorbs/EditUserZorbs";
+import AddUserZorbs from "./components/CreateUserZorbs/AddUserZorbs";
+import EditUserZorbs from "./components/EditUserZorbs/EditUserZorbs";
 
 function App() {
   return (

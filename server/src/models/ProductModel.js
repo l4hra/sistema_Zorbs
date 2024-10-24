@@ -1,8 +1,15 @@
 import mysql from 'mysql2/promise';
 import db from '../../conexao.js';
+import { validateProductData, validateProductId } from '../validations/productsValidation.js';
 
 // Função para cadastrar produtos
 export async function addProducts(products) {
+    const errors = validateProductData(products);
+
+    if (errors.length > 0) {
+        return [400, errors];
+    }
+
     const conexao = mysql.createPool(db);
     const sql = `INSERT INTO products (name, type, category, unidade_medida, preco_custo, preco_venda, observacao)
     VALUES (?,?,?,?,?,?,?)`;
@@ -41,6 +48,12 @@ export async function getProducts(req, res) {
 
 // Função para deletar produtos
 export async function deleteProduct(id) {
+    const idErrors = validateProductId(id);
+
+    if (idErrors.length > 0) {
+        return [400, idErrors];
+    }
+
     const conexao = mysql.createPool(db);
     const sql = 'DELETE FROM products WHERE id = ?';
     
@@ -60,6 +73,14 @@ export async function deleteProduct(id) {
 
 // Função para editar produtos
 export async function updateProduct(id, product) {
+    const idErrors = validateProductId(id);
+    const productErrors = validateProductData(product);
+    const errors = [...idErrors, ...productErrors];
+
+    if (errors.length > 0) {
+        return [400, errors];
+    }
+
     const conexao = mysql.createPool(db);
     const sql = `UPDATE products SET name = ?, type = ?, category = ?, unidade_medida = ?, preco_custo = ?, preco_venda = ?, observacao = ?
                  WHERE id = ?`;
@@ -71,7 +92,7 @@ export async function updateProduct(id, product) {
         product.preco_custo,
         product.preco_venda,
         product.observacao,
-        id // Adicionando o id ao final para o WHERE
+        id
     ];
 
     try {

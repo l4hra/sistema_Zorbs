@@ -46,8 +46,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       type: !type,
       category: !category,
       unidade_medida: !unidade_medida,
-      preco_custo: isNaN(Number(preco_custo)) || !preco_custo,
-      preco_venda: isNaN(Number(preco_venda)) || !preco_venda,
+      preco_custo: !preco_custo || Number(preco_custo.replace(",", ".")) <= 0,
+      preco_venda: !preco_venda || Number(preco_venda.replace(",", ".")) <= 0,
     };
     setErrors(newErrors);
 

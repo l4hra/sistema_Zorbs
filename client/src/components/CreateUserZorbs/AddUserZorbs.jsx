@@ -41,9 +41,6 @@ function AddUserZorbs() {
     const [observacoes, setObservacoes] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const styleDiv = {
-
-    }
 
     const createEmpresa = async () => {
         if (!handleValidation()) {
