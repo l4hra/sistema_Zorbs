@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import Sidenav from '../../components/Sidenav';
 import Navbar from '../../components/Navbar';
 import ProductsList from './ProductsList';
@@ -52,8 +52,12 @@ function Products() {
               <CircularProgress />
               <Typography variant="body1" sx={{ ml: 2 }}>Carregando produtos...</Typography>
             </Box>
+          ) : error ? (
+            // Exibir mensagem de erro caso haja um erro de fetch
+            <Alert severity="error">Ocorreu um problema inesperado. Tente novamente mais tarde.</Alert>
           ) : (
-            <ErrorBoundary errorMessage={error}>
+            // Envolver o ProductsList com ErrorBoundary para capturar erros de renderização
+            <ErrorBoundary errorMessage="Erro ao carregar a lista de produtos.">
               <ProductsList products={products} refreshProducts={refreshProducts} />
             </ErrorBoundary>
           )}

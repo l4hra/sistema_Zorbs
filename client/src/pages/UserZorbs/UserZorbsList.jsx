@@ -49,7 +49,7 @@ export default function UserZorbsList() {
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [rows, getEmpresas] = useEmpresas('http://localhost:5002/empresas');
+  const [rows, getEmpresas] = useEmpresas('http://localhost:5000/empresas');
 
   const deleteEmpresa = async (id) => {
     const result = await Swal.fire({
@@ -62,7 +62,7 @@ export default function UserZorbsList() {
       confirmButtonText: "Sim, deletar",
     });
     if (result.isConfirmed) {
-      await fetch(`http://localhost:5002/empresas/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/empresas/${id}`, { method: 'DELETE' });
       Swal.fire("Deletado com sucesso!", "A empresa foi deletada.", "success");
       getEmpresas();
     }

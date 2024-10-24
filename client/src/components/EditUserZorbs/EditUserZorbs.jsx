@@ -119,7 +119,7 @@ export default function EditUserZorbs() {
             return;
         }
 
-        const response = await fetch(`http://localhost:5002/empresas/${empresa.id}`, {
+        const response = await fetch(`http://localhost:5000/empresas/${empresa.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

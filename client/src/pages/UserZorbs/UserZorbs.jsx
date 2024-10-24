@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import UserZorbsList from './UserZorbsList'
 import Navbar from '../../components/Navbar'
 import Sidenav from '../../components/Sidenav'
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 
 function UserZorbs() {
@@ -14,7 +14,7 @@ function UserZorbs() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:5002/empresas');
+      const response = await fetch('http://localhost:5000/empresas');
       if (!response.ok) {
         throw new Error("Erro ao buscar empresas");
       }
@@ -48,9 +48,14 @@ function UserZorbs() {
               <CircularProgress />
               <Typography variant="body1" sx={{ ml: 2 }}>Carregando empresas...</Typography>
             </Box>
-          ) : (
+          ) //: error ? (
+            // Exibir mensagem de erro caso haja um erro de fetch
+            //<Alert severity="error">Ocorreu um problema inesperado. Tente novamente mais tarde.</Alert>
+            
+          //) 
+          : (
             <ErrorBoundary errorMessage={error}>
-              <UserZorbsList userZorbs={userZorbs} refreshEmpresas={refreshEmpresas}/>
+              <UserZorbsList userZorbs={userZorbs} refreshEmpresas={refreshEmpresas} />
             </ErrorBoundary>
           )}
 
