@@ -1,0 +1,33 @@
+{
+  "empresas": [
+    {
+      "id": "1300",
+      "razao_social": "zorbs.com",
+      "nome_fantasia": "zorbsinho",
+      "CNPJ": "99.999.999.9999-99",
+      "status": "Ativo"
+    },
+    {
+      "CNPJ": "99.999.999.9999-99",
+      "razao_social": "teste",
+      "nome_fantasia": "teste",
+      "inscricao_estadual": "teste",
+      "email": "email@email.com",
+      "telefone": "(99)999999999",
+      "senha_acesso": "12345",
+      "data_abertura": "2024-10-22",
+      "tipo_pessoa": "Pessoa Juridica",
+      "tipo_plano": "Plano Bronze",
+      "status": "Ativo",
+      "CEP": "99999999",
+      "RUA": "rua",
+      "numero": "12",
+      "bairro": "bairro",
+      "cidade": "cidade",
+      "estado": "estado",
+      "complemento": "complemento",
+      "observacoes": "obsss",
+      "id": "b7fd"
+    }
+  ]
+}

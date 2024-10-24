@@ -1,0 +1,18 @@
+.modalStyle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  bgcolor: "background.paper";
+  max-height: 60vh;
+  overflow-y: auto;
+  outline: none;
+  box-shadow: 20;
+  borderradius: 5px;
+  padding: 3;
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+}
