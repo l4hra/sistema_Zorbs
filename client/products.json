@@ -1,0 +1,136 @@
+{
+  "products": [
+    {
+      "name": "Coca-cola 600ml",
+      "type": "Refrigerante",
+      "category": "Bebida",
+      "unidade_medida": "Unidade",
+      "preco_custo": 2.5,
+      "preco_venda": 5.2,
+      "observacao": "obs",
+      "id": "5492"
+    },
+    {
+      "id": "8ee8",
+      "name": "Guarana 1L",
+      "type": "Refrigerante",
+      "category": "Bebida",
+      "unidade_medida": "Unidade",
+      "preco_custo": 6,
+      "preco_venda": 12,
+      "observacao": ""
+    },
+    {
+      "id": "4c4d",
+      "name": "Fandangos",
+      "type": "Chipes",
+      "category": "Comida",
+      "unidade_medida": "Unidade",
+      "preco_custo": 0.5,
+      "preco_venda": 2,
+      "observacao": ""
+    },
+    {
+      "id": "b94a",
+      "name": "Picolé de Abacate",
+      "type": "Picolé Simples",
+      "category": "Picolé",
+      "unidade_medida": "Unidade",
+      "preco_custo": 1.5,
+      "preco_venda": 3,
+      "observacao": ""
+    },
+    {
+      "name": "Picolé de Ninho Nutelado",
+      "type": "Picolé Recheado",
+      "category": "Picolé",
+      "unidade_medida": "Unidade",
+      "preco_custo": 2.5,
+      "preco_venda": 5.5,
+      "observacao": "a",
+      "id": "fcd9"
+    },
+    {
+      "id": "ad00",
+      "name": "Açai 500ml",
+      "type": "Açai",
+      "category": "Açai",
+      "unidade_medida": "Unidade",
+      "preco_custo": 8,
+      "preco_venda": 12,
+      "observacao": ""
+    },
+    {
+      "id": "2387",
+      "name": "",
+      "type": "",
+      "category": "",
+      "unidade_medida": "",
+      "preco_custo": 0,
+      "preco_venda": 0,
+      "observacao": ""
+    },
+    {
+      "id": "5296",
+      "name": "",
+      "type": "",
+      "category": "",
+      "unidade_medida": "",
+      "preco_custo": 0,
+      "preco_venda": 0,
+      "observacao": ""
+    }
+  ],
+  "user": [
+    {
+      "name": "Luiz Felipe",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "felipe@gmail.com",
+      "telefone": "27996482011",
+      "type_of_acess": "Administrador",
+      "status": "Ativo",
+      "id": "1"
+    },
+    {
+      "name": "RaianeOO",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "Raiane@gmail.com",
+      "telefone": "27996482011",
+      "type_of_acess": "Administrador",
+      "status": "Inativo",
+      "id": "2"
+    },
+    {
+      "name": "Igor",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "felipe@gmail.com",
+      "telefone": "27996482011",
+      "type_of_acess": "Administrador",
+      "status": "Ativo",
+      "id": "3"
+    },
+    {
+      "id": "cf20",
+      "name": "Jose Antonio Bizio",
+      "passaword": "321",
+      "confirm_ps": "321",
+      "email": "jose@gmail.com",
+      "telefone": "27999999999",
+      "type_of_acess": "Funcionário",
+      "status": "Ativo"
+    },
+    {
+      "id": "91c5",
+      "name": "Neli Bizio",
+      "passaword": "111",
+      "confirm_ps": "111",
+      "email": "neli@gmail.com",
+      "telefone": "2788888888",
+      "type_of_acess": "Administrador",
+      "status": "Inativo"
+    }
+  ]
+}
