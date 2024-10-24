@@ -9,16 +9,26 @@ import {
 import Swal from "sweetalert2";
 
 export default function EditUsers({ closeEvent, refreshUser, user }) {
-    const [type_of_acess, setTypeOfAccess] = useState("");
-    const [status, setStatus] = useState("");
-    const [name, setName] = useState("");
-    const [passaword, setPassword] = useState("");
-    const [confirm_ps, setConfirmPs] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefone, setTelefone] = useState("");
+    const [type_of_acess, setTypeOfAccess] = useState(user?.type_of_acess || "" );
+    const [status, setStatus] = useState(user?.status || "" );
+    const [name, setName] = useState(user?.name || "" );
+    const [passaword, setPassword] = useState(user?.passaword || "" );
+    const [confirm_ps, setConfirmPs] = useState(user?.confirm_ps || "" );
+    const [email, setEmail] = useState(user?.email || "" );
+    const [telefone, setTelefone] = useState(user?.telefone || "" );
+
+    const [errors, setErrors] = useState({
+        name: false,
+        passaword: false,
+        confirm_ps: false,
+        email: false,
+        telefone: false,
+        type_of_acess: false,
+        status: false,
+    });
 
     useEffect(() => {
-        if (users) {
+        if (user) {
             // Preenche os campos se um produto for passado como prop
             setTypeOfAccess(user.type_of_acess);
             setStatus(user.status);
@@ -36,7 +46,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
         }
 
         const response = await fetch(`http://localhost:3000/user/${user.id}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -60,6 +70,22 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
         }
     };
 
+    const handleValidation = () => {
+        let newErrors = {
+          name: !name,
+          passaword: !passaword,
+          confirm_ps: !confirm_ps,
+          email: !email,
+          telefone: !telefone,
+          type_of_acess: !type_of_acess,
+          status: !status
+        };
+        setErrors(newErrors);
+    
+        // Verifica se há algum erro
+        return !Object.values(newErrors).includes(true);
+      };
+
     const typeAcess = [
         { value: "Funcionário", label: "Funcionário" },
         { value: "Administrador", label: "Administrador" },
@@ -78,12 +104,12 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
             >
                 <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
                     Editar Novo Usuário
-                    <IconButton
+                    {/* <IconButton
                         style={{ position: "absolute", right: 8, top: 8 }}
                         onClick={closeEvent}
                     >
                         <CloseIcon />
-                    </IconButton>
+                    </IconButton> */}
                 </Typography>
 
                 <TextField
@@ -99,7 +125,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                     error={errors.name}
                     helperText={errors.name && "Campo Obrigatório"}
                     onChange={(e) => setName(e.target.value)}
-                    value={name}
+                    value={name || ""}
                 />
 
                 <div
@@ -123,7 +149,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         error={errors.passaword}
                         helperText={errors.passaword && "Campo Obrigatório"}
                         onChange={(e) => setPassword(e.target.value)}
-                        value={passaword}
+                        value={passaword || ""}
                     />
 
                     <TextField
@@ -138,7 +164,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         error={errors.confirm_ps}
                         helperText={errors.confirm_ps && "Campo Obrigatório"}
                         onChange={(e) => setConfirmPs(e.target.value)}
-                        value={confirm_ps}
+                        value={confirm_ps || ""}
                     />
  
                     <TextField
@@ -153,7 +179,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         error={errors.email}
                         helperText={errors.email && "Campo Obrigatório"}
                         onChange={(e) => setEmail(e.target.value)}
-                        value={email}
+                        value={email || ""}
                     />
                     <TextField
                         required
@@ -167,7 +193,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         error={errors.telefone}
                         helperText={errors.telefone && "Campo Obrigatório"}
                         onChange={(e) => setTelefone(e.target.value)}
-                        value={telefone}
+                        value={telefone || ""}
                     />
 
                     <TextField
@@ -180,7 +206,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         error={errors.type_of_acess}
                         helperText={errors.type_of_acess && "Campo Obrigatório"}
                         onChange={(e) => setTypeOfAccess(e.target.value)}
-                        value={type_of_acess}
+                        value={type_of_acess || ""}
                     >
                         {typeAcess.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
@@ -199,7 +225,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         error={errors.status}
                         helperText={errors.status && "Campo Obrigatório"}
                         onChange={(e) => setStatus(e.target.value)}
-                        value={status}
+                        value={status || ""}
                     >
                         {typeStatus.map((option) => (
                             <MenuItem key={option.value} value={option.value}>

@@ -32,6 +32,21 @@ const columns = [
   { id: "option", label: "Opções", minWidth: 170 },
 ];
 
+const styleModal = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "80%", // Aumente para 80% da largura da tela
+  maxWidth: "800px", // Limite a largura máxima
+  bgcolor: "#ffffff",
+  borderRadius: "12px",
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+  p: 4,
+  outline: "none",
+  maxHeight: "90vh",
+  overflowY: "auto",
+};
 
 export default function UsersList() {
   const [page, setPage] = useState(0);
@@ -40,7 +55,7 @@ export default function UsersList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
-  const [selectedUser, setSelectedUser] = useState(null); // Estado para o produto selecionado
+  const [editParms, setEditParms] = useState(null);
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -99,13 +114,13 @@ export default function UsersList() {
 
   // Funções para editar produtos
   const handleEditOpen = (user) => {
-    setSelectedUser(user);
+    setEditParms(user);
     setEditOpen(true);
   };
 
   const handleEditClose = () => {
     setEditOpen(false);
-    setSelectedUser(null);
+    setEditParms(null);
   };
 
   return (
@@ -119,10 +134,12 @@ export default function UsersList() {
                 justifyContent: "center",
             }}
         >
+         
          <EditUsers
-         user={selectedUser} 
+         user={editParms} 
          closeEvent={handleEditClose} 
          refreshUser={getUser} />
+         
 
         </Modal>
 
@@ -150,7 +167,7 @@ export default function UsersList() {
         >
           <TextField
             variant="outlined"
-            label="Pesquisar produtos"
+            label="Pesquisar Usuários"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: "300px" }}

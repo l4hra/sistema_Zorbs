@@ -93,13 +93,13 @@
       "id": "1"
     },
     {
-      "name": "Raiane",
+      "name": "RaianeOO",
       "passaword": "123",
       "confirm_ps": "123",
       "email": "Raiane@gmail.com",
       "telefone": "27996482011",
-      "type_of_acess": "Funcionnário",
-      "status": "Ativo",
+      "type_of_acess": "Administrador",
+      "status": "Inativo",
       "id": "2"
     },
     {
