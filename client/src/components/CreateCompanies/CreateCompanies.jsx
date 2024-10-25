@@ -18,7 +18,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 
-function AddUserZorbs() {
+export default function CreateCompanies() {
     const navigate = useNavigate();
     const [CNPJ, setCnpj] = useState("");
     const [razao_social, setRazao_social] = useState("");
@@ -39,48 +39,53 @@ function AddUserZorbs() {
     const [estado, setEstado] = useState("");
     const [complemento, setComplemento] = useState("");
     const [observacoes, setObservacoes] = useState("");
+
     const [showPassword, setShowPassword] = useState(false);
 
 
-    const createEmpresa = async () => {
+    const createCompanies = async () => {
         if (!handleValidation()) {
             return;
         }
 
-        const response = await fetch("http://localhost:5000/registreEmpresas", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                CNPJ,
-                razao_social,
-                nome_fantasia,
-                inscricao_estadual,
-                email,
-                telefone,
-                senha_acesso,
-                data_abertura,
-                tipo_pessoa,
-                tipo_plano,
-                status,
-                CEP,
-                RUA,
-                numero,
-                bairro,
-                cidade,
-                estado,
-                complemento,
-                observacoes,
-            }),
-        });
+        try {
+            const response = await fetch("http://localhost:5000/createCompanies", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    CNPJ,
+                    razao_social,
+                    nome_fantasia,
+                    inscricao_estadual,
+                    email,
+                    telefone,
+                    senha_acesso,
+                    data_abertura,
+                    tipo_pessoa,
+                    tipo_plano,
+                    status,
+                    CEP,
+                    RUA,
+                    numero,
+                    bairro,
+                    cidade,
+                    estado,
+                    complemento,
+                    observacoes,
+                }),
+            });
 
-        if (response.ok) {
-            Swal.fire("Cadastrada com sucesso!", "Empresa foi adicionado.", "success");
-            navigate("/Users-Zorbs");
-            refreshEmpresas(); // Atualiza a lista 
-        } else {
-            Swal.fire("Erro!", "Não foi possível cadastra empresa.", "error");
+            if (response.ok) {
+                Swal.fire("Cadastrada com sucesso!", "A empresa foi adicionada com sucesso.", "success");
+                navigate("/Companies");
+            } else {
+                Swal.fire("Erro!", "Erro ao se conectar com banco de dados" || "Não foi possível cadastrar a empresa.", "error");
+            }
+        } catch (error) {
+            Swal.fire("Erro!", "Houve um problema ao tentar cadastrar a empresa. Tente novamente mais tarde.", "error");
+            console.error("Erro ao cadastrar empresa:", error);
         }
     };
 
@@ -174,7 +179,7 @@ function AddUserZorbs() {
     const formatPhone = (value) => {
         // Remove tudo que não é número
         value = value.replace(/\D/g, '');
-    
+
         // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
         return value
             .replace(/^(\d{2})(\d)/g, '+$1 $2') // Adiciona o código do país
@@ -616,7 +621,7 @@ function AddUserZorbs() {
                         >
                             <Button
                                 variant="contained"
-                                onClick={createEmpresa}
+                                onClick={createCompanies}
                                 sx={{
                                     backgroundColor: "#1976d2",
                                     "&:hover": {
@@ -629,7 +634,7 @@ function AddUserZorbs() {
                             <Button
                                 variant="contained"
                                 onClick={() => {
-                                    navigate("/Users-Zorbs");
+                                    navigate("/companies");
                                 }}
                                 sx={{
                                     backgroundColor: "#1976d2",
@@ -647,5 +652,3 @@ function AddUserZorbs() {
         </>
     )
 }
-
-export default AddUserZorbs

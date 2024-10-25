@@ -407,7 +407,7 @@ export default function Sidenav({ color }) {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Users-Zorbs");
+              navigate("/Companies");
             }}
           >
             <ListItemButton

@@ -22,7 +22,14 @@ function Products() {
       const data = await response.json();
       setProducts(data);
     } catch (error) {
-      setError(error.message);
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        setError("Não foi possível conectar ao servidor. Verifique sua conexão com o banco de dados.");
+      } else {
+        <ProductsList 
+          products={products} 
+          refreshProducts={refreshProducts} 
+        />
+      }
       console.error('Erro ao buscar produtos:', error);
     } finally {
       setLoading(false);
@@ -52,14 +59,16 @@ function Products() {
               <CircularProgress />
               <Typography variant="body1" sx={{ ml: 2 }}>Carregando produtos...</Typography>
             </Box>
-          ) : //error ? (
-            // Exibir mensagem de erro caso haja um erro de fetch
-            //<Alert severity="error">Ocorreu um problema inesperado. Tente novamente mais tarde.</Alert>
-         // ) : 
-         (
+          ) : error ? (
+            // Exibir mensagem de erro caso haja um erro de conexão ou outro erro
+            <Alert severity="error">{error}</Alert>
+          ) : (
             // Envolver o ProductsList com ErrorBoundary para capturar erros de renderização
-            <ErrorBoundary errorMessage="Erro ao carregar a lista de produtos.">
-              <ProductsList products={products} refreshProducts={refreshProducts} />
+            <ErrorBoundary errorMessage={error}>
+              <ProductsList 
+              products={products} 
+              refreshProducts={refreshProducts} 
+              />
             </ErrorBoundary>
           )}
 

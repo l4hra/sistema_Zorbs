@@ -18,55 +18,55 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 
-export default function EditUserZorbs() {
+export default function EditCompanies() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { empresa } = location.state || {};
+    const { companies } = location.state || {};
 
-    const [CNPJ, setCnpj] = useState(empresa?.CNPJ || "");
-    const [razao_social, setRazao_social] = useState(empresa?.razao_social || "");
-    const [nome_fantasia, setNome_fantasia] = useState(empresa?.nome_fantasia || "");
-    const [inscricao_estadual, setInscricao_estadual] = useState(empresa?.inscricao_estadual || "");
-    const [email, setEmail] = useState(empresa?.email || "");
-    const [telefone, setTelefone] = useState(empresa?.telefone || "");
-    const [senha_acesso, setSenha_acesso] = useState(empresa?.senha_acesso || "");
-    const [data_abertura, setData_abertura] = useState(empresa?.data_abertura || "");
-    const [tipo_pessoa, setTipo_pessoa] = useState(empresa?.tipo_pessoa || "");
-    const [tipo_plano, setTipo_plano] = useState(empresa?.tipo_plano || "");
-    const [status, setStatus] = useState(empresa?.status || "");
-    const [CEP, setCep] = useState(empresa?.CEP || "");
-    const [RUA, setRua] = useState(empresa?.RUA || "");
-    const [numero, setNumero] = useState(empresa?.numero || "");
-    const [bairro, setBairro] = useState(empresa?.bairro || "");
-    const [cidade, setCidade] = useState(empresa?.cidade || "");
-    const [estado, setEstado] = useState(empresa?.estado || "");
-    const [complemento, setComplemento] = useState(empresa?.complemento || "");
-    const [observacoes, setObservacoes] = useState(empresa?.observacoes || "");
+    const [CNPJ, setCnpj] = useState(companies?.CNPJ || "");
+    const [razao_social, setRazao_social] = useState(companies?.razao_social || "");
+    const [nome_fantasia, setNome_fantasia] = useState(companies?.nome_fantasia || "");
+    const [inscricao_estadual, setInscricao_estadual] = useState(companies?.inscricao_estadual || "");
+    const [email, setEmail] = useState(companies?.email || "");
+    const [telefone, setTelefone] = useState(companies?.telefone || "");
+    const [senha_acesso, setSenha_acesso] = useState(companies?.senha_acesso || "");
+    const [data_abertura, setData_abertura] = useState(companies?.data_abertura || "");
+    const [tipo_pessoa, setTipo_pessoa] = useState(companies?.tipo_pessoa || "");
+    const [tipo_plano, setTipo_plano] = useState(companies?.tipo_plano || "");
+    const [status, setStatus] = useState(companies?.status || "");
+    const [CEP, setCep] = useState(companies?.CEP || "");
+    const [RUA, setRua] = useState(companies?.RUA || "");
+    const [numero, setNumero] = useState(companies?.numero || "");
+    const [bairro, setBairro] = useState(companies?.bairro || "");
+    const [cidade, setCidade] = useState(companies?.cidade || "");
+    const [estado, setEstado] = useState(companies?.estado || "");
+    const [complemento, setComplemento] = useState(companies?.complemento || "");
+    const [observacoes, setObservacoes] = useState(companies?.observacoes || "");
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        if (empresa) {
-            setCnpj(empresa.CNPJ || "");
-            setRazao_social(empresa.razao_social || "");
-            setNome_fantasia(empresa.nome_fantasia || "");
-            setInscricao_estadual(empresa.inscricao_estadual || "");
-            setEmail(empresa.email || "");
-            setTelefone(empresa.telefone || "");
-            setSenha_acesso(empresa.senha_acesso || "");
-            setData_abertura(empresa.data_abertura || "");
-            setTipo_pessoa(empresa.tipo_pessoa || "");
-            setTipo_plano(empresa.tipo_plano || "");
-            setStatus(empresa.status || "");
-            setCep(empresa.CEP || "");
-            setRua(empresa.RUA || "");
-            setNumero(empresa.numero || "");
-            setBairro(empresa.bairro || "");
-            setCidade(empresa.cidade || "");
-            setEstado(empresa.estado || "");
-            setComplemento(empresa.complemento || "");
-            setObservacoes(empresa.observacoes || "");
+        if (companies) {
+            setCnpj(companies.CNPJ || "");
+            setRazao_social(companies.razao_social || "");
+            setNome_fantasia(companies.nome_fantasia || "");
+            setInscricao_estadual(companies.inscricao_estadual || "");
+            setEmail(companies.email || "");
+            setTelefone(companies.telefone || "");
+            setSenha_acesso(companies.senha_acesso || "");
+            setData_abertura(companies.data_abertura || "");
+            setTipo_pessoa(companies.tipo_pessoa || "");
+            setTipo_plano(companies.tipo_plano || "");
+            setStatus(companies.status || "");
+            setCep(companies.CEP || "");
+            setRua(companies.RUA || "");
+            setNumero(companies.numero || "");
+            setBairro(companies.bairro || "");
+            setCidade(companies.cidade || "");
+            setEstado(companies.estado || "");
+            setComplemento(companies.complemento || "");
+            setObservacoes(companies.observacoes || "");
         }
-    }, [empresa]);
+    }, [companies]);
 
     const [errors, setErrors] = useState({
         CNPJ: false,
@@ -119,7 +119,7 @@ export default function EditUserZorbs() {
             return;
         }
 
-        const response = await fetch(`http://localhost:5000/empresas/${empresa.id}`, {
+        const response = await fetch(`http://localhost:5000/companies/${companies.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -200,12 +200,12 @@ export default function EditUserZorbs() {
                                 fontWeight: "bold",
                             }}
                         >
-                            Perfil da empresa: {nome_fantasia}
+                            Perfil da Empresa: {nome_fantasia}
                         </Typography>
 
                         <Box height={10} />
 
-                        {/* Cadastro informações empresa */}
+                        {/* Cadastro informações companies */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -421,7 +421,7 @@ export default function EditUserZorbs() {
                             </div>
                         </Box>
 
-                        {/* Cadastro endereço empresa */}
+                        {/* Cadastro endereço companies */}
                         <Typography
                             gutterBottom
                             variant="h5"
@@ -606,7 +606,7 @@ export default function EditUserZorbs() {
                             <Button
                                 variant="contained"
                                 onClick={() => {
-                                    navigate("/Users-Zorbs");
+                                    navigate("/Companies");
                                 }}
                                 sx={{
                                     backgroundColor: "#1976d2",

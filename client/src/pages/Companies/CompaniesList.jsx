@@ -23,12 +23,16 @@ import {
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
-const useEmpresas = (url) => {
+// Hook customizado para gerenciar empresas
+const useCompanies = (url) => {
   const [rows, setRows] = useState([]);
 
-  const getEmpresas = async () => {
+  const getCompanies = async () => {
     try {
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
       const data = await response.json();
       setRows(data);
     } catch (error) {
@@ -37,21 +41,21 @@ const useEmpresas = (url) => {
   };
 
   useEffect(() => {
-    getEmpresas();
+    getCompanies();
   }, [url]);
 
-  return [rows, getEmpresas];
+  return [rows, getCompanies];
 }
 
-export default function UserZorbsList() {
+export default function CompaniesList() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [rows, getEmpresas] = useEmpresas('http://localhost:5000/empresas');
+  const [rows, getCompanies] = useCompanies('http://localhost:5000/companies');
 
-  const deleteEmpresa = async (id) => {
+  const deleteCompanies = async (id) => {
     const result = await Swal.fire({
       title: "Tem certeza?",
       text: "Confirme para deletar a empresa!",
@@ -62,9 +66,9 @@ export default function UserZorbsList() {
       confirmButtonText: "Sim, deletar",
     });
     if (result.isConfirmed) {
-      await fetch(`http://localhost:5000/empresas/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/companies/${id}`, { method: 'DELETE' });
       Swal.fire("Deletado com sucesso!", "A empresa foi deletada.", "success");
-      getEmpresas();
+      getCompanies();
     }
   };
 
@@ -75,8 +79,8 @@ export default function UserZorbsList() {
   );
 
   // Funções para editar empresa passando por navegação
-  const handleEditOpen = (empresa) => {
-    navigate("/EditUsersZorbs", { state: { empresa } });
+  const handleEditOpen = (companies) => {
+    navigate("/EditCompanies", { state: { companies } });
   };
 
 
@@ -112,7 +116,7 @@ export default function UserZorbsList() {
             variant="contained"
             endIcon={<AddCircleIcon />}
             onClick={() => {
-              navigate("/AddUsersZorbs");
+              navigate("/CreateCompanies");
             }}
             sx={{
               backgroundColor: "#578eda",
@@ -174,7 +178,7 @@ export default function UserZorbsList() {
                           color: "#f8615b",
                           cursor: "pointer",
                         }}
-                        onClick={() => deleteEmpresa(row.id)}
+                        onClick={() => deleteCompanies(row.id)}
                       />
                     </Stack>
                   </TableCell>
@@ -199,7 +203,6 @@ export default function UserZorbsList() {
             `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`
           }
         />
-
       </Paper>
     </>
   )
