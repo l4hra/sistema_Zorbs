@@ -52,10 +52,11 @@ function Products() {
               <CircularProgress />
               <Typography variant="body1" sx={{ ml: 2 }}>Carregando produtos...</Typography>
             </Box>
-          ) : error ? (
+          ) : //error ? (
             // Exibir mensagem de erro caso haja um erro de fetch
-            <Alert severity="error">Ocorreu um problema inesperado. Tente novamente mais tarde.</Alert>
-          ) : (
+            //<Alert severity="error">Ocorreu um problema inesperado. Tente novamente mais tarde.</Alert>
+         // ) : 
+         (
             // Envolver o ProductsList com ErrorBoundary para capturar erros de renderização
             <ErrorBoundary errorMessage="Erro ao carregar a lista de produtos.">
               <ProductsList products={products} refreshProducts={refreshProducts} />

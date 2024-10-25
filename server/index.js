@@ -1,8 +1,6 @@
 import express from 'express';
 import { cadastroProduct, excluirProduct, atualizaProduct } from './src/controllers/ProductsController.js';
 import { getProducts } from './src/models/ProductModel.js';
-import { getEmpresas } from './src/models/UserZorbsModel.js';
-import { cadastroUserZorbs } from './src/controllers/UserZorbsController.js'
 import cors from 'cors';
 
 const app = express();
@@ -17,9 +15,6 @@ app.post('/registerProduct', cadastroProduct);
 app.get('/products', getProducts);
 app.delete('/products/:id', excluirProduct);
 app.put('/products/:id', atualizaProduct);
-
-app.post('/registreEmpresas', cadastroUserZorbs);
-app.get('/empresas', getEmpresas);
 
 app.get('/', (req, res) => {
     res.send('API funcionando');
