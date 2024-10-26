@@ -78,7 +78,7 @@ export default function CreateCompanies() {
             });
 
             if (response.ok) {
-                Swal.fire("Cadastrada com sucesso!", "A empresa foi adicionada com sucesso.", "success");
+                Swal.fire("Cadastrada com sucesso!", "A empresa foi cadastrada com sucesso.", "success");
                 navigate("/Companies");
             } else {
                 Swal.fire("Erro!", "Erro ao se conectar com banco de dados" || "Não foi possível cadastrar a empresa.", "error");
@@ -143,9 +143,12 @@ export default function CreateCompanies() {
 
     const handleCnpjChange = (e) => {
         const value = e.target.value.replace(/\D/g, ''); // Remove qualquer caractere não numérico
-        if (value.length <= 14) { // Limita o tamanho máximo do CNPJ
-            setCnpj(formatCNPJ(value));
+        if (value.length <= 11) { // Limita o tamanho máximo do CPF
+            setCnpj(formatCPF(value));
             setErrors({ CNPJ: value.length === 0 }); // Verifica se o campo está vazio
+        } else if (value.length <= 14) { // Limita o tamanho máximo do CNPJ
+            setCnpj(formatCNPJ(value))
+            setErrors({ CNPJ: value.length === 0 });
         }
     };
 
@@ -158,7 +161,14 @@ export default function CreateCompanies() {
             .replace(/(\d{4})(\d)/, '$1-$2');
     };
 
-    const handleChange = (e) => {
+    const formatCPF = (value) => {
+        return value
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{2})$/, '$1-$2');
+    }
+
+    const handleEmailChange = (e) => {
         const value = e.target.value;
         setEmail(value);
 
@@ -246,7 +256,7 @@ export default function CreateCompanies() {
                             <div style={{ width: "100%" }}>
                                 <TextField
                                     required
-                                    label="CNPJ"
+                                    label="CPF | CNPJ"
                                     variant="outlined"
                                     size="small"
                                     fullWidth
@@ -312,7 +322,7 @@ export default function CreateCompanies() {
                                     fullWidth
                                     error={errors.email}
                                     helperText={errors.email && "Campo obrigatório ou formato inválido"}
-                                    onChange={handleChange}
+                                    onChange={handleEmailChange}
                                     value={email}
                                 />
                             </div>
@@ -329,7 +339,7 @@ export default function CreateCompanies() {
                                     onChange={handleChangePhone}
                                     value={telefone}
                                     placeholder="+55 (11) 99999-9999"
-                                />
+                                /> 
                             </div>
                             <div style={{ width: "100%" }}>
                                 <TextField

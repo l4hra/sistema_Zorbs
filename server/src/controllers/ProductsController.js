@@ -22,7 +22,7 @@ export async function cadastroProduct(req, res){
 }
 
 export async function excluirProduct(req, res) {
-    console.log('ProductsController excluirProduct');
+    console.log(`ProductsController excluirProduct`);
     const { id } = req.params;
 
     // Validar o ID do produto antes de excluir

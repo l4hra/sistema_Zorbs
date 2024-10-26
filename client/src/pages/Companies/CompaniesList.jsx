@@ -66,7 +66,7 @@ export default function CompaniesList() {
       confirmButtonText: "Sim, deletar",
     });
     if (result.isConfirmed) {
-      await fetch(`http://localhost:5000/companies/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/deleteCompanies/${id}`, { method: 'DELETE' });
       Swal.fire("Deletado com sucesso!", "A empresa foi deletada.", "success");
       getCompanies();
     }

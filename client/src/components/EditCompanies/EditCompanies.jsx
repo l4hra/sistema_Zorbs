@@ -119,7 +119,7 @@ export default function EditCompanies() {
             return;
         }
 
-        const response = await fetch(`http://localhost:5000/companies/${companies.id}`, {
+        const response = await fetch(`http://localhost:5000/updateCompanies/${companies.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,10 +147,10 @@ export default function EditCompanies() {
             }),
         });
         if (response.ok) {
-            Swal.fire("Atualizado com sucesso!", "Seu produto foi atualizado.", "success");
-            navigate("/Users-Zorbs");
+            Swal.fire("Atualizado com sucesso!", "Empresa atualizada.", "success");
+            navigate("/companies");
         } else {
-            Swal.fire("Erro!", "Não foi possível atualizar o produto.", "error");
+            Swal.fire("Erro!", "Não foi possível atualizar a empresa.", "error");
         }
     };
 

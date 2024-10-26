@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCompanies } from './src/controllers/CompaniesController.js'
+import { createCompanies, excluirCompanies, atualizaCompanies  } from './src/controllers/CompaniesController.js'
 import { cadastroProduct, excluirProduct, atualizaProduct } from './src/controllers/ProductsController.js';
 import { getCompanies } from './src/models/CompaniesModel.js'
 import { getProducts } from './src/models/ProductModel.js';
@@ -21,6 +21,8 @@ app.put('/products/:id', atualizaProduct);
 
 app.get('/companies', getCompanies);
 app.post('/createCompanies', createCompanies);
+app.delete('/deleteCompanies/:id', excluirCompanies);
+app.put('/updateCompanies/:id', atualizaCompanies);
 
 app.get('/', (req, res) => {
     res.send('API funcionando');

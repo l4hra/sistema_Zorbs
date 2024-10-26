@@ -30,8 +30,9 @@
     "react-input-color": "^4.0.1",
     "react-input-mask": "^2.0.4",
     "react-number-format": "^5.4.2",
+    "react-phone-number-input": "^3.4.9",
     "react-router-dom": "^6.26.2",
-    "sweetalert2": "^11.14.1",
+    "sweetalert2": "^11.14.4",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {

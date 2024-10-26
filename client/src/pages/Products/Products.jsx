@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar';
 import ProductsList from './ProductsList';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 
-function Products() {
+export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -77,11 +77,10 @@ function Products() {
             <Typography variant="body1" color="textSecondary">
               Nenhum produto encontrado.
             </Typography>
+        
           )}
         </Box>
       </Box>
     </div>
   );
 }
-
-export default Products;

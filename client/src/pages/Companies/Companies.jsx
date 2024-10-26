@@ -60,13 +60,13 @@ export default function Companies() {
             // Exibir mensagem de erro caso haja um erro de conexão ou outro erro
             <Alert severity="error">{error}</Alert>
           ) : (
-              <ErrorBoundary errorMessage={error}>
-                <CompaniesList
-                  companies={companies}
-                  refreshEmpresas={refreshEmpresas}
-                />
-              </ErrorBoundary>
-            )}
+            <ErrorBoundary errorMessage={error}>
+              <CompaniesList
+                companies={companies}
+                refreshEmpresas={refreshEmpresas}
+              />
+            </ErrorBoundary>
+          )}
 
           {/* Caso não haja empresas e não esteja carregando, exibir uma mensagem */}
           {!loading && !error && companies.length === 0 && (
