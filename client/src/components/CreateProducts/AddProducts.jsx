@@ -38,8 +38,8 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
       type: !type,
       category: !category,
       unidade_medida: !unidade_medida,
-      preco_custo: !preco_custo,
-      preco_venda: !preco_venda,
+      preco_custo: !preco_custo || Number(preco_custo.replace(",", ".")) <= 0,
+      preco_venda: !preco_venda || Number(preco_venda.replace(",", ".")) <= 0,
     };
     setErrors(newErrors);
 
@@ -78,7 +78,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
     }
   };
 
-  const currencies = [
+  const categorie = [
     { value: "Bebida", label: "Bebida" },
     { value: "Comida", label: "Comida" },
     { value: "Sorvetes", label: "Sorvetes" },
@@ -140,7 +140,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             onChange={(e) => setCategory(e.target.value)}
             value={category}
           >
-            {currencies.map((option) => (
+            {categorie.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -179,7 +179,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
             }}
             error={errors.preco_custo}
-            helperText={errors.preco_custo && "Campo obrigatório"}
+            helperText={errors.preco_custo && "Campo obrigatório ou valor inválido"}
             onValueChange={(values) => setPreco_custo(values.value)}
             value={preco_custo}
           />
@@ -202,7 +202,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
             }}
             error={errors.preco_venda}
-            helperText={errors.preco_venda && "Campo obrigatório"}
+            helperText={errors.preco_venda && "Campo obrigatório ou valor inválido"}
             onValueChange={(values) => setPreco_venda(values.value)}
             value={preco_venda}
           />
