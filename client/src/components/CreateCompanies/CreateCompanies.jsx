@@ -41,6 +41,8 @@ export default function CreateCompanies() {
     const [observacoes, setObservacoes] = useState("");
 
     const [showPassword, setShowPassword] = useState(false);
+    const axios = require('axios');
+
 
 
     const createCompanies = async () => {
@@ -187,9 +189,6 @@ export default function CreateCompanies() {
     };
 
     const formatPhone = (value) => {
-        // Remove tudo que não é número
-        value = value.replace(/\D/g, '');
-
         // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
         return value
             .replace(/^(\d{2})(\d)/g, '+$1 $2') // Adiciona o código do país
@@ -198,8 +197,62 @@ export default function CreateCompanies() {
     };
 
     const handleChangePhone = (e) => {
-        const formattedPhone = formatPhone(e.target.value);
-        setTelefone(formattedPhone);
+        const value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 15) {
+            setTelefone(formatPhone(value));
+            setErrors({ telefone: value.length === 0 });
+        }
+        
+    };
+
+    const handleChangeIncricao = (e) => {
+        const value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            setInscricao_estadual(value);
+        }
+    };
+
+    const handleBuscarCep = async (cep) => {
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await response.json();
+
+            if (data.erro) {
+                setErrors((prevErrors) => ({ ...prevErrors, CEP: true }));
+            } else {
+                setRua(data.logradouro || '');
+                setBairro(data.bairro || '');
+                setCidade(data.localidade || '');
+                setEstado(data.uf || '');
+                setComplemento(data.complemento || '');
+                setErrors((prevErrors) => ({ ...prevErrors, CEP: false }));
+            }
+        } catch (error) {
+            console.error('Erro ao consultar o CEP:', error);
+            setErrors((prevErrors) => ({ ...prevErrors, CEP: true }));
+        }
+    };
+
+    const handleCepChange = (e) => {
+        const valor = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        
+        if (valor.length > 8) {
+            valor = valor.slice(0, 8);
+        }
+
+        setCep(valor);
+
+        // Verifica se o CEP tem 8 dígitos para buscar automaticamente
+        if (valor.length === 8 ) {
+            handleBuscarCep(valor);
+        } else {
+            // Limpa os campos se o CEP for apagado ou incompleto
+            setRua('');
+            setBairro('');
+            setCidade('');
+            setEstado('');
+            setComplemento('');
+        }
     };
 
     const tipo_pessoas = [
@@ -299,7 +352,7 @@ export default function CreateCompanies() {
                                     size="small"
                                     fullWidth
                                     error={errors.inscricao_estadual}
-                                    onChange={(e) => setInscricao_estadual(e.target.value)}
+                                    onChange={handleChangeIncricao}
                                     value={inscricao_estadual}
                                 />
                             </div>
@@ -487,8 +540,8 @@ export default function CreateCompanies() {
                                     size="small"
                                     fullWidth
                                     error={errors.CEP}
-                                    helperText={errors.CEP && "Campo obrigatório"}
-                                    onChange={(e) => setCep(e.target.value)}
+                                    helperText={errors.CEP && "Campo obrigatório ou CEP inexistente"}
+                                    onChange={handleCepChange}
                                     value={CEP}
                                 />
                             </div>

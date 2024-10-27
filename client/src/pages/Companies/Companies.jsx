@@ -67,7 +67,7 @@ export default function Companies() {
 
           {/* Caso não haja empresas e não esteja carregando, exibir uma mensagem */}
           {!loading && !error && companies.length === 0 && (
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color="textSecondary" align='center'>
               Nenhum empresa encontrada.
             </Typography>
 
