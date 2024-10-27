@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import CompaniesList from './CompaniesList'
-import Navbar from '../../components/Navbar'
-import Sidenav from '../../components/Sidenav'
+import React, { useState, useEffect } from 'react';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
+import Sidenav from '../../components/Sidenav'
+import Navbar from '../../components/Navbar'
+import CompaniesList from './CompaniesList'
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 
 export default function Companies() {
@@ -10,6 +10,11 @@ export default function Companies() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
+  // Função para buscar as empresas
   const fetchCompanies = async () => {
     setLoading(true);
     setError(null);
@@ -24,21 +29,13 @@ export default function Companies() {
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
         setError("Não foi possível conectar ao servidor. Verifique sua conexão com o banco de dados.");
       } else {
-        // Se não ouver empresas cadastradas
-        <CompaniesList
-          companies={companies}
-          refreshEmpresas={refreshEmpresas}
-        />
+        setError("Erro ao buscar empresas. Tente novamente mais tarde!")
       }
       console.error('Erro ao buscar empresas:', error);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchCompanies();
-  }, []);
 
   const refreshEmpresas = async () => {
     await fetchCompanies();
@@ -78,5 +75,5 @@ export default function Companies() {
         </Box>
       </Box>
     </div>
-  )
+  );
 }
