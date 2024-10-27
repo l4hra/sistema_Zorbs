@@ -131,6 +131,26 @@
       "telefone": "2788888888",
       "type_of_acess": "Administrador",
       "status": "Inativo"
+    },
+    {
+      "id": "569f",
+      "name": "Luiz Felipe Xavier Bizio",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "felipexavierluizbizio@gmail.com",
+      "telefone": "27999999999",
+      "type_of_acess": "Funcionário",
+      "status": "Ativo"
+    },
+    {
+      "id": "e7fb",
+      "name": "Luiz Felipe Xavier Bizio",
+      "passaword": "123",
+      "confirm_ps": "123",
+      "email": "felipexavierluizbizio@gmail.com",
+      "telefone": "27999999999",
+      "type_of_acess": "Funcionário",
+      "status": "Inativo"
     }
   ]
 }

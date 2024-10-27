@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/DeleteForever";
 import EditUsers from "./EditUsers";
 import Swal from "sweetalert2";
 
+
 const columns = [
   { id: "code", label: "Código", minWidth: 170 },
   { id: "name", label: "Nome", minWidth: 100 },
@@ -57,6 +58,8 @@ export default function UsersList() {
   const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
   const [editParms, setEditParms] = useState(null);
   
+
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -73,7 +76,7 @@ export default function UsersList() {
   );
 
   const getUser = async () => {
-    const response = await fetch('http://localhost:3000/user');
+    const response = await fetch('http://localhost:5000/users');
     const data = await response.json();
     setRows(data);
   }
@@ -87,8 +90,8 @@ export default function UsersList() {
     setPage(0);
   };
 
-  const deleteUser = (id) => {
-    Swal.fire({
+  const deleteUser = async (id) => {
+    const result = await Swal.fire({
       title: "Tem certeza?",
       text: "Confirme para deletar o usuário!",
       icon: "warning",
@@ -96,22 +99,14 @@ export default function UsersList() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Sim, deletar",
-    }).then((result) => {
-      if (result.value) {
-        deleteApi(id);
+    })
+      if (result.isConfirmed) {
+        await fetch(`http://localhost:5000/deleteUser/${id}`, { method: 'DELETE' });
+        Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
+        getUser();
       }
-    });
-  };
-
-  //Função delete
-  const deleteApi = async (id) => {
-    await fetch(`http://localhost:3000/user/${id}`, {
-      method: 'DELETE'
-    });
-    Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
-    getUser();
-  };
-
+    };
+  
   // Funções para editar produtos
   const handleEditOpen = (user) => {
     setEditParms(user);
@@ -132,6 +127,7 @@ export default function UsersList() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                
             }}
         >
          
@@ -152,25 +148,18 @@ export default function UsersList() {
         <NewUsersModal closeEvent={handleClose} refreshUser={getUser} />
       </Dialog>
 
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-          sx={{ padding: "10px", fontWeight: "bold", fontSize: "30px" }}
-        >
+        <Paper sx={{ width: "100%", padding: "16px", boxShadow: "0px 0px 3px rgba(0,0,0,0.50)" }}>
+        <Typography variant="h5" sx={{ paddingBottom: "10px", fontWeight: "bold" }}>
           Usuários Cadastrados
         </Typography>
-        <Divider />
-        <Box
-          sx={{ display: "flex", justifyContent: "space-between", padding: 2 }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
           <TextField
             variant="outlined"
             label="Pesquisar Usuários"
+            size="small"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ width: "300px" }}
+            sx={{ width: 300 }}
           />
 
           <Button
@@ -182,7 +171,7 @@ export default function UsersList() {
               height: "40px",
             }}
           >
-            Novo Usuário
+            Cadastrar Usuário
           </Button>
         </Box>
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -195,7 +184,7 @@ export default function UsersList() {
                     align="center"
                     style={{
                       minWidth: "100px",
-                      backgroundColor: "#136b69",
+                      backgroundColor: "#054f77",
                       color: "#fff",
                       fontWeight: "bold",
                       fontSize: "18px",
@@ -211,17 +200,12 @@ export default function UsersList() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
-                    <TableCell align="center">{row.id}</TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.type_of_acess}</TableCell>
-                    <TableCell align="center">{row.status}</TableCell>
-                    <TableCell align="center">
-                      <Stack
-                        spacing={2}
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
+                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.id}</TableCell>
+                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.name}</TableCell>
+                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.type_of_acess}</TableCell>
+                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.status}</TableCell>
+                    <TableCell align="center" sx={{fontSize: "17px"}}>
+                      <Stack direction="row" spacing={2} justifyContent="center">
                         <EditIcon
                           style={{
                             fontSize: "20px",
@@ -246,13 +230,20 @@ export default function UsersList() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[15, 25, 35]}
           component="div"
-          count={rows.length}
+          count={filteredRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          onPageChange={(e, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(e) => {
+            setRowsPerPage(parseInt(e.target.value, 10));
+            setPage(0);
+          }}
+          labelRowsPerPage="Linhas por página:"
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`
+        }
         />
       </Paper>
     </>

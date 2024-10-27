@@ -5,17 +5,16 @@ import {
     Typography,
     Box,
     TextField,
-    Autocomplete,
     Button,
     MenuItem,
+    InputAdornment,
     Modal,
-    FormControl,
-    InputLabel,
-    Select,
-    Grid2,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
+
+
 
 export default function NewUsersModal({ closeEvent, refreshUser }) {
     const [type_of_acess, setTypeOfAccess] = useState("");
@@ -26,6 +25,8 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPs, setShowConfirmPs] = useState(false);
 
     const [errors, setErrors] = useState({
         name: false,
@@ -58,7 +59,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             return;
         }
 
-        const response = await fetch("http://localhost:3000/user", {
+        const response = await fetch("http://localhost:5000/cadastroUser", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -100,6 +101,88 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
         { value: "Inativo", label: "Inativo" },
     ];
 
+    const handleEmailChange = (e) => {
+        const value = e.target.value;
+        setEmail(value);
+
+        // Valida o e-mail e atualiza os erros
+        if (value === '' || validateEmail(value)) {
+            setErrors({ email: false });
+        } else {
+            setErrors({ email: true });
+        }
+    };
+
+    const validateEmail = (value) => {
+        // Expressão regular para validar o formato de e-mail
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+    };
+
+    const handlePasswordChange = (e) => {
+        const value = e.target.value;
+        setPassword(value); 
+
+        // Valida a senha e atualiza os erros
+        if (value === '' || validatePassword(value)) {
+            setErrors({ passaword: false });
+        } else {
+            setErrors({ passaword: true });
+        }
+    }
+    function validatePassword(value, confirm_ps ) {
+        // Verifica o comprimento da senha
+        if (senha.length < 8) {
+            return "A senha deve ter pelo menos 8 caracteres.";
+        }
+        // Verifica a presença de pelo menos uma letra maiúscula
+        if (!/[A-Z]/.test(value)) {
+            return "A senha deve conter pelo menos uma letra maiúscula.";
+        }   
+        // Verifica a presença de pelo menos uma letra minúscula
+        if (!/[a-z]/.test(value)) {
+            return "A senha deve conter pelo menos uma letra minúscula.";
+        }  
+        // Verifica a presença de pelo menos um número
+        if (!/[0-9]/.test(value)) {
+            return "A senha deve conter pelo menos um número.";
+        } 
+        // Verifica a presença de pelo menos um símbolo especial
+        if (!/[^A-Za-z0-9]/.test(value)) {
+            return "A senha deve conter pelo menos um símbolo especial (ex.: !, @, #, etc.).";
+        }
+        if (passaword !== confirm_ps) {
+            return "As senhas não correspondem.";
+        }
+    }
+
+    const handleClickShowPassword = () => {
+        setShowPassword((prev) => !prev);
+    };
+
+    const handleClickShowConfirmPs = () => {
+        setShowConfirmPs((prev) => !prev);
+    };
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+    const formatPhone = (value) => {
+        // Remove tudo que não é número
+        value = value.replace(/\D/g, '');
+
+        // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
+        return value
+            .replace(/^(\d{2})(\d)/g, '+$1 $2') // Adiciona o código do país
+            .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona o DDD entre parênteses
+            .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen no meio do número
+    };
+
+    const handleChangePhone = (e) => {
+        const formattedPhone = formatPhone(e.target.value);
+        setTelefone(formattedPhone);
+    };
+
     return (
         <Modal
             open={true}
@@ -115,7 +198,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                 sx={{ width: 850, bgcolor: "background.paper", p: 9, boxShadow: 24 }}
             >
                 <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
-                    Adicionar Novo Usuário
+                    Novo Usuário
                     <IconButton
                         style={{ position: "absolute", right: 8, top: 8 }}
                         onClick={closeEvent}
@@ -155,13 +238,26 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                         id="user-password"
                         name="senha"
                         label="Senha"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         fullWidth
                         variant="outlined"
                         error={errors.passaword}
                         helperText={errors.passaword && "Campo Obrigatório"}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                         value={passaword}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
 
                     <TextField
@@ -170,13 +266,26 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                         id="user-confirm-password"
                         name="confirmacaoSenha"
                         label="Confirmar senha"
-                        type="password"
+                        type={showConfirmPs ? "text" : "password"}
                         fullWidth
                         variant="outlined"
                         error={errors.confirm_ps}
                         helperText={errors.confirm_ps && "Campo Obrigatório"}
                         onChange={(e) => setConfirmPs(e.target.value)}
                         value={confirm_ps}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowConfirmPs}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showConfirmPs ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
  
                     <TextField
@@ -187,10 +296,11 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                         label="E-mail"
                         type="email"
                         fullWidth
+                        placeholder="email@email.com"
                         variant="outlined"
                         error={errors.email}
                         helperText={errors.email && "Campo Obrigatório"}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleEmailChange}
                         value={email}
                     />
                     <TextField
@@ -200,11 +310,12 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
                         name="telefone"
                         label="Telefone"
                         type="tel"
+                        placeholder="(xx) xxxxx-xxxx"
                         fullWidth
                         variant="outlined"
                         error={errors.telefone}
                         helperText={errors.telefone && "Campo Obrigatório"}
-                        onChange={(e) => setTelefone(e.target.value)}
+                        onChange={handleChangePhone}
                         value={telefone}
                     />
 

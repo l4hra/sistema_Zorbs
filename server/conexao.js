@@ -1,7 +1,7 @@
 const db = {
     host: "localhost",
     user: "root",
-    password: "",
+    password: "154869",
     database: "zorbs"
 }
 

@@ -1,8 +1,10 @@
 import express from 'express';
 import { createCompanies, excluirCompanies, atualizaCompanies  } from './src/controllers/CompaniesController.js'
 import { cadastroProduct, excluirProduct, atualizaProduct } from './src/controllers/ProductsController.js';
+import {cadastroUser, excluirUsers, atualizaUsers} from './src/controllers/UserController.js'
 import { getCompanies } from './src/models/CompaniesModel.js'
 import { getProducts } from './src/models/ProductModel.js';
+import { getUsers } from './src/models/UserModel.js';
 import cors from 'cors';
 
 const app = express();
@@ -23,6 +25,11 @@ app.get('/companies', getCompanies);
 app.post('/createCompanies', createCompanies);
 app.delete('/deleteCompanies/:id', excluirCompanies);
 app.put('/updateCompanies/:id', atualizaCompanies);
+
+app.get('/users', getUsers);
+app.post('/cadastroUser', cadastroUser);
+app.delete('/deleteUser/:id', excluirUsers);
+app.put('/updateUsers/:id', atualizaUsers)
 
 app.get('/', (req, res) => {
     res.send('API funcionando');

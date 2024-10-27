@@ -45,7 +45,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
             return;
         }
 
-        const response = await fetch(`http://localhost:3000/user/${user.id}`, {
+        const response = await fetch(`http://localhost:5000/updateUsers/${user.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
