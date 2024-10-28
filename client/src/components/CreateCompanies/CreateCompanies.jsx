@@ -230,7 +230,7 @@ export default function CreateCompanies() {
     };
 
     const handleCepChange = (e) => {
-        const valor = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        let valor = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
         
         if (valor.length > 8) {
             valor = valor.slice(0, 8);

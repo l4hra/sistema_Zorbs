@@ -318,7 +318,7 @@ export default function Sidenav({ color }) {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Users-Zorbs");
+              navigate("/Companies");
             }}
           >
             <ListItemButton
@@ -420,59 +420,7 @@ export default function Sidenav({ color }) {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Companies");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <BuildingIcon sx={{ color: "#fff"}}/>
-              </ListItemIcon>
-              <ListItemText
-                primary="Usuários Zorbs"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
+          
           {/* <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={[
