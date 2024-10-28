@@ -39,12 +39,8 @@ export default function CreateCompanies() {
     const [estado, setEstado] = useState("");
     const [complemento, setComplemento] = useState("");
     const [observacoes, setObservacoes] = useState("");
-
     const [showPassword, setShowPassword] = useState(false);
-    const axios = require('axios');
-
-
-
+    
     const createCompanies = async () => {
         if (!handleValidation()) {
             return;
