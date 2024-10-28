@@ -14,6 +14,31 @@ export default function CommandModal() {
   const handleOpen = () => setOpen(true);
   const [iceCreams, setIceCreams] = useState([]);
   const [acai, setAcai] = useState([]);
+  const [selectedBeverages, setSelectedBeverages] = useState([]);
+  const [selectedFoods, setSelectedFoods] = useState([]);
+  const [selectedPicole, setSelectedPicole] = useState([]);
+
+  const handleIceCreamDataChange = (data) => {
+    setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
+  };
+
+  const handleAcaiDataChange = (data) => {
+    setAcai((prevAcai) => [...prevAcai, data]);
+  };
+
+  const handleBeveragesChange = (event, value) => setSelectedBeverages(value);
+  const handleFoodsChange = (event, value) => setSelectedFoods(value);
+  const handleIceCreamsChange = (event, value) => setIceCreams(value);
+  const handleAcaiChange = (event, value) => setAcai(value);
+  const handlePicoleChange = (event, value) => setSelectedPicole(value);
+
+  const allSelectedProducts = [
+    ...selectedBeverages,
+    ...selectedFoods,
+    ...iceCreams,
+    ...acai,
+    ...selectedPicole,
+  ];
 
   const handleClose = () => {
     setOpen(false);
@@ -21,25 +46,44 @@ export default function CommandModal() {
     setAcai([]);
   };
   const listItems = [
-    { id: 1, title: "Coca-cola" },
-    { id: 2, title: "Água com gás" },
-    { id: 3, title: "Coca-cola" },
+    { id: 1, name: "Coca-cola", price: 10, quantity: 2 },
+    { id: 2, name: "Água com gás", price: 10, quantity: 2 },
+    { id: 3, name: "Coca-cola", price: 10, quantity: 2 },
   ];
 
   const listItemsFoods = [
-    { id: 1, title: "Chips" },
-    { id: 2, title: "Doces" },
-    { id: 3, title: "Bala" },
+    { id: 1, name: "Chips", quantity: 2 },
+    { id: 2, name: "Doces", price: 10, quantity: 2 },
+    { id: 3, name: "Bala", price: 10, quantity: 2 },
   ];
 
-  const handleIceCreamDataChange = (data) => {
-    setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
-    // console.log("sorvetes", iceCreams);
+  const listPicole = [
+    { id: 1, name: "Tablito recheado", price: 10, quantity: 2 },
+    { id: 2, name: "Picole de coco", price: 10, quantity: 2 },
+    { id: 3, name: "Picole de limão", price: 10, quantity: 2 },
+  ];
+
+  const handleQuantityChange = (id, delta) => {
+    const newItems = allSelectedProducts.map((item) => {
+      if (item.id === id) {
+        const newQuantity = Math.max(0, item.quantity + delta); // Não permite quantidade negativa
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    });
+    setIceCreams(newItems.filter((item) => item.category === "iceCream"));
+    setAcai(newItems.filter((item) => item.category === "acai"));
+    setSelectedBeverages(
+      newItems.filter((item) => item.category === "beverage")
+    );
+    setSelectedFoods(newItems.filter((item) => item.category === "food"));
+    setSelectedPicole(newItems.filter((item) => item.category === "picole"));
   };
 
-  const handleAcaiDataChange = (data) => {
-    setAcai((prevAcai) => [...prevAcai, data]);
-  };
+  const total = allSelectedProducts.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <>
@@ -55,7 +99,7 @@ export default function CommandModal() {
         <Button
           onClick={handleOpen}
           sx={{
-            backgroundColor: "#9FD6D2",
+            backgroundColor: "#054f77",
             color: "#fff",
             width: "10%",
             padding: "10px",
@@ -80,14 +124,11 @@ export default function CommandModal() {
             transform: "translate(-50%, -50%)",
             width: 1100,
             bgcolor: "background.paper",
-            borderRadius: "5px",
-            boxShadow: 20,
             p: 4,
             overflowY: "auto",
             outline: "none",
             boxShadow: 20,
             borderRadius: "5px",
-            p: 3,
             "&::-webkit-scrollbar": {
               width: "0px",
             },
@@ -105,7 +146,7 @@ export default function CommandModal() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2,1fr)",
-              gap: "2em",
+              gap: "1.2em",
               marginTop: "15px",
               marginBottom: "25px",
             }}
@@ -115,8 +156,9 @@ export default function CommandModal() {
               sx={{ width: "100%" }}
               id="tags-outlined"
               options={listItems}
-              getOptionLabel={(option) => option.title}
+              getOptionLabel={(option) => option.name}
               filterSelectedOptions
+              onChange={handleBeveragesChange}
               renderInput={(params) => (
                 <TextField {...params} label="Bebidas" placeholder="Bebidas" />
               )}
@@ -126,8 +168,9 @@ export default function CommandModal() {
               multiple
               id="tags-outlined"
               options={listItemsFoods}
-              getOptionLabel={(option) => option.title}
+              getOptionLabel={(option) => option.name}
               filterSelectedOptions
+              onChange={handleFoodsChange}
               renderInput={(params) => (
                 <TextField {...params} label="Comidas" placeholder="Comidas" />
               )}
@@ -144,6 +187,7 @@ export default function CommandModal() {
                 getOptionLabel={(option) => option.name}
                 options={iceCreams}
                 filterSelectedOptions
+                onChange={handleIceCreamsChange}
                 noOptionsText="Nenhum sorvete"
                 renderInput={(params) => (
                   <TextField
@@ -169,6 +213,7 @@ export default function CommandModal() {
                 options={acai}
                 filterSelectedOptions
                 noOptionsText="Nenhum açaí"
+                onChange={handleAcaiChange}
                 renderInput={(params) => (
                   <TextField {...params} label="Açaí" placeholder="Açaí" />
                 )}
@@ -176,9 +221,24 @@ export default function CommandModal() {
 
               <AcaiModal onDataChange={handleAcaiDataChange} />
             </div>
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              options={listPicole}
+              getOptionLabel={(option) => option.name}
+              filterSelectedOptions
+              onChange={handlePicoleChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Picolé" placeholder="Picolé" />
+              )}
+            />
           </div>
 
-          <TableComponent />
+          <TableComponent
+            allSelectedProducts={allSelectedProducts}
+            handleQuantityChange={handleQuantityChange}
+            total={total}
+          />
 
           <div
             className="buttons"

@@ -8,13 +8,15 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 
-export default function IceCreamModal({onDataChange}) {
+export default function IceCreamModal({ onDataChange }) {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('Sorvete#1');
-  const [weight, setWeight] = useState('');
-  const [price, setPrice] = useState('');
-  const [observation, setObservation] = useState('');
+  const [name, setName] = useState("Sorvete#1");
+  const [quantity, setQuantity] = useState(1);
+
+  const [weight, setWeight] = useState("");
+  const [price, setPrice] = useState(0);
+  const [observation, setObservation] = useState("");
 
   const handleOpenChild = () => {
     setOpen(true);
@@ -22,7 +24,7 @@ export default function IceCreamModal({onDataChange}) {
   const handleClose = () => {
     setOpen(false);
   };
- 
+
   const handleEditClick = () => setIsEditing(true);
   const handleBlur = () => setIsEditing(false);
 
@@ -43,12 +45,13 @@ export default function IceCreamModal({onDataChange}) {
   };
 
   const handleCreateClick = () => {
-    onDataChange({ name, weight, price, observation });
+    onDataChange({ name, weight, price, observation, quantity });
     handleClose(true);
-    setObservation('');
-    setPrice('');
-    setName('Sorvete#1');
-    setWeight('');
+    setObservation("");
+    setPrice(0);
+    setQuantity(1);
+    setName("Sorvete#1");
+    setWeight("");
   };
   return (
     <>
@@ -79,24 +82,25 @@ export default function IceCreamModal({onDataChange}) {
             p: 3,
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {isEditing ? (
-            <TextField
-            id="standard-basic"  variant="standard" 
-              value={name}
-              onChange={handleNameChange}
-              onBlur={handleBlur}
-              maxRows={1}
-              minRows={1}
-              autoFocus
-            />
-          ) : (
-            <h2 style={{ margin: 0 }}>{name}</h2>
-          )}
-          <IconButton onClick={handleEditClick}>
-            <CreateIcon />
-          </IconButton>
-        </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            {isEditing ? (
+              <TextField
+                id="standard-basic"
+                variant="standard"
+                value={name}
+                onChange={handleNameChange}
+                onBlur={handleBlur}
+                maxRows={1}
+                minRows={1}
+                autoFocus
+              />
+            ) : (
+              <h2 style={{ margin: 0 }}>{name}</h2>
+            )}
+            <IconButton onClick={handleEditClick}>
+              <CreateIcon />
+            </IconButton>
+          </div>
           <div>
             <div
               className="acai"
@@ -188,8 +192,10 @@ export default function IceCreamModal({onDataChange}) {
               marginTop: "1rem",
             }}
           >
-            <Button style={{ backgroundColor: "#F9A7AB", color: "#fff" }} onClick={handleCreateClick}
-        >
+            <Button
+              style={{ backgroundColor: "#F9A7AB", color: "#fff" }}
+              onClick={handleCreateClick}
+            >
               Criar
             </Button>
 
@@ -205,4 +211,3 @@ export default function IceCreamModal({onDataChange}) {
     </>
   );
 }
-

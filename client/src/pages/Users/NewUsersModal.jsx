@@ -52,9 +52,7 @@ export default function NewUsersModal({ closeEvent }) {
           transform: "translate(-50%, -50%)",
           width: 1100,
           bgcolor: "background.paper",
-          borderRadius: "5px",
-          boxShadow: 20,
-          p: 4,
+
           overflowY: "auto",
           outline: "none",
           boxShadow: 20,
@@ -77,7 +75,7 @@ export default function NewUsersModal({ closeEvent }) {
             <CloseIcon />
           </IconButton>
         </Typography>
-        
+
         <div
           style={{
             display: "grid",
