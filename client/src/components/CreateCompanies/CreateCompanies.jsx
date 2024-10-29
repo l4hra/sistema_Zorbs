@@ -32,7 +32,7 @@ export default function CreateCompanies() {
     const [tipo_plano, setTipo_plano] = useState("");
     const [status, setStatus] = useState("");
     const [CEP, setCep] = useState("");
-    const [RUA, setRua] = useState("");
+    const [rua, setRua] = useState("");
     const [numero, setNumero] = useState("");
     const [bairro, setBairro] = useState("");
     const [cidade, setCidade] = useState("");
@@ -65,7 +65,7 @@ export default function CreateCompanies() {
                     tipo_plano,
                     status,
                     CEP,
-                    RUA,
+                    rua,
                     numero,
                     bairro,
                     cidade,
@@ -99,7 +99,7 @@ export default function CreateCompanies() {
         tipo_plano: false,
         status: false,
         CEP: false,
-        RUA: false,
+        rua: false,
         numero: false,
         bairro: false,
         cidade: false,
@@ -119,7 +119,7 @@ export default function CreateCompanies() {
             tipo_plano: !tipo_plano,
             status: !status,
             CEP: !CEP,
-            RUA: !RUA,
+            rua: !rua,
             numero: !numero,
             bairro: !bairro,
             cidade: !cidade,
@@ -548,10 +548,10 @@ export default function CreateCompanies() {
                                     variant="outlined"
                                     size="small"
                                     fullWidth
-                                    error={errors.RUA}
-                                    helperText={errors.RUA && "Campo obrigatório"}
+                                    error={errors.rua}
+                                    helperText={errors.rua && "Campo obrigatório"}
                                     onChange={(e) => setRua(e.target.value)}
-                                    value={RUA}
+                                    value={rua}
                                 />
                             </div>
                             <div style={{ width: "100%" }}>

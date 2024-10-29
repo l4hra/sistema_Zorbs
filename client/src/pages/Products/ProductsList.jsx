@@ -143,7 +143,7 @@ export default function ProductsList() {
           </Button>
         </Box>
 
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 950 }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
