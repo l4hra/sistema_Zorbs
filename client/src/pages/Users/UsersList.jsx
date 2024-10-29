@@ -104,6 +104,7 @@ export default function UsersList() {
         await fetch(`http://localhost:5000/deleteUser/${id}`, { method: 'DELETE' });
         Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
         getUser();
+        location.reload(true);
       }
     };
   
