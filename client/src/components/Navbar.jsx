@@ -199,7 +199,16 @@ export default function Navbar() {
             ZORBS
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                md: "flex",
+
+                alignItems: "center",
+              },
+            }}
+          >
             <div>
               <h2>{formatTime(time)}</h2>
             </div>
