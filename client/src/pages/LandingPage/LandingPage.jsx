@@ -1,7 +1,8 @@
 import styles from "../LandingPage/Landing.module.css";
 import { FaWhatsapp } from "react-icons/fa";
 import Tooltip from "@mui/joy/Tooltip";
-import tela from "./tela.png"; // Se estiver no mesmo diretório
+import zorbs from "../../../public/assets/esquilo.png";
+import waves from "../../../public/assets/waves.svg";
 
 export default function LandingPage() {
   const handleClick = () => {
@@ -23,6 +24,7 @@ export default function LandingPage() {
       </Tooltip>
 
       <div className={styles.background}>
+        <img src={waves}></img>
         <header className={styles.header}>
           <h1>Zorbs</h1>
           <nav>
@@ -42,26 +44,60 @@ export default function LandingPage() {
           </nav>
         </header>
 
-        <div className={styles.container}>
+        {/* <div className={styles.container}>
           <img src={tela} alt="" width={700} />
-        </div>
-
-        <div className={styles.container2}>
-          <h3>Planos</h3>
-          <div className={styles.card}>
-            <p>Plano basic</p>
-            <p>R$300,00</p>
-          </div>
-          <div className={styles.card}>
-            <p>Plano basic</p>
-            <p>R$300,00</p>
-          </div>
-          <div className={styles.card}>
-            <p>Plano basic</p>
-            <p>R$300,00</p>
-          </div>
-        </div>
+        </div> */}
       </div>
+      <container>
+        <div class={styles.card}>
+          <div class={styles.imgBox}>
+            <img src={zorbs} width={85} />
+          </div>
+          <div class={styles.content}>
+            <h2>Plano premium</h2>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus molestias minus porro. Deserunt dolore eligendi
+              sapiente hic totam.
+            </p>
+            <a href="#" class={styles.readMore}>
+              Consulte os preços
+            </a>
+          </div>
+        </div>
+        <div class={styles.card}>
+          <div class={styles.imgBox}>
+            <img src={zorbs} width={85} />
+          </div>
+          <div class={styles.content}>
+            <h2>Plano premium</h2>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus molestias minus porro. Deserunt dolore eligendi
+              sapiente hic totam.
+            </p>
+            <a href="#" class={styles.readMore}>
+              Consulte os preços
+            </a>
+          </div>
+        </div>
+        <div class={styles.card}>
+          <div class={styles.imgBox}>
+            <img src={zorbs} width={85} />
+          </div>
+          <div class={styles.content}>
+            <h2>Plano premium</h2>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus molestias minus porro. Deserunt dolore eligendi
+              sapiente hic totam.
+            </p>
+            <a href="#" class={styles.readMore}>
+              Consulte os preços
+            </a>
+          </div>
+        </div>
+      </container>
     </>
   );
 }
