@@ -1,11 +1,9 @@
-import mysql from 'mysql2/promise';
-import db from '../../conexao.js';
-
+import conexao from '../../conexao.js';
 
 // Função para vizualizar usuários
 export async function getUsers(req, res) {
     console.log('UsersController getUsers');
-    const conexao = mysql.createPool(db);
+    
     try {
         const [rows] = await conexao.query('SELECT * FROM users');
         res.status(200).json(rows);
@@ -23,7 +21,7 @@ export async function addUser(users) {
     //     return [400, errors];
     // }
 
-    const conexao = mysql.createPool(db);
+    
     const sql = `INSERT INTO users (name, passaword, confirm_ps, 
     email, telefone, type_of_acess, status)
     VALUES (?,?,?,?,?,?,?)`;
@@ -49,7 +47,6 @@ export async function addUser(users) {
 
 export async function deleteUser(id) {
 
-    const conexao = mysql.createPool(db);
     const sql = 'DELETE FROM users WHERE id = ?';
 
     try {
@@ -74,7 +71,6 @@ export async function updateUsers(id, users) {
     //     return [400, errors];
     // }
 
-    const conexao = mysql.createPool(db);
     const sql = `UPDATE users SET 
     name = ?,
     passaword = ?,

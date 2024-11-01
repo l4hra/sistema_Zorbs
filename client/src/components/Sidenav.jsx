@@ -142,7 +142,7 @@ export default function Sidenav({ color }) {
                 <img src={casinha} height={25} />
               </ListItemIcon>
               <ListItemText
-                primary="Dashboard"
+                primary="Home"
                 sx={[
                   open
                     ? {
@@ -367,7 +367,7 @@ export default function Sidenav({ color }) {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
@@ -419,7 +419,7 @@ export default function Sidenav({ color }) {
                 ]}
               />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           
           {/* <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
