@@ -11,12 +11,21 @@ import AcaiModal from "./AcaiModal";
 
 export default function CommandModal() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const [iceCreams, setIceCreams] = useState([]);
   const [acai, setAcai] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [selectedPicole, setSelectedPicole] = useState([]);
+  const [comandaNumber, setComandaNumber] = useState(1);
+  const handleOpen = () => {
+    setOpen(true);
+    setComandaNumber(comandaNumber + 1);
+  };
+
+  const generateComandaTitle = (number) => {
+    const formattedNumber = number.toString().padStart(3, "0");
+    return `Pedido N°${formattedNumber}`;
+  };
 
   const handleIceCreamDataChange = (data) => {
     setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
@@ -138,7 +147,7 @@ export default function CommandModal() {
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            Nova comanda
+            {generateComandaTitle(comandaNumber)}
           </Typography>
 
           <div
