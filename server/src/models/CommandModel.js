@@ -1,17 +1,16 @@
-import mysql from "mysql2/promise";
-import db from "../../conexao.js";
+import conexao from "../../conexao.js";
 
 // Função para cadastrar produtos
 export async function createCommand(command) {
-  const conexao = mysql.createPool(db);
-  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, status)
+  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, completed, canceled)
     VALUES (?,?,?,?,?)`;
   const params = [
     command.name,
     command.date_opening,
     command.totalPrice,
     command.payment,
-    command.status,
+    command.completed,
+    command.canceled,
   ];
 
   try {
@@ -24,10 +23,10 @@ export async function createCommand(command) {
   }
 }
 
-// Função para vizualizar produtos
+// Função para visualizar produtos
 export async function getAllCommands(req, res) {
   console.log("CommandController getCommand");
-  const conexao = mysql.createPool(db);
+
   try {
     const [rows] = await conexao.query("SELECT * FROM commands");
     res.status(200).json(rows);
@@ -39,15 +38,15 @@ export async function getAllCommands(req, res) {
 
 // Função para editar produtos
 export async function updateCommand(id, command) {
-  const conexao = mysql.createPool(db);
-  const sql = `UPDATE commands SET name = ?, date_opening = ?, totalPrice = ?, payment = ?, status = ?
+  const sql = `UPDATE commands SET name = ?, date_opening = ?, totalPrice = ?, payment = ?, completed = ?, canceled = ?
                  WHERE id = ?`;
   const params = [
     command.name,
     command.date_opening,
     command.totalPrice,
     command.payment,
-    command.status,
+    command.completed,
+    command.canceled,
     id, // Adicionando o id ao final para o WHERE
   ];
 

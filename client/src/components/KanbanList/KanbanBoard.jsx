@@ -42,30 +42,6 @@ export default function Kanban() {
         totalPrice: "58,99",
         completed: true,
       },
-      {
-        id: 4,
-        title: "Pedido 4",
-        hora: "15:30",
-        produtos: ["Casquinha", "Sorvete de Palito", "Milkshake"],
-        totalPrice: "32,60",
-        completed: false,
-      },
-      {
-        id: 5,
-        title: "Pedido 5",
-        hora: "16:00",
-        produtos: ["Sorvete de Copo", "Açaí", "Sundae"],
-        totalPrice: "10,15",
-        completed: true,
-      },
-      {
-        id: 6,
-        title: "Pedido 6",
-        hora: "16:30",
-        produtos: ["Casquinha", "Açaí", "Sorvete de Palito"],
-        totalPrice: "47,50",
-        completed: false,
-      },
     ];
 
     setCompleted(sorvetes.filter((pedido) => pedido.completed));

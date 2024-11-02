@@ -1,26 +1,13 @@
 import { Draggable } from "@hello-pangea/dnd";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import EditIcon from "@mui/icons-material/Edit";
 import EditCommand from "../EditCommand/EditCommand";
+import { useEffect, useState } from "react";
 
 function NotaFiscalButton() {
   const gerarConteudoNotaFiscal = () => {
-    const notaFiscal = `
-      Sorveteria Zorbs
-      ----------------------------------------
-      Produtos:
-      1. Sorvete de Chocolate - R$ 10,00
-      2. Milkshake de Morango - R$ 12,00
-      3. Sundae de Caramelo - R$ 8,50
-      
-      Total: R$ 30,50
-      Data: ${new Date().toLocaleDateString()} 
-      Hora: ${new Date().toLocaleTimeString()}
-      ----------------------------------------
-      Obrigado pela sua compra!
-    `;
+    const notaFiscal = `       Sorveteria Zorbs       ----------------------------------------       Produtos:       1. Sorvete de Chocolate - R$ 10,00       2. Milkshake de Morango - R$ 12,00       3. Sundae de Caramelo - R$ 8,50              Total: R$ 30,50       Data: ${new Date().toLocaleDateString()}        Hora: ${new Date().toLocaleTimeString()}       ----------------------------------------       Obrigado pela sua compra!     `;
     return notaFiscal;
   };
 
@@ -34,15 +21,33 @@ function NotaFiscalButton() {
   };
 
   return (
-    <>
-      <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
-        <DownloadIcon />
-      </IconButton>
-    </>
+    <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
+      <DownloadIcon />
+    </IconButton>
   );
 }
 
 export default function Command({ task, index }) {
+  const [commands, setCommands] = useState([]);
+  const [name, setName] = useState();
+  const [date, setDate] = useState();
+
+  useEffect(() => {
+    carregaComanda();
+  }, []);
+
+  const carregaComanda = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/commands");
+      const data = await response.json();
+      setName(data.name);
+      setDate(data.date_opening);
+      // setCommands(data);
+    } catch (error) {
+      console.error("Erro ao buscar as comandas:", error);
+    }
+  };
+
   return (
     <>
       <Draggable draggableId={`${task.id}`} key={task.id} index={index}>

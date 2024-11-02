@@ -5,18 +5,19 @@ import {
   atualizaProduct,
 } from "./src/controllers/ProductsController.js";
 import {
-  createCommand,
-  getAllCommands,
-  updateCommand,
-  getCommandById,
+  cadastroCommand,
+  atualizaCommand,
 } from "./src/controllers/CommandController.js";
 
 import {
-  createItemCommand,
-  getAllItemCommands,
-  updateItemCommand,
+  criarItemCommand,
+  atualizaItemCommand,
 } from "./src/controllers/Item_CommandController.js";
+
 import { getProducts } from "./src/models/ProductModel.js";
+import { getAllCommands } from "./src/models/CommandModel.js";
+import { getAllItemCommands } from "./src/models/Item_CommandModel.js";
+
 import cors from "cors";
 
 const app = express();
@@ -34,14 +35,14 @@ app.get("/products", getProducts);
 app.delete("/products/:id", excluirProduct);
 app.put("/products/:id", atualizaProduct);
 
-app.post("/createCommand", createCommand);
+app.post("/cadastroCommand", cadastroCommand);
 app.get("/commands", getAllCommands);
-app.put("/commands/:id", updateCommand);
+app.put("/commands/:id", atualizaCommand);
 // app.delete("/products/:id", updateCommand);
 
-app.post("/createItemCommand", createItemCommand);
 app.get("/itemCommands", getAllItemCommands);
-app.put("/ItemCommands/:id", updateItemCommand);
+app.post("/createItemCommand", criarItemCommand);
+app.put("/itemCommands/:id", atualizaItemCommand);
 
 app.get("/", (req, res) => {
   res.send("API funcionando");

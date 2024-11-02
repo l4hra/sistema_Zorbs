@@ -4,14 +4,15 @@ import db from "../../conexao.js";
 // Função para cadastrar produtos
 export async function createItemCommand(item) {
   const conexao = mysql.createPool(db);
-  const sql = `INSERT INTO item_command (id_products, id_command, qtd_products, value_item, und_measure)
+  const sql = `INSERT INTO item_command (id_products, id_command, qtd_products, value_item, und_medida)
                  VALUES (?,?,?,?,?)`;
+  console.log("chegou aqui");
   const params = [
     item.id_products,
     item.id_command,
     item.qtd_products,
     item.value_item,
-    item.und_measure,
+    item.und_medida, // Corrigido aqui
   ];
 
   try {
@@ -40,14 +41,14 @@ export async function getAllItemCommands(req, res) {
 // Função para editar produtos
 export async function updateItemCommand(id, item) {
   const conexao = mysql.createPool(db);
-  const sql = `UPDATE item_command SET id_products = ?, id_command = ?, qtd_products = ?, value_item = ?, und_measure = ?
+  const sql = `UPDATE item_command SET id_products = ?, id_command = ?, qtd_products = ?, value_item = ?, und_medida = ?
                  WHERE id = ?`;
   const params = [
     item.id_products,
     item.id_command,
     item.qtd_products,
     item.value_item,
-    item.und_measure,
+    item.und_medida,
     id,
   ];
 
