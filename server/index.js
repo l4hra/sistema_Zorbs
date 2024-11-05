@@ -25,7 +25,9 @@ const port = 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // apenas requisições vindas desse localhost:5173 serão permitidas
+    origin: "http://localhost:5173",
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization", // apenas requisições vindas desse localhost:5173 serão permitidas
   })
 );
 app.use(express.json());
@@ -40,8 +42,8 @@ app.get("/commands", getAllCommands);
 app.put("/commands/:id", atualizaCommand);
 // app.delete("/products/:id", updateCommand);
 
-app.get("/itemCommands", getAllItemCommands);
 app.post("/createItemCommand", criarItemCommand);
+app.get("/itemCommands", getAllItemCommands);
 app.put("/itemCommands/:id", atualizaItemCommand);
 
 app.get("/", (req, res) => {

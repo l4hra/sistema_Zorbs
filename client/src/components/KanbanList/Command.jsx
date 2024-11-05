@@ -28,29 +28,21 @@ function NotaFiscalButton() {
 }
 
 export default function Command({ task, index }) {
-  const [commands, setCommands] = useState([]);
-  const [name, setName] = useState();
-  const [date, setDate] = useState();
-
-  useEffect(() => {
-    carregaComanda();
-  }, []);
-
-  const carregaComanda = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/commands");
-      const data = await response.json();
-      setName(data.name);
-      setDate(data.date_opening);
-      // setCommands(data);
-    } catch (error) {
-      console.error("Erro ao buscar as comandas:", error);
-    }
+  const formatTime = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
     <>
-      <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
+      <Draggable
+        draggableId={`${task.command_id}`} // use apenas se command_id for único
+        key={task.command_id}
+        index={index}
+      >
         {(provided, snapshot) => (
           <div
             className="container"
@@ -73,7 +65,7 @@ export default function Command({ task, index }) {
                   justifyContent: "space-between",
                 }}
               >
-                <h3>#{task.title}</h3>
+                <h3>#{task.command_name}</h3>
 
                 <div
                   style={{
@@ -83,10 +75,14 @@ export default function Command({ task, index }) {
                     gap: "5px",
                   }}
                 >
-                  {task.hora}
+                  {formatTime(task.date_opening)}
                   <AccessTimeIcon style={{ width: "1rem" }} />
                 </div>
               </span>
+              <h4>Total: R${task.totalPrice}</h4>
+
+              <h5>Forma de pagamento: {task.payment}</h5>
+              <p>Produto: {task.product_name}</p>
               <div
                 style={{
                   display: "flex",
@@ -94,8 +90,7 @@ export default function Command({ task, index }) {
                   alignItems: "center",
                 }}
               >
-                <p>{task.produtos.join(",")}</p>
-                <h4>Total: R${task.totalPrice}</h4>
+                {/* <p>{task.produtos.join(",")}</p> */}
               </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>

@@ -1,9 +1,10 @@
 import mysql from "mysql2/promise";
 import db from "../../conexao.js";
 
+import conexao from "../../conexao.js";
+
 // Função para cadastrar produtos
 export async function createItemCommand(item) {
-  const conexao = mysql.createPool(db);
   const sql = `INSERT INTO item_command (id_products, id_command, qtd_products, value_item, und_medida)
                  VALUES (?,?,?,?,?)`;
   console.log("chegou aqui");
@@ -26,21 +27,45 @@ export async function createItemCommand(item) {
 }
 
 // Função para vizualizar produtos
+
 export async function getAllItemCommands(req, res) {
-  // console.log("CommandController getCommand");
-  const conexao = mysql.createPool(db);
   try {
-    const [rows] = await conexao.query("SELECT * FROM item_command");
-    res.status(200).json(rows);
+    const [rows] = await db.query(`
+        SELECT 
+          item_command.id AS item_id,
+          item_command.id_command,
+          item_command.qtd_products,
+          item_command.value_item,
+          item_command.und_medida,
+          products.name AS product_name,
+          products.type AS product_type,
+          products.category AS product_category,
+          products.preco_venda AS product_price,
+          commands.id AS command_id,
+          commands.name AS command_name,
+          commands.date_opening,
+          commands.totalPrice,
+          commands.payment,
+          commands.completed,
+          commands.incompleted,
+          commands.canceled
+      FROM 
+          item_command
+      JOIN 
+          products ON item_command.id_products = products.id
+      JOIN 
+          commands ON item_command.id_command = commands.id;
+    `);
+
+    res.json(rows); // Envia os dados para o frontend
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Erro ao buscar item de comandas", error });
+    console.error("Erro ao buscar itens de comanda:", error);
+    res.status(500).json({ message: "Erro ao buscar itens de comanda" });
   }
 }
 
 // Função para editar produtos
 export async function updateItemCommand(id, item) {
-  const conexao = mysql.createPool(db);
   const sql = `UPDATE item_command SET id_products = ?, id_command = ?, qtd_products = ?, value_item = ?, und_medida = ?
                  WHERE id = ?`;
   const params = [
