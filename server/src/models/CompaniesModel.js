@@ -1,10 +1,9 @@
-import mysql from 'mysql2/promise';
-import db from '../../conexao.js';
+import conexao from '../../conexao.js';
 import { validateCompanies } from '../validations/companiesValidation.js';
 
 export async function getCompanies(req, res) {
-    const conexao = mysql.createPool(db);
-    console.log('CompaniesController: getCompanies');
+    console.log('CompaniesController: getCompanies')
+
     try {
         const [rows] = await conexao.query('SELECT * FROM companies');
         res.status(200).json(rows);
@@ -15,7 +14,6 @@ export async function getCompanies(req, res) {
 }
 
 export async function postCompanies(companies) {
-    const conexao = mysql.createPool(db);
     const sql = `INSERT INTO companies ( 
     CNPJ, 
     razao_social, 
@@ -29,7 +27,7 @@ export async function postCompanies(companies) {
     tipo_plano, 
     status, 
     CEP, 
-    RUA, 
+    rua, 
     numero, 
     bairro, 
     cidade, 
@@ -50,7 +48,7 @@ export async function postCompanies(companies) {
         companies.tipo_plano,
         companies.status,
         companies.CEP,
-        companies.RUA,
+        companies.rua,
         companies.numero,
         companies.bairro,
         companies.cidade,
@@ -70,8 +68,6 @@ export async function postCompanies(companies) {
 }
 
 export async function deleteCompanies(id) {
-
-    const conexao = mysql.createPool(db);
     const sql = 'DELETE FROM companies WHERE id = ?';
 
     try {
@@ -96,7 +92,7 @@ export async function updateCompanies(id, companies) {
         return [400, errors];
     }
 
-    const conexao = mysql.createPool(db);
+    
     const sql = `UPDATE companies SET
      CNPJ = ?, 
      razao_social = ?, 
@@ -110,7 +106,7 @@ export async function updateCompanies(id, companies) {
      tipo_plano = ?,
      status = ?,
      CEP = ?,
-     RUA = ?,
+     rua = ?,
      numero = ?,
      bairro = ?,
      cidade = ?,
@@ -131,7 +127,7 @@ export async function updateCompanies(id, companies) {
         companies.tipo_plano,
         companies.status,
         companies.CEP,
-        companies.RUA,
+        companies.rua,
         companies.numero,
         companies.bairro,
         companies.cidade,

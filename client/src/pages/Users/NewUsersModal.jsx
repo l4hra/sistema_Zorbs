@@ -18,7 +18,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
   const [type_of_acess, setTypeOfAccess] = useState("");
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
-  const [passaword, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [confirm_ps, setConfirmPs] = useState("");
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -28,7 +28,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
 
   const [errors, setErrors] = useState({
     name: false,
-    passaword: false,
+    password: false,
     confirm_ps: false,
     email: false,
     telefone: false,
@@ -39,7 +39,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
   const handleValidation = () => {
     let newErrors = {
       name: !name,
-      passaword: !passaword,
+      password: !password,
       confirm_ps: !confirm_ps,
       email: !email,
       telefone: !telefone,
@@ -64,7 +64,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
       },
       body: JSON.stringify({
         name,
-        passaword,
+        password,
         confirm_ps,
         email,
         telefone,
@@ -128,9 +128,9 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
 
     // Valida a senha e atualiza os erros
     if (value === "" || validatePassword(value)) {
-      setErrors({ passaword: false });
+      setErrors({ password: false });
     } else {
-      setErrors({ passaword: true });
+      setErrors({ password: true });
     }
   };
   function validatePassword(value, confirm_ps) {
@@ -154,7 +154,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     if (!/[^A-Za-z0-9]/.test(value)) {
       return "A senha deve conter pelo menos um símbolo especial (ex.: !, @, #, etc.).";
     }
-    if (passaword !== confirm_ps) {
+    if (password !== confirm_ps) {
       return "As senhas não correspondem.";
     }
   }
@@ -198,7 +198,28 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
       }}
     >
       <Box
-        sx={{ width: 850, bgcolor: "background.paper", p: 9, boxShadow: 24 }}
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 1100,
+          bgcolor: "background.paper",
+          borderRadius: "5px",
+          boxShadow: 20,
+          p: 4,
+          overflowY: "auto",
+          outline: "none",
+          boxShadow: 20,
+          borderRadius: "5px",
+          p: 3,
+          "&::-webkit-scrollbar": {
+            width: "0px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "transparent",
+          },
+        }}
       >
         <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
           Novo Usuário
@@ -209,23 +230,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             <CloseIcon />
           </IconButton>
         </Typography>
-
-        <TextField
-          autoFocus
-          required
-          margin="dense"
-          id="user-name"
-          name="nome"
-          label="Nome do Usuário"
-          type="text"
-          fullWidth
-          variant="outlined"
-          error={errors.name}
-          helperText={errors.name && "Campo Obrigatório"}
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-        />
-
+        
         <div
           style={{
             display: "grid",
@@ -233,6 +238,20 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             gap: "0.9em",
           }}
         >
+          <div style={{ gridColumn: "1 / span 2" }}>
+          <TextField
+            required
+            label="Nome do Usuário"
+            variant="outlined"
+            size="small"
+            fullWidth
+            error={errors.name}
+            helperText={errors.name && "Campo obrigatório"}
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
+
+        </div>
           <TextField
             required
             margin="dense"
@@ -242,10 +261,10 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             type={showPassword ? "text" : "password"}
             fullWidth
             variant="outlined"
-            error={errors.passaword}
-            helperText={errors.passaword && "Campo Obrigatório"}
+            error={errors.password}
+            helperText={errors.password && "Campo Obrigatório"}
             onChange={handlePasswordChange}
-            value={passaword}
+            value={password}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

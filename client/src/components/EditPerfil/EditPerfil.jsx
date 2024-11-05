@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import Sidenav from "../Sidenav";
 import {
@@ -7,99 +7,78 @@ import {
     Box,
     TextField,
     Button,
-    MenuItem,
-    InputAdornment,
     Paper,
-    FormControl,
-    FormLabel,
-    IconButton,
+    IconButton, 
+    InputAdornment
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 
-export default function CreateCompanies() {
+export default function EditPerfil() {
+    const location = useLocation();
     const navigate = useNavigate();
-    const [CNPJ, setCnpj] = useState("");
-    const [razao_social, setRazao_social] = useState("");
-    const [nome_fantasia, setNome_fantasia] = useState("");
-    const [inscricao_estadual, setInscricao_estadual] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const [senha_acesso, setSenha_acesso] = useState("");
-    const [data_abertura, setData_abertura] = useState("");
-    const [tipo_pessoa, setTipo_pessoa] = useState("");
-    const [tipo_plano, setTipo_plano] = useState("");
-    const [status, setStatus] = useState("");
-    const [CEP, setCep] = useState("");
-    const [rua, setRua] = useState("");
-    const [numero, setNumero] = useState("");
-    const [bairro, setBairro] = useState("");
-    const [cidade, setCidade] = useState("");
-    const [estado, setEstado] = useState("");
-    const [complemento, setComplemento] = useState("");
-    const [observacoes, setObservacoes] = useState("");
+    const { companies } = location.state || {};
+
+    const [CNPJ, setCnpj] = useState(companies?.CNPJ || "");
+    const [razao_social, setRazao_social] = useState(companies?.razao_social || "");
+    const [nome_fantasia, setNome_fantasia] = useState(companies?.nome_fantasia || "");
+    const [inscricao_estadual, setInscricao_estadual] = useState(companies?.inscricao_estadual || "");
+    const [email, setEmail] = useState(companies?.email || "");
+    const [telefone, setTelefone] = useState(companies?.telefone || "");
+    const [senha_acesso, setSenha_acesso] = useState(companies?.senha_acesso || "");
+    // const [data_abertura, setData_abertura] = useState(companies?.data_abertura || "");
+    // const [tipo_pessoa, setTipo_pessoa] = useState(companies?.tipo_pessoa || "");
+    // const [tipo_plano, setTipo_plano] = useState(companies?.tipo_plano || "");
+    // const [status, setStatus] = useState(companies?.status || "");
+    const [CEP, setCep] = useState(companies?.CEP || "");
+    const [RUA, setRua] = useState(companies?.RUA || "");
+    const [numero, setNumero] = useState(companies?.numero || "");
+    const [bairro, setBairro] = useState(companies?.bairro || "");
+    const [cidade, setCidade] = useState(companies?.cidade || "");
+    const [estado, setEstado] = useState(companies?.estado || "");
+    const [complemento, setComplemento] = useState(companies?.complemento || "");
+    const [observacoes, setObservacoes] = useState(companies?.observacoes || "");
     const [showPassword, setShowPassword] = useState(false);
-    
-    const createCompanies = async () => {
-        if (!handleValidation()) {
-            return;
-        }
 
-        try {
-            const response = await fetch("http://localhost:5000/createCompanies", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    CNPJ,
-                    razao_social,
-                    nome_fantasia,
-                    inscricao_estadual,
-                    email,
-                    telefone,
-                    senha_acesso,
-                    data_abertura,
-                    tipo_pessoa,
-                    tipo_plano,
-                    status,
-                    CEP,
-                    rua,
-                    numero,
-                    bairro,
-                    cidade,
-                    estado,
-                    complemento,
-                    observacoes,
-                }),
-            });
-
-            if (response.ok) {
-                Swal.fire("Cadastrada com sucesso!", "A empresa foi cadastrada com sucesso.", "success");
-                navigate("/Companies");
-            } else {
-                Swal.fire("Erro!", "Erro ao se conectar com banco de dados" || "Não foi possível cadastrar a empresa.", "error");
-            }
-        } catch (error) {
-            Swal.fire("Erro!", "Houve um problema ao tentar cadastrar a empresa. Tente novamente mais tarde.", "error");
-            console.error("Erro ao cadastrar empresa:", error);
+    useEffect(() => {
+        if (companies) {
+            setCnpj(companies.CNPJ || "");
+            setRazao_social(companies.razao_social || "");
+            setNome_fantasia(companies.nome_fantasia || "");
+            setInscricao_estadual(companies.inscricao_estadual || "");
+            setEmail(companies.email || "");
+            setTelefone(companies.telefone || "");
+            setSenha_acesso(companies.senha_acesso || "");
+            // setData_abertura(companies.data_abertura || "");
+            // setTipo_pessoa(companies.tipo_pessoa || "");
+            // setTipo_plano(companies.tipo_plano || "");
+            // setStatus(companies.status || "");
+            setCep(companies.CEP || "");
+            setRua(companies.RUA || "");
+            setNumero(companies.numero || "");
+            setBairro(companies.bairro || "");
+            setCidade(companies.cidade || "");
+            setEstado(companies.estado || "");
+            setComplemento(companies.complemento || "");
+            setObservacoes(companies.observacoes || "");
         }
-    };
+    }, [companies]);
 
     const [errors, setErrors] = useState({
         CNPJ: false,
         razao_social: false,
         nome_fantasia: false,
+        inscricao_estadual: false,
         email: false,
         telefone: false,
         senha_acesso: false,
-        data_abertura: false,
-        tipo_pessoa: false,
-        tipo_plano: false,
-        status: false,
+        // data_abertura: false,
+        // tipo_pessoa: false,
+        // tipo_plano: false,
+        // status: false,
         CEP: false,
-        rua: false,
+        RUA: false,
         numero: false,
         bairro: false,
         cidade: false,
@@ -111,15 +90,16 @@ export default function CreateCompanies() {
             CNPJ: !CNPJ,
             razao_social: !razao_social,
             nome_fantasia: !nome_fantasia,
+            inscricao_estadual: !inscricao_estadual,
             email: !email,
             telefone: !telefone,
             senha_acesso: !senha_acesso,
-            data_abertura: !data_abertura,
-            tipo_pessoa: !tipo_pessoa,
-            tipo_plano: !tipo_plano,
-            status: !status,
+            // data_abertura: !data_abertura,
+            // tipo_pessoa: !tipo_pessoa,
+            // tipo_plano: !tipo_plano,
+            // status: !status,
             CEP: !CEP,
-            rua: !rua,
+            RUA: !RUA,
             numero: !numero,
             bairro: !bairro,
             cidade: !cidade,
@@ -131,6 +111,46 @@ export default function CreateCompanies() {
         return !Object.values(newErrors).includes(true);
     };
 
+    const updateUserZorbs = async () => {
+        if (!handleValidation()) {
+            return;
+        }
+
+        const response = await fetch(`http://localhost:5000/updateCompanies/${companies.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                CNPJ,
+                razao_social,
+                nome_fantasia,
+                inscricao_estadual,
+                email,
+                telefone,
+                senha_acesso,
+                // data_abertura,
+                // tipo_pessoa,
+                // tipo_plano,
+                // status,
+                CEP,
+                RUA,
+                numero,
+                bairro,
+                cidade,
+                estado,
+                complemento,
+                observacoes,
+            }),
+        });
+        if (response.ok) {
+            Swal.fire("Atualizado com sucesso!", "Empresa atualizada.", "success");
+            navigate("/companies");
+        } else {
+            Swal.fire("Erro!", "Não foi possível atualizar a empresa.", "error");
+        }
+    };
+
     const handleClickShowPassword = () => {
         setShowPassword((prev) => !prev);
     };
@@ -139,133 +159,21 @@ export default function CreateCompanies() {
         event.preventDefault();
     };
 
-    const handleCnpjChange = (e) => {
-        const value = e.target.value.replace(/\D/g, ''); // Remove qualquer caractere não numérico
-        if (value.length <= 11) { // Limita o tamanho máximo do CPF
-            setCnpj(formatCPF(value));
-            setErrors({ CNPJ: value.length === 0 }); // Verifica se o campo está vazio
-        } else if (value.length <= 14) { // Limita o tamanho máximo do CNPJ
-            setCnpj(formatCNPJ(value))
-            setErrors({ CNPJ: value.length === 0 });
-        }
-    };
+    // const tipo_pessoas = [
+    //     { value: "Pessoa Juridica", label: "Pessoa Juridica" },
+    //     { value: "Pessoa Fisica", label: "Pessoa Fisica" },
+    // ];
 
-    const formatCNPJ = (value) => {
-        // Formata o CNPJ no padrão: 00.000.000/0000-00
-        return value
-            .replace(/^(\d{2})(\d)/, '$1.$2')
-            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-            .replace(/\.(\d{3})(\d)/, '.$1/$2')
-            .replace(/(\d{4})(\d)/, '$1-$2');
-    };
+    // const tipo_planos = [
+    //     { value: "Plano Bronze", label: "Plano Bronze" },
+    //     { value: "Plano Prata", label: "Plano Prata" },
+    //     { value: "Plano Ouro", label: "Plano Ouro" },
+    // ];
 
-    const formatCPF = (value) => {
-        return value
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{2})$/, '$1-$2');
-    }
-
-    const handleEmailChange = (e) => {
-        const value = e.target.value;
-        setEmail(value);
-
-        // Valida o e-mail e atualiza os erros
-        if (value === '' || validateEmail(value)) {
-            setErrors({ email: false });
-        } else {
-            setErrors({ email: true });
-        }
-    };
-
-    const validateEmail = (value) => {
-        // Expressão regular para validar o formato de e-mail
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(value);
-    };
-
-    const formatPhone = (value) => {
-        // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
-        return value
-            .replace(/^(\d{2})(\d)/g, '+$1 $2') // Adiciona o código do país
-            .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona o DDD entre parênteses
-            .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen no meio do número
-    };
-
-    const handleChangePhone = (e) => {
-        const value = e.target.value.replace(/\D/g, '');
-        if (value.length <= 15) {
-            setTelefone(formatPhone(value));
-            setErrors({ telefone: value.length === 0 });
-        }
-        
-    };
-
-    const handleChangeIncricao = (e) => {
-        const value = e.target.value.replace(/\D/g, '');
-        if (value.length <= 11) {
-            setInscricao_estadual(value);
-        }
-    };
-
-    const handleBuscarCep = async (cep) => {
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await response.json();
-
-            if (data.erro) {
-                setErrors((prevErrors) => ({ ...prevErrors, CEP: true }));
-            } else {
-                setRua(data.logradouro || '');
-                setBairro(data.bairro || '');
-                setCidade(data.localidade || '');
-                setEstado(data.uf || '');
-                setComplemento(data.complemento || '');
-                setErrors((prevErrors) => ({ ...prevErrors, CEP: false }));
-            }
-        } catch (error) {
-            console.error('Erro ao consultar o CEP:', error);
-            setErrors((prevErrors) => ({ ...prevErrors, CEP: true }));
-        }
-    };
-
-    const handleCepChange = (e) => {
-        let valor = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-        
-        if (valor.length > 8) {
-            valor = valor.slice(0, 8);
-        }
-
-        setCep(valor);
-
-        // Verifica se o CEP tem 8 dígitos para buscar automaticamente
-        if (valor.length === 8 ) {
-            handleBuscarCep(valor);
-        } else {
-            // Limpa os campos se o CEP for apagado ou incompleto
-            setRua('');
-            setBairro('');
-            setCidade('');
-            setEstado('');
-            setComplemento('');
-        }
-    };
-
-    const tipo_pessoas = [
-        { value: "Pessoa Juridica", label: "Pessoa Juridica" },
-        { value: "Pessoa Fisica", label: "Pessoa Fisica" },
-    ];
-
-    const tipo_planos = [
-        { value: "Plano Bronze", label: "Plano Bronze" },
-        { value: "Plano Prata", label: "Plano Prata" },
-        { value: "Plano Ouro", label: "Plano Ouro" },
-    ];
-
-    const tipo_status = [
-        { value: "Ativo", label: "Ativo" },
-        { value: "Desativado", label: "Desativado" },
-    ];
+    // const tipo_status = [
+    //     { value: "Ativo", label: "Ativo" },
+    //     { value: "Desativado", label: "Desativado" },
+    // ];
 
     return (
         <>
@@ -274,6 +182,7 @@ export default function CreateCompanies() {
             <Box height={70} />
 
             <Box sx={{ display: "flex" }}>
+                
                 <Sidenav />
 
                 <Box component="main" sx={{ width: "100%", overflow: "hidden", padding: "16px" }}>
@@ -288,12 +197,12 @@ export default function CreateCompanies() {
                                 fontWeight: "bold",
                             }}
                         >
-                            Cadastrar nova empresa
+                            Perfil da Empresa: {nome_fantasia}
                         </Typography>
 
                         <Box height={10} />
 
-                        {/* Cadastro informações empresa */}
+                        {/* Cadastro informações companies */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -305,13 +214,13 @@ export default function CreateCompanies() {
                             <div style={{ width: "100%" }}>
                                 <TextField
                                     required
-                                    label="CPF | CNPJ"
+                                    label="CNPJ"
                                     variant="outlined"
                                     size="small"
                                     fullWidth
                                     error={errors.CNPJ}
                                     helperText={errors.CNPJ && "Campo obrigatório"}
-                                    onChange={handleCnpjChange}
+                                    onChange={(e) => setCnpj(e.target.value)}
                                     value={CNPJ}
                                 />
                             </div>
@@ -343,12 +252,14 @@ export default function CreateCompanies() {
                             </div>
                             <div style={{ width: "100%" }}>
                                 <TextField
+                                    required
                                     label="Inscrição Estadual"
                                     variant="outlined"
                                     size="small"
                                     fullWidth
                                     error={errors.inscricao_estadual}
-                                    onChange={handleChangeIncricao}
+                                    helperText={errors.inscricao_estadual && "Campo obrigatório"}
+                                    onChange={(e) => setInscricao_estadual(e.target.value)}
                                     value={inscricao_estadual}
                                 />
                             </div>
@@ -370,8 +281,8 @@ export default function CreateCompanies() {
                                     size="small"
                                     fullWidth
                                     error={errors.email}
-                                    helperText={errors.email && "Campo obrigatório ou formato inválido"}
-                                    onChange={handleEmailChange}
+                                    helperText={errors.email && "Campo obrigatório"}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     value={email}
                                 />
                             </div>
@@ -385,10 +296,9 @@ export default function CreateCompanies() {
                                     fullWidth
                                     error={errors.telefone}
                                     helperText={errors.telefone && "Campo obrigatório"}
-                                    onChange={handleChangePhone}
+                                    onChange={(e) => setTelefone(e.target.value)}
                                     value={telefone}
-                                    placeholder="+55 (11) 99999-9999"
-                                /> 
+                                />
                             </div>
                             <div style={{ width: "100%" }}>
                                 <TextField
@@ -418,7 +328,8 @@ export default function CreateCompanies() {
                                 />
                             </div>
                         </Box>
-                        <Box
+
+                        {/* <Box
                             sx={{
                                 display: "flex",
                                 padding: "18px",
@@ -506,15 +417,15 @@ export default function CreateCompanies() {
                                     ))}
                                 </TextField>
                             </div>
-                        </Box>
+                        </Box> */}
 
-                        {/* Cadastro endereço empresa */}
+                        {/* Cadastro endereço companies */}
                         <Typography
                             gutterBottom
                             variant="h5"
                             component="div"
                             sx={{
-                                paddingTop: "50px",
+                                paddingTop: "20px",
                                 paddingLeft: "16px",
                                 fontWeight: "bold",
                             }}
@@ -536,8 +447,8 @@ export default function CreateCompanies() {
                                     size="small"
                                     fullWidth
                                     error={errors.CEP}
-                                    helperText={errors.CEP && "Campo obrigatório ou CEP inexistente"}
-                                    onChange={handleCepChange}
+                                    helperText={errors.CEP && "Campo obrigatório"}
+                                    onChange={(e) => setCep(e.target.value)}
                                     value={CEP}
                                 />
                             </div>
@@ -548,10 +459,10 @@ export default function CreateCompanies() {
                                     variant="outlined"
                                     size="small"
                                     fullWidth
-                                    error={errors.rua}
-                                    helperText={errors.rua && "Campo obrigatório"}
+                                    error={errors.RUA}
+                                    helperText={errors.RUA && "Campo obrigatório"}
                                     onChange={(e) => setRua(e.target.value)}
-                                    value={rua}
+                                    value={RUA}
                                 />
                             </div>
                             <div style={{ width: "100%" }}>
@@ -624,12 +535,12 @@ export default function CreateCompanies() {
                         >
                             <div style={{ width: "100%" }}>
                                 <TextField
+                                    required
                                     label="Complemento"
                                     variant="outlined"
                                     size="small"
                                     fullWidth
                                     error={errors.complemento}
-                                    helperText={errors.complemento && "Campo obrigatório"}
                                     onChange={(e) => setComplemento(e.target.value)}
                                     value={complemento}
                                 />
@@ -680,7 +591,7 @@ export default function CreateCompanies() {
                         >
                             <Button
                                 variant="contained"
-                                onClick={createCompanies}
+                                onClick={updateUserZorbs}
                                 sx={{
                                     backgroundColor: "#1976d2",
                                     "&:hover": {
@@ -688,12 +599,12 @@ export default function CreateCompanies() {
                                     },
                                 }}
                             >
-                                Cadastrar
+                                Salvar
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant="contained"
                                 onClick={() => {
-                                    navigate("/companies");
+                                    navigate("/Companies");
                                 }}
                                 sx={{
                                     backgroundColor: "#1976d2",
@@ -703,7 +614,7 @@ export default function CreateCompanies() {
                                 }}
                             >
                                 Cancelar
-                            </Button>
+                            </Button> */}
                         </div>
                     </Paper>
                 </Box>

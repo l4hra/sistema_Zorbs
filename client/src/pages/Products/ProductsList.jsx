@@ -90,6 +90,7 @@ export default function ProductsList() {
       await fetch(`http://localhost:5000/products/${id}`, { method: 'DELETE' });
       Swal.fire("Deletado com sucesso!", "Seu produto foi deletado.", "success");
       getProducts();
+      location.reload(true);
     }
   };
 
@@ -142,8 +143,7 @@ export default function ProductsList() {
           </Button>
         </Box>
 
-        <Divider />
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 950 }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -178,6 +178,7 @@ export default function ProductsList() {
                         onClick={() => {
                           setSelectedProduct(row);
                           setEditOpen(true);
+                          
                         }}
                       />
                       <DeleteIcon

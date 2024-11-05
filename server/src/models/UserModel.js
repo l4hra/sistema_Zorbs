@@ -1,10 +1,17 @@
 import conexao from '../../conexao.js';
 
-
 // Função para vizualizar usuários
 export async function getUsers(req, res) {
     console.log('UsersController getUsers');
+    
+    try {
+        const [rows] = await conexao.query('SELECT * FROM users');
+        res.status(200).json(rows);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Erro ao buscar usuário', error });
     }
+}
 
 // Função para cadastrar produtos
 export async function addUser(users) {
@@ -14,13 +21,13 @@ export async function addUser(users) {
     //     return [400, errors];
     // }
 
-
-    const sql = `INSERT INTO users (name, passaword, confirm_ps, 
+    
+    const sql = `INSERT INTO users (name, password, confirm_ps, 
     email, telefone, type_of_acess, status)
     VALUES (?,?,?,?,?,?,?)`;
     const params = [
         users.name,
-        users.passaword,
+        users.password,
         users.confirm_ps,
         users.email,
         users.telefone,
@@ -40,7 +47,6 @@ export async function addUser(users) {
 
 export async function deleteUser(id) {
 
-   
     const sql = 'DELETE FROM users WHERE id = ?';
 
     try {
@@ -65,10 +71,9 @@ export async function updateUsers(id, users) {
     //     return [400, errors];
     // }
 
-    
     const sql = `UPDATE users SET 
     name = ?,
-    passaword = ?,
+    password = ?,
     confirm_ps = ?, 
     email = ?, 
     telefone = ?, 
@@ -77,7 +82,7 @@ export async function updateUsers(id, users) {
     WHERE id = ?`;
     const params = [
         users.name,
-        users.passaword,
+        users.password,
         users.confirm_ps,
         users.email,
         users.telefone,

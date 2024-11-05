@@ -1,5 +1,4 @@
-import mysql from 'mysql2/promise';
-import db from '../../conexao.js';
+import conexao from '../../conexao.js';
 import { validateProductData, validateProductId } from '../validations/productsValidation.js';
 
 // Função para cadastrar produtos
@@ -10,7 +9,6 @@ export async function addProducts(products) {
         return [400, errors];
     }
 
-    const conexao = mysql.createPool(db);
     const sql = `INSERT INTO products (name, type, category, unidade_medida, preco_custo, preco_venda, observacao)
     VALUES (?,?,?,?,?,?,?)`;
     const params = [
@@ -36,7 +34,7 @@ export async function addProducts(products) {
 // Função para vizualizar produtos
 export async function getProducts(req, res) {
     console.log('ProductsController getProducts');
-    const conexao = mysql.createPool(db);
+
     try {
         const [rows] = await conexao.query('SELECT * FROM products');
         res.status(200).json(rows);
@@ -54,7 +52,6 @@ export async function deleteProduct(id) {
         return [400, idErrors];
     }
 
-    const conexao = mysql.createPool(db);
     const sql = 'DELETE FROM products WHERE id = ?';
     
     try {
@@ -81,7 +78,6 @@ export async function updateProduct(id, product) {
         return [400, errors];
     }
 
-    const conexao = mysql.createPool(db);
     const sql = `UPDATE products SET name = ?, type = ?, category = ?, unidade_medida = ?, preco_custo = ?, preco_venda = ?, observacao = ?
                  WHERE id = ?`;
     const params = [

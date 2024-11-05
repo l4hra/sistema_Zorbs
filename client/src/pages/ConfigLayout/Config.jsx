@@ -7,11 +7,10 @@ import { Sketch } from "@uiw/react-color";
 export default function Config({ color }) {
   const [hex, setHex] = useState("#fff");
 
-  
   return (
     <>
       <Navbar />
-      <Box height={30} />
+      <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <Sidenav color={hex} />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

@@ -69,6 +69,7 @@ export default function CompaniesList() {
       await fetch(`http://localhost:5000/deleteCompanies/${id}`, { method: 'DELETE' });
       Swal.fire("Deletado com sucesso!", "A empresa foi deletada.", "success");
       getCompanies();
+      location.reload(true);
     }
   };
 
@@ -93,7 +94,7 @@ export default function CompaniesList() {
             fontWeight: "bold",
           }}
         >
-          Usuários Zorbs
+          Empresas cadastradas
         </Typography>
 
         <Box

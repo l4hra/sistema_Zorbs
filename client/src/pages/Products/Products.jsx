@@ -10,6 +10,10 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+  
   // Função para buscar os produtos
   const fetchProducts = async () => {
     setLoading(true);
@@ -25,21 +29,13 @@ export default function Products() {
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
         setError("Não foi possível conectar ao servidor. Verifique sua conexão com o banco de dados.");
       } else {
-        <ProductsList 
-          products={products} 
-          refreshProducts={refreshProducts} 
-        />
+        setError("Erro ao buscar produtos. Tente novamente mais tarde.");
       }
       console.error('Erro ao buscar produtos:', error);
     } finally {
       setLoading(false);
     }
   };
-
-  // useEffect para chamar a função fetchProducts quando o componente é montado
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   // Função para atualizar a lista de produtos
   const refreshProducts = async () => {
@@ -74,7 +70,8 @@ export default function Products() {
 
           {/* Caso não haja produtos e não esteja carregando, exibir uma mensagem */}
           {!loading && !error && products.length === 0 && (
-            <Typography variant="body1" color="textSecondary">
+            
+            <Typography variant="body1" color="textSecondary" align='center'>
               Nenhum produto encontrado.
             </Typography>
         

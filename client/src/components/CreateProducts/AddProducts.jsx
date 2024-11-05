@@ -72,6 +72,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
       Swal.fire("Criado com sucesso!", "Seu produto foi adicionado.", "success");
       refreshProducts(); // Atualiza a lista de produtos
       closeEvent();
+      location.reload(true);
     } else {
       setErrorMessage("Não foi possível adicionar o produto.");
       setOpenSnackbar(true);
@@ -93,7 +94,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
   return (
     <Box sx={{ m: 2, maxHeight: "80vh" }}>
       <Typography variant="h5" align="left" sx={{ paddingBottom: "px" }}>
-        Adicionar Produto
+        Novo Produto
       </Typography>
 
       <Box height={30} />

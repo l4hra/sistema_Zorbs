@@ -12,14 +12,14 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
     const [type_of_acess, setTypeOfAccess] = useState(user?.type_of_acess || "" );
     const [status, setStatus] = useState(user?.status || "" );
     const [name, setName] = useState(user?.name || "" );
-    const [passaword, setPassword] = useState(user?.passaword || "" );
+    const [password, setPassword] = useState(user?.password || "" );
     const [confirm_ps, setConfirmPs] = useState(user?.confirm_ps || "" );
     const [email, setEmail] = useState(user?.email || "" );
     const [telefone, setTelefone] = useState(user?.telefone || "" );
 
     const [errors, setErrors] = useState({
         name: false,
-        passaword: false,
+        password: false,
         confirm_ps: false,
         email: false,
         telefone: false,
@@ -33,7 +33,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
             setTypeOfAccess(user.type_of_acess);
             setStatus(user.status);
             setName(user.name);
-            setPassword(user.passaword);
+            setPassword(user.password);
             setConfirmPs(user.confirm_ps);
             setEmail(user.email);
             setTelefone(user.telefone);
@@ -52,7 +52,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
             },
             body: JSON.stringify({
                 name,
-                passaword,
+                password,
                 confirm_ps,
                 email,
                 telefone,
@@ -73,7 +73,7 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
     const handleValidation = () => {
         let newErrors = {
           name: !name,
-          passaword: !passaword,
+          password: !password,
           confirm_ps: !confirm_ps,
           email: !email,
           telefone: !telefone,
@@ -146,10 +146,10 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         type="password"
                         fullWidth
                         variant="outlined"
-                        error={errors.passaword}
-                        helperText={errors.passaword && "Campo Obrigatório"}
+                        error={errors.password}
+                        helperText={errors.password && "Campo Obrigatório"}
                         onChange={(e) => setPassword(e.target.value)}
-                        value={passaword || ""}
+                        value={password || ""}
                     />
 
                     <TextField
