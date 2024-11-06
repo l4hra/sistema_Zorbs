@@ -1,6 +1,5 @@
 import conexao from '../../conexao.js';
 
-
 // Função para vizualizar usuários
 export async function getUsers(req, res) {
     console.log('UsersController getUsers');

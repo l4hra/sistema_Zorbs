@@ -11,6 +11,7 @@ import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import Companies from "./pages/Companies/Companies";
 import EditCompanies from "./components/EditCompanies/EditCompanies";
 import CreateCompanies from "./components/CreateCompanies/CreateCompanies";
+import EditPerfil from "./components/EditPerfil/EditPerfil";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/Companies" exact element={<Companies />}></Route>
           <Route path="/CreateCompanies" exact element={<CreateCompanies />}></Route>
           <Route path="/EditCompanies" exact element={<EditCompanies />}></Route>
+          <Route path="/EditPerfil" exact element={<EditPerfil />}></Route>
         </Routes>
       </BrowserRouter>
     </>

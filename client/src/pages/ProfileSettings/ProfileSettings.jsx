@@ -54,7 +54,7 @@ function ProfileSettings() {
                         }}
                     >
                         <Typography variant="h4" gutterBottom>
-                            Meu Perfil
+                            Alterar Senha
                         </Typography>
                         <Box
                             component="form"
@@ -65,7 +65,7 @@ function ProfileSettings() {
                                 width: "100%",
                             }}
                         >
-                            <TextField
+                            {/* <TextField
                                 label="Nome"
                                 variant="outlined"
                                 value={name}
@@ -86,7 +86,7 @@ function ProfileSettings() {
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                                 fullWidth
-                            />
+                            /> */}
                             <TextField
                                 label="Nova Senha"
                                 variant="outlined"
