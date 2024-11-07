@@ -90,7 +90,6 @@ export default function ProductsList() {
       await fetch(`http://localhost:5000/products/${id}`, { method: 'DELETE' });
       Swal.fire("Deletado com sucesso!", "Seu produto foi deletado.", "success");
       getProducts();
-      location.reload(true);
     }
   };
 
@@ -147,7 +146,7 @@ export default function ProductsList() {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                {["Nome", "Tipo", "Preço de Custo", "Preço de Venda", "Opções"].map((header) => (
+                {["Nome", "Categoria", "Preço de Custo", "Preço de Venda", "Opções"].map((header) => (
                   <TableCell
                     key={header}
                     align="center"
@@ -168,7 +167,7 @@ export default function ProductsList() {
               {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow key={row.id} hover>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>{row.name}</TableCell>
-                  <TableCell align="center" sx={{ fontSize: "17px" }}>{row.type}</TableCell>
+                  <TableCell align="center" sx={{ fontSize: "17px" }}>{row.category}</TableCell>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>{formatPrice(row.preco_custo)}</TableCell>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>{formatPrice(row.preco_venda)}</TableCell>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>

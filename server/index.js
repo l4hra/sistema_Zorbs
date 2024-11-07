@@ -1,9 +1,9 @@
 import express from 'express';
 import { createCompanies, excluirCompanies, atualizaCompanies  } from './src/controllers/CompaniesController.js'
-import { cadastroProduct, excluirProduct, atualizaProduct } from './src/controllers/ProductsController.js';
+import { cadastroProduct, excluirProduct, atualizaProduct, listaProdutos } from './src/controllers/ProductsController.js';
 import {cadastroUser, excluirUsers, atualizaUsers} from './src/controllers/UserController.js'
 import { getCompanies } from './src/models/CompaniesModel.js'
-import { getProducts } from './src/models/ProductModel.js';
+//import { getProducts } from './src/models/ProductModel.js';
 import { getUsers } from './src/models/UserModel.js';
 import cors from 'cors';
 
@@ -17,7 +17,9 @@ app.use(express.json());
 
 
 app.post('/registerProduct', cadastroProduct);
-app.get('/products', getProducts);
+//app.get('/products', getProducts);
+//Rota filtrando categoria
+app.get('/products/:categoria?', listaProdutos);
 app.delete('/products/:id', excluirProduct);
 app.put('/products/:id', atualizaProduct);
 

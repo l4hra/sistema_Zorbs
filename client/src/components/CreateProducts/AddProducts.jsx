@@ -32,6 +32,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
     preco_venda: false,
   });
 
+
   const handleValidation = () => {
     let newErrors = {
       name: !name,
@@ -72,7 +73,6 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
       Swal.fire("Criado com sucesso!", "Seu produto foi adicionado.", "success");
       refreshProducts(); // Atualiza a lista de produtos
       closeEvent();
-      location.reload(true);
     } else {
       setErrorMessage("Não foi possível adicionar o produto.");
       setOpenSnackbar(true);
@@ -111,20 +111,6 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             helperText={errors.name && "Campo obrigatório"}
             onChange={(e) => setName(e.target.value)}
             value={name}
-          />
-        </div>
-
-        <div style={{ gridColumn: "span 1" }}>
-          <TextField
-            required
-            label="Tipo do Produto"
-            variant="outlined"
-            size="small"
-            fullWidth
-            error={errors.type}
-            helperText={errors.type && "Campo obrigatório"}
-            onChange={(e) => setType(e.target.value)}
-            value={type}
           />
         </div>
 

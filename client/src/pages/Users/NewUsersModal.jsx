@@ -74,11 +74,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     });
 
     if (response.ok) {
-      Swal.fire(
-        "Criado com sucesso!",
-        "Seu usuário foi adicionado.",
-        "success"
-      );
+      Swal.fire("Criado com sucesso!", "Seu usuário foi adicionado.", "success");
       refreshUser(); // Atualiza a lista de produtos
       closeEvent();
       location.reload(true);
@@ -230,6 +226,21 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             <CloseIcon />
           </IconButton>
         </Typography>
+
+        <TextField
+            required
+            margin="dense"
+            id="name"
+            name="name"
+            label="Nome do Usuário"
+            type="name"
+            fullWidth
+            variant="outlined"
+            error={errors.name}
+            helperText={errors.name && "Campo Obrigatório"}
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
         
         <div
           style={{

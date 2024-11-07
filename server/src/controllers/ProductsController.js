@@ -1,4 +1,4 @@
-import { addProducts, deleteProduct, updateProduct } from "../models/ProductModel.js";
+import { addProducts, deleteProduct, getProducts, updateProduct } from "../models/ProductModel.js";
 import { validateProductData, validateProductId } from "../validations/productsValidation.js";
 
 export async function cadastroProduct(req, res){
@@ -21,10 +21,22 @@ export async function cadastroProduct(req, res){
     }
 }
 
+export async function listaProdutos(req,res) {
+        console.log('ProductsController :: listaProdutos')
+        const {categoria} = req.params;
+
+        try {
+            const [status,resposta] = await getProducts(categoria);
+            res.status(status).json(resposta);
+        } catch (error) {
+            res.status(500).json({message:'Erro ao exibir'})
+        }
+}
+
 export async function excluirProduct(req, res) {
     console.log(`ProductsController excluirProduct`);
     const { id } = req.params;
-
+    
     // Validar o ID do produto antes de excluir
     const validationErrors = validateProductId(Number(id));
     if (validationErrors.length > 0) {

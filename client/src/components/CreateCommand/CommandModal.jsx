@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
-import { TextField } from "@mui/material";
+import { TextField, Divider } from "@mui/material";
 import TableComponent from "./TableCommand";
 import IceCreamModal from "./IceCreamModal";
 import AcaiModal from "./AcaiModal";
+import axios from "axios";
 
 export default function CommandModal() {
   const [open, setOpen] = useState(false);
@@ -17,6 +18,27 @@ export default function CommandModal() {
   const [selectedBeverages, setSelectedBeverages] = useState([]);
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [selectedPicole, setSelectedPicole] = useState([]);
+
+  const [listItems, setListItems] = useState([]);
+
+  // Listar Bebidas
+  const fetchBebida = async (categoria) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/products`, {
+        params: { categoria },  // Passa a categoria como parâmetro
+      });
+      if (response.status === 200)  {
+        setListItems(response.data);  // Atualiza o estado com os produtos recebidos
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+    }
+  };
+
+  // Chama a função de busca ao carregar o componente (quando a categoria for 'bebida')
+  useEffect(() => {
+    fetchBebida("Bebida");  // Passa a categoria "bebida" para buscar os produtos
+  }, []);
 
   const handleIceCreamDataChange = (data) => {
     setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
@@ -45,11 +67,6 @@ export default function CommandModal() {
     setIceCreams([]);
     setAcai([]);
   };
-  const listItems = [
-    { id: 1, name: "Coca-cola", price: 10, quantity: 2 },
-    { id: 2, name: "Água com gás", price: 10, quantity: 2 },
-    { id: 3, name: "Coca-cola", price: 10, quantity: 2 },
-  ];
 
   const listItemsFoods = [
     { id: 1, name: "Chips", quantity: 2 },
@@ -140,6 +157,21 @@ export default function CommandModal() {
           <Typography id="modal-modal-title" variant="h4" component="h2">
             Nova comanda
           </Typography>
+          <Box height={10} />
+          <Divider />
+          <Box height={20} />
+          <Autocomplete
+              multiple
+              sx={{ width: "100%" }}
+              id="tags-outlined"
+              options={listItems}
+              getOptionLabel={(option) => option.name}
+              filterSelectedOptions
+              onChange={handleBeveragesChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Produtos" />
+              )}
+            />
 
           <div
             className="organize"
@@ -151,20 +183,9 @@ export default function CommandModal() {
               marginBottom: "25px",
             }}
           >
-            <Autocomplete
-              multiple
-              sx={{ width: "100%" }}
-              id="tags-outlined"
-              options={listItems}
-              getOptionLabel={(option) => option.name}
-              filterSelectedOptions
-              onChange={handleBeveragesChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Bebidas" placeholder="Bebidas" />
-              )}
-            />
+            
 
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               id="tags-outlined"
               options={listItemsFoods}
@@ -174,7 +195,7 @@ export default function CommandModal() {
               renderInput={(params) => (
                 <TextField {...params} label="Comidas" placeholder="Comidas" />
               )}
-            />
+            /> */}
 
             <div
               className="sorvete"
@@ -221,7 +242,7 @@ export default function CommandModal() {
 
               <AcaiModal onDataChange={handleAcaiDataChange} />
             </div>
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               id="tags-outlined"
               options={listPicole}
@@ -231,7 +252,7 @@ export default function CommandModal() {
               renderInput={(params) => (
                 <TextField {...params} label="Picolé" placeholder="Picolé" />
               )}
-            />
+            /> */}
           </div>
 
           <TableComponent

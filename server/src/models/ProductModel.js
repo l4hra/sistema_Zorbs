@@ -32,13 +32,20 @@ export async function addProducts(products) {
 }
 
 // Função para vizualizar produtos
-export async function getProducts(req, res) {
-    console.log('ProductsController getProducts');
-
+export async function getProducts(categoria) {
+    console.log('ProductsModel getProducts');
+    console.log(categoria);
+    let filtros = '';
+    if (categoria){
+        filtros = `WHERE category='${categoria}'`
+    }
+    console.log(filtros);
     try {
-        const [rows] = await conexao.query('SELECT * FROM products');
-        res.status(200).json(rows);
+        const [rows] = await conexao.query(`SELECT * FROM products ${filtros}`);
+        return [200,rows];
+        //res.status(200).json(rows);
     } catch (error) {
+        console.log(filtros);
         console.log(error);
         res.status(500).json({ message: 'Erro ao buscar produtos', error });
     }
@@ -103,4 +110,9 @@ export async function updateProduct(id, product) {
         console.log(error);
         return [500, 'Erro ao atualizar o produto'];
     }
+}
+
+// 
+function teste (...opcoes){
+    opcoes['categoria']
 }
