@@ -81,7 +81,6 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
       );
       refreshUser(); // Atualiza a lista de produtos
       closeEvent();
-      location.reload(true);
     } else {
       Swal.fire("Erro!", "Não foi possível adicionar o usuário.", "error");
     }
@@ -184,6 +183,11 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
   const handleChangePhone = (e) => {
     const formattedPhone = formatPhone(e.target.value);
     setTelefone(formattedPhone);
+    const { value } = event.target;
+    const numericValue = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+    if (numericValue.length <= 12) {
+      setTelefone(numericValue); // Atualiza apenas se tiver até 13 números
+    }
   };
 
   return (
@@ -230,7 +234,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             <CloseIcon />
           </IconButton>
         </Typography>
-        
+
         <div
           style={{
             display: "grid",
@@ -239,19 +243,18 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
           }}
         >
           <div style={{ gridColumn: "1 / span 2" }}>
-          <TextField
-            required
-            label="Nome do Usuário"
-            variant="outlined"
-            size="small"
-            fullWidth
-            error={errors.name}
-            helperText={errors.name && "Campo obrigatório"}
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-
-        </div>
+            <TextField
+              required
+              label="Nome do Usuário"
+              variant="outlined"
+              size="small"
+              fullWidth
+              error={errors.name}
+              helperText={errors.name && "Campo obrigatório"}
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+            />
+          </div>
           <TextField
             required
             margin="dense"
@@ -330,13 +333,16 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             name="telefone"
             label="Telefone"
             type="tel"
-            placeholder="(xx) xxxxx-xxxx"
+            placeholder="+xx                                                                                                                                                                                                                                          (xx) xxxxx-xxxx"
             fullWidth
             variant="outlined"
             error={errors.telefone}
             helperText={errors.telefone && "Campo Obrigatório"}
             onChange={handleChangePhone}
             value={telefone}
+            inputProps={{
+              maxLength: 15,
+            }}
           />
 
           <TextField

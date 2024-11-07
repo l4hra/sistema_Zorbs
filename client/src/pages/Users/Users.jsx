@@ -69,14 +69,6 @@ const fetchUsers = async () => {
           />
           </ErrorBoundary>
           )}
-
-          {/* Caso não haja usuários e não esteja carregando, exibir uma mensagem */}
-          {!loading && !error && users.length === 0 && (
-            <Typography variant="body1" color="textSecondary" align='center'>
-              Nenhum usuário encontrado.
-            </Typography>
-        
-          )}
         </Box>
       </Box>
     </div>
