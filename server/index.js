@@ -1,21 +1,17 @@
 import {
-  cadastroProduct,
-  excluirProduct,
-  atualizaProduct,
-} from "./src/controllers/ProductsController.js";
-import {
   cadastroCommand,
   atualizaCommand,
 } from "./src/controllers/CommandController.js";
-
+import { getCompanies } from './src/models/CompaniesModel.js'
+import { createCompanies, excluirCompanies, atualizaCompanies  } from './src/controllers/CompaniesController.js'
 import {
   criarItemCommand,
   atualizaItemCommand,
 } from "./src/controllers/Item_CommandController.js";
-
+import { getUsers } from './src/models/UserModel.js';
 import { getAllCommands } from "./src/models/CommandModel.js";
 import { getAllItemCommands } from "./src/models/Item_CommandModel.js";
-
+import {cadastroUser, excluirUsers, atualizaUsers} from './src/controllers/UserController.js'
 import cors from "cors";
 import express from 'express';
 

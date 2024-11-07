@@ -35,7 +35,7 @@ export default function Kanban() {
 
   useEffect(() => {
     setCompleted(commands.filter((pedido) => pedido.completed));
-    setIncomplete(commands.filter((pedido) => !pedido.completed));
+    setIncomplete(commands.filter((pedido) => pedido.incompleted));
     setcanceled(commands.filter((pedido) => pedido.canceled));
   }, [commands]);
 
@@ -48,7 +48,6 @@ export default function Kanban() {
   
     // Encontre a task usando o item_id, que é agora o draggableId
     const task = findItemById(draggableId, [...incomplete, ...completed, ...canceled]);
-  
     deletePreviousState(source.droppableId, task.item_id); // Use item_id para remover
   
     setNewState(destination.droppableId, task);
@@ -86,11 +85,11 @@ export default function Kanban() {
     }
   }
   function findItemById(id, array) {
-    return array.find((item) => item.id == id);
+    return array.find((item) => item.id_command == id);
   }
 
   function removeItemById(id, array) {
-    return array.filter((item) => item.id != id);
+    return array.filter((item) => item.id_command != id);
   }
   return (
     <>

@@ -24,7 +24,7 @@ export default function EditCommand() {
   const listItems = [
     { id: 1, title: "Coca-cola" },
     { id: 2, title: "Água com gás" },
-    { id: 3, title: "Coca-cola" },
+    { id: 3, title: "Sprite" },
   ];
 
   const listItemsFoods = [

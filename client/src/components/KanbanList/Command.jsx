@@ -32,25 +32,33 @@ export default function Command({ task, index }) {
   const [name, setName] = useState();
   const [date, setDate] = useState();
 
-  useEffect(() => {
-    carregaComanda();
-  }, []);
+  // useEffect(() => {
+  //   carregaComanda();
+  // }, []);
 
-  const carregaComanda = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/commands");
-  console.log(response, 'oi')
+  // const carregaComanda = async () => {
+  //   try {
+  //     const response = await fetch("http://localhost:5000/commands");
+  // console.log(response, 'oi')
 
-      const data = await response.json();
-      setName(data.name);
-      setDate(data.date_opening);
-      // setCommands(data);
-    } catch (error) {
-      console.error("Erro ao buscar as comandas:", error);
-    }
-  };
+  //     const data = await response.json();
+  //     setName(data.name);
+  //     setDate(data.date_opening);
+  //     // setCommands(data);
+  //   } catch (error) {
+  //     console.error("Erro ao buscar as comandas:", error);
+  //   }
+  // };
 
   console.log(name, 'nome')
+  const formatTime = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+  
   return (
     <>
       <Draggable
