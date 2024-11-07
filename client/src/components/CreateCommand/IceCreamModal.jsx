@@ -12,7 +12,7 @@ export default function IceCreamModal({ onDataChange }) {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("Sorvete#1");
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState();
 
   const [weight, setWeight] = useState("");
   const [price, setPrice] = useState(0);

@@ -49,7 +49,7 @@ export default function TableComponent({
             allSelectedProducts.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  {item.name} | R${item.price},00
+                  {item.name} | R${item.preco_venda}
                 </TableCell>
                 <TableCell align="right">
                   <Button
@@ -64,7 +64,7 @@ export default function TableComponent({
                   >
                     -
                   </Button>
-                  <span style={{ margin: "0 10px" }}>{item.quantity}</span>
+                  <span style={{ margin: "0 10px" }}>{1}</span>
                   <Button
                     variant="outlined"
                     size="small"

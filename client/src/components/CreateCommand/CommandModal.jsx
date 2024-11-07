@@ -37,7 +37,12 @@ export default function CommandModal() {
         params: { categoria },  // Passa a categoria como parâmetro
       });
       if (response.status === 200)  {
-        setListItems(response.data);  // Atualiza o estado com os produtos recebidos
+        const products = response.data.map((item) => {
+          return {...item, quantity: 1};
+        })
+        console.log('products map',products)
+        
+        setListItems();  // Atualiza o estado com os produtos recebidos
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -70,24 +75,13 @@ export default function CommandModal() {
     ...acai,
     ...selectedPicole,
   ];
+console.log('items dentro de allselect', allSelectedProducts);
 
   const handleClose = () => {
     setOpen(false);
     setIceCreams([]);
     setAcai([]);
   };
-
-  const listItemsFoods = [
-    { id: 1, name: "Chips", quantity: 2 },
-    { id: 2, name: "Doces", price: 10, quantity: 2 },
-    { id: 3, name: "Bala", price: 10, quantity: 2 },
-  ];
-
-  const listPicole = [
-    { id: 1, name: "Tablito recheado", price: 10, quantity: 2 },
-    { id: 2, name: "Picole de coco", price: 10, quantity: 2 },
-    { id: 3, name: "Picole de limão", price: 10, quantity: 2 },
-  ];
 
   const handleQuantityChange = (id, delta) => {
     const newItems = allSelectedProducts.map((item) => {
@@ -102,8 +96,8 @@ export default function CommandModal() {
     setSelectedBeverages(
       newItems.filter((item) => item.category === "beverage")
     );
-    setSelectedFoods(newItems.filter((item) => item.category === "food"));
-    setSelectedPicole(newItems.filter((item) => item.category === "picole"));
+    // setSelectedFoods(newItems.filter((item) => item.category === "food"));
+    // setSelectedPicole(newItems.filter((item) => item.category === "picole"));
   };
 
   const total = allSelectedProducts.reduce(
