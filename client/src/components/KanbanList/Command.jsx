@@ -38,7 +38,9 @@ export default function Command({ task, index }) {
 
   const carregaComanda = async () => {
     try {
-      const response = await fetch("http://localhost:5000/commands");
+      const response = await fetch("http://localhost:5000/commands;");
+  console.log(response, 'oi')
+
       const data = await response.json();
       setName(data.name);
       setDate(data.date_opening);
@@ -48,16 +50,17 @@ export default function Command({ task, index }) {
     }
   };
 
+  console.log(name, 'nome')
   return (
     <>
       <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
         {(provided, snapshot) => (
           <div
-            className="container"
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-            isDragging={snapshot.isDragging}
+          className="container"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
           >
             <div
               style={{
@@ -66,13 +69,14 @@ export default function Command({ task, index }) {
                 borderRadius: "5px",
                 marginBottom: "6px",
               }}
-            >
+              >
               <span
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                 }}
-              >
+                >
+                {name}
                 <h3>#{task.title}</h3>
 
                 <div
