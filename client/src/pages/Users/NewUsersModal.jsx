@@ -4,22 +4,84 @@ import {
   IconButton,
   Typography,
   Box,
-  Grid,
   TextField,
   Button,
   MenuItem,
+  InputAdornment,
   Modal,
-  FormControl,
-  InputLabel,
-  Select,
-  Grid2,
-  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
-export default function NewUsersModal({ closeEvent }) {
-  const [access, setAccess] = useState("");
+export default function NewUsersModal({ closeEvent, refreshUser }) {
+  const [type_of_acess, setTypeOfAccess] = useState("");
   const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
+  const [passaword, setPassword] = useState("");
+  const [confirm_ps, setConfirmPs] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPs, setShowConfirmPs] = useState(false);
+
+  const [errors, setErrors] = useState({
+    name: false,
+    passaword: false,
+    confirm_ps: false,
+    email: false,
+    telefone: false,
+    type_of_acess: false,
+    status: false,
+  });
+
+  const handleValidation = () => {
+    let newErrors = {
+      name: !name,
+      passaword: !passaword,
+      confirm_ps: !confirm_ps,
+      email: !email,
+      telefone: !telefone,
+      type_of_acess: !type_of_acess,
+      status: !status,
+    };
+    setErrors(newErrors);
+
+    // Verifica se há algum erro
+    return !Object.values(newErrors).includes(true);
+  };
+
+  const createUser = async () => {
+    if (!handleValidation()) {
+      return;
+    }
+
+    const response = await fetch("http://localhost:5000/cadastroUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        passaword,
+        confirm_ps,
+        email,
+        telefone,
+        type_of_acess,
+        status,
+      }),
+    });
+
+    if (response.ok) {
+      Swal.fire("Criado com sucesso!", "Seu usuário foi adicionado.", "success");
+      refreshUser(); // Atualiza a lista de produtos
+      closeEvent();
+      location.reload(true);
+    } else {
+      Swal.fire("Erro!", "Não foi possível adicionar o usuário.", "error");
+    }
+  };
 
   const handleChangeSetAccess = (event) => {
     setAccess(event.target.value);
@@ -27,11 +89,98 @@ export default function NewUsersModal({ closeEvent }) {
   const handleChangeSetStatus = (event) => {
     setStatus(event.target.value);
   };
-  const listItems = [
-    { id: 1, title: "Tipo 1" },
-    { id: 2, title: "Tipo 2" },
-    { id: 3, title: "Tipo 3" },
+
+  const typeAcess = [
+    { value: "Funcionário", label: "Funcionário" },
+    { value: "Administrador", label: "Administrador" },
   ];
+
+  const typeStatus = [
+    { value: "Ativo", label: "Ativo" },
+    { value: "Inativo", label: "Inativo" },
+  ];
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    // Valida o e-mail e atualiza os erros
+    if (value === "" || validateEmail(value)) {
+      setErrors({ email: false });
+    } else {
+      setErrors({ email: true });
+    }
+  };
+
+  const validateEmail = (value) => {
+    // Expressão regular para validar o formato de e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+
+    // Valida a senha e atualiza os erros
+    if (value === "" || validatePassword(value)) {
+      setErrors({ passaword: false });
+    } else {
+      setErrors({ passaword: true });
+    }
+  };
+  function validatePassword(value, confirm_ps) {
+    // Verifica o comprimento da senha
+    if (senha.length < 8) {
+      return "A senha deve ter pelo menos 8 caracteres.";
+    }
+    // Verifica a presença de pelo menos uma letra maiúscula
+    if (!/[A-Z]/.test(value)) {
+      return "A senha deve conter pelo menos uma letra maiúscula.";
+    }
+    // Verifica a presença de pelo menos uma letra minúscula
+    if (!/[a-z]/.test(value)) {
+      return "A senha deve conter pelo menos uma letra minúscula.";
+    }
+    // Verifica a presença de pelo menos um número
+    if (!/[0-9]/.test(value)) {
+      return "A senha deve conter pelo menos um número.";
+    }
+    // Verifica a presença de pelo menos um símbolo especial
+    if (!/[^A-Za-z0-9]/.test(value)) {
+      return "A senha deve conter pelo menos um símbolo especial (ex.: !, @, #, etc.).";
+    }
+    if (passaword !== confirm_ps) {
+      return "As senhas não correspondem.";
+    }
+  }
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleClickShowConfirmPs = () => {
+    setShowConfirmPs((prev) => !prev);
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const formatPhone = (value) => {
+    // Remove tudo que não é número
+    value = value.replace(/\D/g, "");
+
+    // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
+    return value
+      .replace(/^(\d{2})(\d)/g, "+$1 $2") // Adiciona o código do país
+      .replace(/(\d{2})(\d)/, "($1) $2") // Adiciona o DDD entre parênteses
+      .replace(/(\d{5})(\d)/, "$1-$2"); // Adiciona o hífen no meio do número
+  };
+
+  const handleChangePhone = (e) => {
+    const formattedPhone = formatPhone(e.target.value);
+    setTelefone(formattedPhone);
+  };
 
   return (
     <Modal
@@ -52,7 +201,9 @@ export default function NewUsersModal({ closeEvent }) {
           transform: "translate(-50%, -50%)",
           width: 1100,
           bgcolor: "background.paper",
-
+          borderRadius: "5px",
+          boxShadow: 20,
+          p: 4,
           overflowY: "auto",
           outline: "none",
           boxShadow: 20,
@@ -67,7 +218,7 @@ export default function NewUsersModal({ closeEvent }) {
         }}
       >
         <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
-          Adicionar Novo Usuário
+          Novo Usuário
           <IconButton
             style={{ position: "absolute", right: 8, top: 8 }}
             onClick={closeEvent}
@@ -76,6 +227,21 @@ export default function NewUsersModal({ closeEvent }) {
           </IconButton>
         </Typography>
 
+        <TextField
+            required
+            margin="dense"
+            id="name"
+            name="name"
+            label="Nome do Usuário"
+            type="name"
+            fullWidth
+            variant="outlined"
+            error={errors.name}
+            helperText={errors.name && "Campo Obrigatório"}
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
+        
         <div
           style={{
             display: "grid",
@@ -84,36 +250,31 @@ export default function NewUsersModal({ closeEvent }) {
           }}
         >
           <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="user-name"
-            name="nome"
-            label="Nome do Usuário"
-            type="text"
-            fullWidth
-            variant="outlined"
-          />
-          <TextField
-            required
-            margin="dense"
-            id="user-email"
-            name="email"
-            label="E-mail"
-            type="email"
-            fullWidth
-            variant="outlined"
-          />
-
-          <TextField
             required
             margin="dense"
             id="user-password"
             name="senha"
             label="Senha"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             variant="outlined"
+            error={errors.passaword}
+            helperText={errors.passaword && "Campo Obrigatório"}
+            onChange={handlePasswordChange}
+            value={passaword}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
@@ -122,11 +283,43 @@ export default function NewUsersModal({ closeEvent }) {
             id="user-confirm-password"
             name="confirmacaoSenha"
             label="Confirmar senha"
-            type="password"
+            type={showConfirmPs ? "text" : "password"}
             fullWidth
             variant="outlined"
+            error={errors.confirm_ps}
+            helperText={errors.confirm_ps && "Campo Obrigatório"}
+            onChange={(e) => setConfirmPs(e.target.value)}
+            value={confirm_ps}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowConfirmPs}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showConfirmPs ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
+          <TextField
+            required
+            margin="dense"
+            id="user-email"
+            name="email"
+            label="E-mail"
+            type="email"
+            fullWidth
+            placeholder="email@email.com"
+            variant="outlined"
+            error={errors.email}
+            helperText={errors.email && "Campo Obrigatório"}
+            onChange={handleEmailChange}
+            value={email}
+          />
           <TextField
             required
             margin="dense"
@@ -134,38 +327,52 @@ export default function NewUsersModal({ closeEvent }) {
             name="telefone"
             label="Telefone"
             type="tel"
+            placeholder="(xx) xxxxx-xxxx"
             fullWidth
             variant="outlined"
+            error={errors.telefone}
+            helperText={errors.telefone && "Campo Obrigatório"}
+            onChange={handleChangePhone}
+            value={telefone}
           />
 
-          <Autocomplete
-            multiple
-            sx={{
-              width: "100%",
-              margin: 0,
-              display: "flex",
-              alignItems: "center",
-            }}
-            id="tags-outlined"
-            options={listItems}
-            getOptionLabel={(option) => option.title}
-            filterSelectedOptions
-            renderInput={(params) => (
-              <TextField {...params} label="Tipo" placeholder="Tipo" />
-            )}
-          />
+          <TextField
+            required
+            margin="dense"
+            label="Tipo de Acesso"
+            fullWidth
+            select
+            variant="outlined"
+            error={errors.type_of_acess}
+            helperText={errors.type_of_acess && "Campo Obrigatório"}
+            onChange={(e) => setTypeOfAccess(e.target.value)}
+            value={type_of_acess}
+          >
+            {typeAcess.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
 
-          <Autocomplete
-            multiple
-            sx={{ width: "100%" }}
-            id="tags-outlined"
-            options={listItems}
-            getOptionLabel={(option) => option.title}
-            filterSelectedOptions
-            renderInput={(params) => (
-              <TextField {...params} label="Tipo" placeholder="Tipo" />
-            )}
-          />
+          <TextField
+            required
+            margin="dense"
+            label="Tipo de Status"
+            fullWidth
+            select
+            variant="outlined"
+            error={errors.status}
+            helperText={errors.status && "Campo Obrigatório"}
+            onChange={(e) => setStatus(e.target.value)}
+            value={status}
+          >
+            {typeStatus.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
         </div>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
           <Button
@@ -183,9 +390,7 @@ export default function NewUsersModal({ closeEvent }) {
             Cancelar
           </Button>
           <Button
-            onClick={() => {
-              console.log("Save logic here");
-            }}
+            onClick={createUser}
             sx={{
               width: 150,
               color: "white",
@@ -202,12 +407,3 @@ export default function NewUsersModal({ closeEvent }) {
     </Modal>
   );
 }
-
-/*
-                            <Button onClick={handleClose}>Cancelar</Button>
-                            <Button type="submit" onClick={handleClose}>Salvar</Button>
-                        </DialogActions>
-
-                        );
-}
-*/

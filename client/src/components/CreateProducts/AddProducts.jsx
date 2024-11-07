@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import {
   Typography,
@@ -7,17 +7,21 @@ import {
   Button,
   MenuItem,
   InputAdornment,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Swal from "sweetalert2";
 
-export default function EditProduct({ closeEvent, refreshProducts, product }) {
-  const [name, setName] = useState(product?.name || "");
-  const [type, setType] = useState(product?.type || "");
-  const [category, setCategory] = useState(product?.category || "");
-  const [unidade_medida, setUnidade_medida] = useState(product?.unidade_medida || "");
-  const [preco_custo, setPreco_custo] = useState(product?.preco_custo?.toString() || "");
-  const [preco_venda, setPreco_venda] = useState(product?.preco_venda?.toString() || "");
-  const [observacao, setObservacao] = useState(product?.observacao || "");
+export default function AddProducts({ closeEvent, refreshProducts }) {
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
+  const [unidade_medida, setUnidade_medida] = useState("");
+  const [preco_custo, setPreco_custo] = useState("");
+  const [preco_venda, setPreco_venda] = useState("");
+  const [observacao, setObservacao] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [errors, setErrors] = useState({
     name: false,
@@ -28,17 +32,6 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
     preco_venda: false,
   });
 
-  useEffect(() => {
-    if (product) {
-      setName(product.name || "");
-      setType(product.type || "");
-      setCategory(product.category || "");
-      setUnidade_medida(product.unidade_medida || "");
-      setPreco_custo(product.preco_custo?.toString() || "");
-      setPreco_venda(product.preco_venda?.toString() || "");
-      setObservacao(product.observacao || "");
-    }
-  }, [product]);
 
   const handleValidation = () => {
     let newErrors = {
@@ -46,8 +39,8 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       type: !type,
       category: !category,
       unidade_medida: !unidade_medida,
-      preco_custo: isNaN(Number(preco_custo)) || !preco_custo,
-      preco_venda: isNaN(Number(preco_venda)) || !preco_venda,
+      preco_custo: !preco_custo || Number(preco_custo.replace(",", ".")) <= 0,
+      preco_venda: !preco_venda || Number(preco_venda.replace(",", ".")) <= 0,
     };
     setErrors(newErrors);
 
@@ -55,15 +48,15 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
     return !Object.values(newErrors).includes(true);
   };
 
-  const updateProduct = async () => {
+  const createProduct = async () => {
     if (!handleValidation()) {
       return;
     }
 
-    const response = await fetch(`http://localhost:5000/products/${product.id}`, {
-      method: 'PUT',
+    const response = await fetch("http://localhost:5000/registerProduct", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
@@ -77,15 +70,16 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
     });
 
     if (response.ok) {
-      Swal.fire("Atualizado com sucesso!", "Seu produto foi atualizado.", "success");
+      Swal.fire("Criado com sucesso!", "Seu produto foi adicionado.", "success");
       refreshProducts(); // Atualiza a lista de produtos
       closeEvent();
     } else {
-      Swal.fire("Erro!", "Não foi possível atualizar o produto.", "error");
+      setErrorMessage("Não foi possível adicionar o produto.");
+      setOpenSnackbar(true);
     }
   };
 
-  const currencies = [
+  const categorie = [
     { value: "Bebida", label: "Bebida" },
     { value: "Comida", label: "Comida" },
     { value: "Sorvetes", label: "Sorvetes" },
@@ -93,16 +87,20 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
     { value: "Picolé", label: "Picolé" },
   ];
 
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
-    <Box sx={{ m: 2 }}>
+    <Box sx={{ m: 2, maxHeight: "80vh" }}>
       <Typography variant="h5" align="left" sx={{ paddingBottom: "px" }}>
-        Editar Produto
+        Novo Produto
       </Typography>
 
       <Box height={30} />
 
-      <div style={{ display: 'grid', gap: '16px' }}>
-        <div style={{ gridColumn: '1 / span 2' }}>
+      <div style={{ display: "grid", gap: "16px" }}>
+        <div style={{ gridColumn: "1 / span 2" }}>
           <TextField
             required
             label="Nome do Produto"
@@ -112,25 +110,11 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.name}
             helperText={errors.name && "Campo obrigatório"}
             onChange={(e) => setName(e.target.value)}
-            value={name || ""}
+            value={name}
           />
         </div>
 
-        <div style={{ gridColumn: 'span 1' }}>
-          <TextField
-            required
-            label="Tipo do Produto"
-            variant="outlined"
-            size="small"
-            fullWidth
-            error={errors.type}
-            helperText={errors.type && "Campo obrigatório"}
-            onChange={(e) => setType(e.target.value)}
-            value={type || ""}
-          />
-        </div>
-
-        <div style={{ gridColumn: 'span 1' }}>
+        <div style={{ gridColumn: "span 1" }}>
           <TextField
             required
             label="Categoria"
@@ -141,9 +125,9 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.category}
             helperText={errors.category && "Campo obrigatório"}
             onChange={(e) => setCategory(e.target.value)}
-            value={category || ""}
+            value={category}
           >
-            {currencies.map((option) => (
+            {categorie.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -151,7 +135,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
           </TextField>
         </div>
 
-        <div style={{ gridColumn: 'span 1' }}>
+        <div style={{ gridColumn: "span 1" }}>
           <TextField
             required
             label="Unidade de medida"
@@ -161,11 +145,11 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             error={errors.unidade_medida}
             helperText={errors.unidade_medida && "Campo obrigatório"}
             onChange={(e) => setUnidade_medida(e.target.value)}
-            value={unidade_medida || ""}
+            value={unidade_medida}
           />
         </div>
 
-        <div style={{ gridColumn: 'span 1' }}>
+        <div style={{ gridColumn: "span 1" }}>
           <NumericFormat
             customInput={TextField}
             required
@@ -182,13 +166,13 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
             }}
             error={errors.preco_custo}
-            helperText={errors.preco_custo && "Campo obrigatório"}
+            helperText={errors.preco_custo && "Campo obrigatório ou valor inválido"}
             onValueChange={(values) => setPreco_custo(values.value)}
             value={preco_custo}
           />
         </div>
 
-        <div style={{ gridColumn: 'span 1' }}>
+        <div style={{ gridColumn: "span 1" }}>
           <NumericFormat
             customInput={TextField}
             required
@@ -205,13 +189,13 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
             }}
             error={errors.preco_venda}
-            helperText={errors.preco_venda && "Campo obrigatório"}
+            helperText={errors.preco_venda && "Campo obrigatório ou valor inválido"}
             onValueChange={(values) => setPreco_venda(values.value)}
             value={preco_venda}
           />
         </div>
 
-        <div style={{ gridColumn: '1 / span 2' }}>
+        <div style={{ gridColumn: "1 / span 2" }}>
           <TextField
             label="Observação"
             variant="outlined"
@@ -220,15 +204,22 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             multiline
             rows={3}
             onChange={(e) => setObservacao(e.target.value)}
-            value={observacao || ""}
+            value={observacao}
           />
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px', gap: '50px' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "24px",
+          gap: "50px",
+        }}
+      >
         <Button
           variant="contained"
-          onClick={updateProduct}
+          onClick={createProduct}
           sx={{
             backgroundColor: "#1976d2",
             "&:hover": {
@@ -236,7 +227,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             },
           }}
         >
-          Atualizar
+          Cadastrar
         </Button>
         <Button
           variant="contained"
@@ -251,6 +242,17 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
           Cancelar
         </Button>
       </div>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
 
       <Box sx={{ m: 4 }} />
     </Box>

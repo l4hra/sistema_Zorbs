@@ -1,9 +1,14 @@
-import mysql from 'mysql2/promise';
-import db from '../../conexao.js';
+import conexao from '../../conexao.js';
+import { validateProductData, validateProductId } from '../validations/productsValidation.js';
 
 // Função para cadastrar produtos
 export async function addProducts(products) {
-    const conexao = mysql.createPool(db);
+    const errors = validateProductData(products);
+
+    if (errors.length > 0) {
+        return [400, errors];
+    }
+
     const sql = `INSERT INTO products (name, type, category, unidade_medida, preco_custo, preco_venda, observacao)
     VALUES (?,?,?,?,?,?,?)`;
     const params = [
@@ -27,13 +32,20 @@ export async function addProducts(products) {
 }
 
 // Função para vizualizar produtos
-export async function getProducts(req, res) {
-    console.log('ProductsController getProducts');
-    const conexao = mysql.createPool(db);
+export async function getProducts(categoria) {
+    console.log('ProductsModel getProducts');
+    console.log(categoria);
+    let filtros = '';
+    if (categoria){
+        filtros = `WHERE category='${categoria}'`
+    }
+    console.log(filtros);
     try {
-        const [rows] = await conexao.query('SELECT * FROM products');
-        res.status(200).json(rows);
+        const [rows] = await conexao.query(`SELECT * FROM products ${filtros}`);
+        return [200,rows];
+        //res.status(200).json(rows);
     } catch (error) {
+        console.log(filtros);
         console.log(error);
         res.status(500).json({ message: 'Erro ao buscar produtos', error });
     }
@@ -41,7 +53,12 @@ export async function getProducts(req, res) {
 
 // Função para deletar produtos
 export async function deleteProduct(id) {
-    const conexao = mysql.createPool(db);
+    const idErrors = validateProductId(id);
+
+    if (idErrors.length > 0) {
+        return [400, idErrors];
+    }
+
     const sql = 'DELETE FROM products WHERE id = ?';
     
     try {
@@ -60,7 +77,14 @@ export async function deleteProduct(id) {
 
 // Função para editar produtos
 export async function updateProduct(id, product) {
-    const conexao = mysql.createPool(db);
+    const idErrors = validateProductId(id);
+    const productErrors = validateProductData(product);
+    const errors = [...idErrors, ...productErrors];
+
+    if (errors.length > 0) {
+        return [400, errors];
+    }
+
     const sql = `UPDATE products SET name = ?, type = ?, category = ?, unidade_medida = ?, preco_custo = ?, preco_venda = ?, observacao = ?
                  WHERE id = ?`;
     const params = [
@@ -71,7 +95,7 @@ export async function updateProduct(id, product) {
         product.preco_custo,
         product.preco_venda,
         product.observacao,
-        id // Adicionando o id ao final para o WHERE
+        id
     ];
 
     try {
@@ -86,4 +110,9 @@ export async function updateProduct(id, product) {
         console.log(error);
         return [500, 'Erro ao atualizar o produto'];
     }
+}
+
+// 
+function teste (...opcoes){
+    opcoes['categoria']
 }

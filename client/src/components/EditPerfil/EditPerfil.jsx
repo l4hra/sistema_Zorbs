@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import Sidenav from "../../components/Sidenav";
+import Navbar from "../Navbar";
+import Sidenav from "../Sidenav";
 import {
     Typography,
     Box,
     TextField,
     Button,
-    MenuItem,
     Paper,
-    FormControl,
-    FormLabel,
     IconButton, 
     InputAdornment
 } from "@mui/material";
@@ -18,55 +15,55 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 
-export default function EditUserZorbs() {
+export default function EditPerfil() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { empresa } = location.state || {};
+    const { companies } = location.state || {};
 
-    const [CNPJ, setCnpj] = useState(empresa?.CNPJ || "");
-    const [razao_social, setRazao_social] = useState(empresa?.razao_social || "");
-    const [nome_fantasia, setNome_fantasia] = useState(empresa?.nome_fantasia || "");
-    const [inscricao_estadual, setInscricao_estadual] = useState(empresa?.inscricao_estadual || "");
-    const [email, setEmail] = useState(empresa?.email || "");
-    const [telefone, setTelefone] = useState(empresa?.telefone || "");
-    const [senha_acesso, setSenha_acesso] = useState(empresa?.senha_acesso || "");
-    const [data_abertura, setData_abertura] = useState(empresa?.data_abertura || "");
-    const [tipo_pessoa, setTipo_pessoa] = useState(empresa?.tipo_pessoa || "");
-    const [tipo_plano, setTipo_plano] = useState(empresa?.tipo_plano || "");
-    const [status, setStatus] = useState(empresa?.status || "");
-    const [CEP, setCep] = useState(empresa?.CEP || "");
-    const [RUA, setRua] = useState(empresa?.RUA || "");
-    const [numero, setNumero] = useState(empresa?.numero || "");
-    const [bairro, setBairro] = useState(empresa?.bairro || "");
-    const [cidade, setCidade] = useState(empresa?.cidade || "");
-    const [estado, setEstado] = useState(empresa?.estado || "");
-    const [complemento, setComplemento] = useState(empresa?.complemento || "");
-    const [observacoes, setObservacoes] = useState(empresa?.observacoes || "");
+    const [CNPJ, setCnpj] = useState(companies?.CNPJ || "");
+    const [razao_social, setRazao_social] = useState(companies?.razao_social || "");
+    const [nome_fantasia, setNome_fantasia] = useState(companies?.nome_fantasia || "");
+    const [inscricao_estadual, setInscricao_estadual] = useState(companies?.inscricao_estadual || "");
+    const [email, setEmail] = useState(companies?.email || "");
+    const [telefone, setTelefone] = useState(companies?.telefone || "");
+    const [senha_acesso, setSenha_acesso] = useState(companies?.senha_acesso || "");
+    // const [data_abertura, setData_abertura] = useState(companies?.data_abertura || "");
+    // const [tipo_pessoa, setTipo_pessoa] = useState(companies?.tipo_pessoa || "");
+    // const [tipo_plano, setTipo_plano] = useState(companies?.tipo_plano || "");
+    // const [status, setStatus] = useState(companies?.status || "");
+    const [CEP, setCep] = useState(companies?.CEP || "");
+    const [RUA, setRua] = useState(companies?.RUA || "");
+    const [numero, setNumero] = useState(companies?.numero || "");
+    const [bairro, setBairro] = useState(companies?.bairro || "");
+    const [cidade, setCidade] = useState(companies?.cidade || "");
+    const [estado, setEstado] = useState(companies?.estado || "");
+    const [complemento, setComplemento] = useState(companies?.complemento || "");
+    const [observacoes, setObservacoes] = useState(companies?.observacoes || "");
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        if (empresa) {
-            setCnpj(empresa.CNPJ || "");
-            setRazao_social(empresa.razao_social || "");
-            setNome_fantasia(empresa.nome_fantasia || "");
-            setInscricao_estadual(empresa.inscricao_estadual || "");
-            setEmail(empresa.email || "");
-            setTelefone(empresa.telefone || "");
-            setSenha_acesso(empresa.senha_acesso || "");
-            setData_abertura(empresa.data_abertura || "");
-            setTipo_pessoa(empresa.tipo_pessoa || "");
-            setTipo_plano(empresa.tipo_plano || "");
-            setStatus(empresa.status || "");
-            setCep(empresa.CEP || "");
-            setRua(empresa.RUA || "");
-            setNumero(empresa.numero || "");
-            setBairro(empresa.bairro || "");
-            setCidade(empresa.cidade || "");
-            setEstado(empresa.estado || "");
-            setComplemento(empresa.complemento || "");
-            setObservacoes(empresa.observacoes || "");
+        if (companies) {
+            setCnpj(companies.CNPJ || "");
+            setRazao_social(companies.razao_social || "");
+            setNome_fantasia(companies.nome_fantasia || "");
+            setInscricao_estadual(companies.inscricao_estadual || "");
+            setEmail(companies.email || "");
+            setTelefone(companies.telefone || "");
+            setSenha_acesso(companies.senha_acesso || "");
+            // setData_abertura(companies.data_abertura || "");
+            // setTipo_pessoa(companies.tipo_pessoa || "");
+            // setTipo_plano(companies.tipo_plano || "");
+            // setStatus(companies.status || "");
+            setCep(companies.CEP || "");
+            setRua(companies.RUA || "");
+            setNumero(companies.numero || "");
+            setBairro(companies.bairro || "");
+            setCidade(companies.cidade || "");
+            setEstado(companies.estado || "");
+            setComplemento(companies.complemento || "");
+            setObservacoes(companies.observacoes || "");
         }
-    }, [empresa]);
+    }, [companies]);
 
     const [errors, setErrors] = useState({
         CNPJ: false,
@@ -76,10 +73,10 @@ export default function EditUserZorbs() {
         email: false,
         telefone: false,
         senha_acesso: false,
-        data_abertura: false,
-        tipo_pessoa: false,
-        tipo_plano: false,
-        status: false,
+        // data_abertura: false,
+        // tipo_pessoa: false,
+        // tipo_plano: false,
+        // status: false,
         CEP: false,
         RUA: false,
         numero: false,
@@ -97,10 +94,10 @@ export default function EditUserZorbs() {
             email: !email,
             telefone: !telefone,
             senha_acesso: !senha_acesso,
-            data_abertura: !data_abertura,
-            tipo_pessoa: !tipo_pessoa,
-            tipo_plano: !tipo_plano,
-            status: !status,
+            // data_abertura: !data_abertura,
+            // tipo_pessoa: !tipo_pessoa,
+            // tipo_plano: !tipo_plano,
+            // status: !status,
             CEP: !CEP,
             RUA: !RUA,
             numero: !numero,
@@ -119,7 +116,7 @@ export default function EditUserZorbs() {
             return;
         }
 
-        const response = await fetch(`http://localhost:5002/empresas/${empresa.id}`, {
+        const response = await fetch(`http://localhost:5000/updateCompanies/${companies.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,10 +129,10 @@ export default function EditUserZorbs() {
                 email,
                 telefone,
                 senha_acesso,
-                data_abertura,
-                tipo_pessoa,
-                tipo_plano,
-                status,
+                // data_abertura,
+                // tipo_pessoa,
+                // tipo_plano,
+                // status,
                 CEP,
                 RUA,
                 numero,
@@ -147,10 +144,10 @@ export default function EditUserZorbs() {
             }),
         });
         if (response.ok) {
-            Swal.fire("Atualizado com sucesso!", "Seu produto foi atualizado.", "success");
-            navigate("/Users-Zorbs");
+            Swal.fire("Atualizado com sucesso!", "Empresa atualizada.", "success");
+            navigate("/companies");
         } else {
-            Swal.fire("Erro!", "Não foi possível atualizar o produto.", "error");
+            Swal.fire("Erro!", "Não foi possível atualizar a empresa.", "error");
         }
     };
 
@@ -162,21 +159,21 @@ export default function EditUserZorbs() {
         event.preventDefault();
     };
 
-    const tipo_pessoas = [
-        { value: "Pessoa Juridica", label: "Pessoa Juridica" },
-        { value: "Pessoa Fisica", label: "Pessoa Fisica" },
-    ];
+    // const tipo_pessoas = [
+    //     { value: "Pessoa Juridica", label: "Pessoa Juridica" },
+    //     { value: "Pessoa Fisica", label: "Pessoa Fisica" },
+    // ];
 
-    const tipo_planos = [
-        { value: "Plano Bronze", label: "Plano Bronze" },
-        { value: "Plano Prata", label: "Plano Prata" },
-        { value: "Plano Ouro", label: "Plano Ouro" },
-    ];
+    // const tipo_planos = [
+    //     { value: "Plano Bronze", label: "Plano Bronze" },
+    //     { value: "Plano Prata", label: "Plano Prata" },
+    //     { value: "Plano Ouro", label: "Plano Ouro" },
+    // ];
 
-    const tipo_status = [
-        { value: "Ativo", label: "Ativo" },
-        { value: "Desativado", label: "Desativado" },
-    ];
+    // const tipo_status = [
+    //     { value: "Ativo", label: "Ativo" },
+    //     { value: "Desativado", label: "Desativado" },
+    // ];
 
     return (
         <>
@@ -200,12 +197,12 @@ export default function EditUserZorbs() {
                                 fontWeight: "bold",
                             }}
                         >
-                            Perfil da empresa: {nome_fantasia}
+                            Perfil da Empresa: {nome_fantasia}
                         </Typography>
 
                         <Box height={10} />
 
-                        {/* Cadastro informações empresa */}
+                        {/* Cadastro informações companies */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -214,7 +211,7 @@ export default function EditUserZorbs() {
                                 width: "100%",
                             }}
                         >
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="CNPJ"
@@ -227,7 +224,7 @@ export default function EditUserZorbs() {
                                     value={CNPJ}
                                 />
                             </div>
-                            <div style={{ width: "350px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Nome Fantasia"
@@ -240,7 +237,7 @@ export default function EditUserZorbs() {
                                     value={nome_fantasia}
                                 />
                             </div>
-                            <div style={{ width: "350px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Razão Social"
@@ -253,7 +250,7 @@ export default function EditUserZorbs() {
                                     value={razao_social}
                                 />
                             </div>
-                            <div style={{ width: "350px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Inscrição Estadual"
@@ -275,7 +272,7 @@ export default function EditUserZorbs() {
                                 gap: "105px",
                             }}
                         >
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="E-mail"
@@ -289,7 +286,7 @@ export default function EditUserZorbs() {
                                     value={email}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Telefone"
@@ -303,7 +300,7 @@ export default function EditUserZorbs() {
                                     value={telefone}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Senha de acesso"
@@ -331,7 +328,8 @@ export default function EditUserZorbs() {
                                 />
                             </div>
                         </Box>
-                        <Box
+
+                        {/* <Box
                             sx={{
                                 display: "flex",
                                 padding: "18px",
@@ -339,7 +337,7 @@ export default function EditUserZorbs() {
                                 gap: "20px",
                             }}
                         >
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <FormControl fullWidth variant="outlined" size="small">
                                     <FormLabel style={{ marginBottom: "3px" }}>Data de Abertura</FormLabel>
                                     <TextField
@@ -359,7 +357,7 @@ export default function EditUserZorbs() {
                                     />
                                 </FormControl>
                             </div>
-                            <div style={{ width: "350px", marginTop: "25px" }}>
+                            <div style={{ width: "100%", marginTop: "25px" }}>
                                 <TextField
                                     required
                                     label="Tipo de Pessoa"
@@ -379,7 +377,7 @@ export default function EditUserZorbs() {
                                     ))}
                                 </TextField>
                             </div>
-                            <div style={{ width: "350px", marginTop: "25px" }}>
+                            <div style={{ width: "100%", marginTop: "25px" }}>
                                 <TextField
                                     required
                                     label="Tipo do plano"
@@ -399,7 +397,7 @@ export default function EditUserZorbs() {
                                     ))}
                                 </TextField>
                             </div>
-                            <div style={{ width: "350px", marginTop: "25px" }}>
+                            <div style={{ width: "100%", marginTop: "25px" }}>
                                 <TextField
                                     required
                                     label="Status"
@@ -419,15 +417,15 @@ export default function EditUserZorbs() {
                                     ))}
                                 </TextField>
                             </div>
-                        </Box>
+                        </Box> */}
 
-                        {/* Cadastro endereço empresa */}
+                        {/* Cadastro endereço companies */}
                         <Typography
                             gutterBottom
                             variant="h5"
                             component="div"
                             sx={{
-                                paddingTop: "50px",
+                                paddingTop: "20px",
                                 paddingLeft: "16px",
                                 fontWeight: "bold",
                             }}
@@ -441,7 +439,7 @@ export default function EditUserZorbs() {
                                 gap: "100px",
                             }}
                         >
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="CEP"
@@ -454,7 +452,7 @@ export default function EditUserZorbs() {
                                     value={CEP}
                                 />
                             </div>
-                            <div style={{ width: "605px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Rua / Endereço"
@@ -467,7 +465,7 @@ export default function EditUserZorbs() {
                                     value={RUA}
                                 />
                             </div>
-                            <div style={{ width: "300px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Numero"
@@ -488,7 +486,7 @@ export default function EditUserZorbs() {
                                 gap: "105px",
                             }}
                         >
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Bairro"
@@ -501,7 +499,7 @@ export default function EditUserZorbs() {
                                     value={bairro}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Cidade"
@@ -514,7 +512,7 @@ export default function EditUserZorbs() {
                                     value={cidade}
                                 />
                             </div>
-                            <div style={{ width: "400px" }}>
+                            <div style={{ width: "100%" }}>
                                 <TextField
                                     required
                                     label="Estado"
@@ -601,12 +599,12 @@ export default function EditUserZorbs() {
                                     },
                                 }}
                             >
-                                Editar
+                                Salvar
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant="contained"
                                 onClick={() => {
-                                    navigate("/Users-Zorbs");
+                                    navigate("/Companies");
                                 }}
                                 sx={{
                                     backgroundColor: "#1976d2",
@@ -616,7 +614,7 @@ export default function EditUserZorbs() {
                                 }}
                             >
                                 Cancelar
-                            </Button>
+                            </Button> */}
                         </div>
                     </Paper>
                 </Box>

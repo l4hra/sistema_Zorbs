@@ -142,7 +142,7 @@ export default function Sidenav({ color }) {
                 <img src={casinha} height={25} />
               </ListItemIcon>
               <ListItemText
-                primary="Dashboard"
+                primary="Home"
                 sx={[
                   open
                     ? {
@@ -318,7 +318,7 @@ export default function Sidenav({ color }) {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Users-Zorbs");
+              navigate("/Companies");
             }}
           >
             <ListItemButton
@@ -367,7 +367,7 @@ export default function Sidenav({ color }) {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
@@ -419,7 +419,55 @@ export default function Sidenav({ color }) {
                 ]}
               />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
+          
+          {/* <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={[
+                {
+                  minHeight: 48,
+                  px: 2.5,
+                },
+                open
+                  ? {
+                      justifyContent: "initial",
+                    }
+                  : {
+                      justifyContent: "center",
+                    },
+              ]}
+            >
+              <ListItemIcon
+                sx={[
+                  {
+                    minWidth: 0,
+                    justifyContent: "center",
+                  },
+                  open
+                    ? {
+                        mr: 3,
+                      }
+                    : {
+                        mr: "auto",
+                      },
+                ]}
+              >
+                <RelatorioIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Slot 1"
+                sx={[
+                  open
+                    ? {
+                        opacity: 1,
+                      }
+                    : {
+                        opacity: 0,
+                      },
+                ]}
+              />
+            </ListItemButton>
+          </ListItem> */}
         </List>
       </Drawer>
     </Box>

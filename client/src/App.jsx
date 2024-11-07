@@ -8,9 +8,10 @@ import NewCommands from "./pages/NewCommands/NewCommands";
 import Config from "./pages/ConfigLayout/Config";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
-import UserZorbs from "./pages/UserZorbs/UserZorbs";
-import AddUserZorbs from "./pages/UserZorbs/AddUserZorbs";
-import EditUserZorbs from "./pages/UserZorbs/EditUserZorbs";
+import Companies from "./pages/Companies/Companies";
+import EditCompanies from "./components/EditCompanies/EditCompanies";
+import CreateCompanies from "./components/CreateCompanies/CreateCompanies";
+import EditPerfil from "./components/EditPerfil/EditPerfil";
 
 function App() {
   return (
@@ -25,13 +26,10 @@ function App() {
           <Route path="/Produtos" exact element={<Products />}></Route>
           <Route path="/NewCommands" exact element={<NewCommands />}></Route>
           <Route path="/Config" exact element={<Config />}></Route>
-          <Route path="/Users-Zorbs" exact element={<UserZorbs />}></Route>
-          <Route path="/AddUsersZorbs" exact element={<AddUserZorbs />}></Route>
-          <Route
-            path="/EditUsersZorbs"
-            exact
-            element={<EditUserZorbs />}
-          ></Route>
+          <Route path="/Companies" exact element={<Companies />}></Route>
+          <Route path="/CreateCompanies" exact element={<CreateCompanies />}></Route>
+          <Route path="/EditCompanies" exact element={<EditCompanies />}></Route>
+          <Route path="/EditPerfil" exact element={<EditPerfil />}></Route>
         </Routes>
       </BrowserRouter>
     </>
