@@ -38,7 +38,7 @@ export default function Command({ task, index }) {
 
   const carregaComanda = async () => {
     try {
-      const response = await fetch("http://localhost:5000/commands;");
+      const response = await fetch("http://localhost:5000/commands");
   console.log(response, 'oi')
 
       const data = await response.json();
@@ -53,7 +53,11 @@ export default function Command({ task, index }) {
   console.log(name, 'nome')
   return (
     <>
-      <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
+      <Draggable
+        draggableId={`${task.command_id}`} // use apenas se command_id for único
+        key={task.command_id}
+        index={index}
+      >
         {(provided, snapshot) => (
           <div
           className="container"
@@ -75,9 +79,8 @@ export default function Command({ task, index }) {
                   display: "flex",
                   justifyContent: "space-between",
                 }}
-                >
-                {name}
-                <h3>#{task.title}</h3>
+              >
+                <h3>#{task.command_name}</h3>
 
                 <div
                   style={{
@@ -87,10 +90,14 @@ export default function Command({ task, index }) {
                     gap: "5px",
                   }}
                 >
-                  {task.hora}
+                  {formatTime(task.date_opening)}
                   <AccessTimeIcon style={{ width: "1rem" }} />
                 </div>
               </span>
+              <h4>Total: R${task.totalPrice}</h4>
+
+              <h5>Forma de pagamento: {task.payment}</h5>
+              <p>Produto: {task.product_name}</p>
               <div
                 style={{
                   display: "flex",
@@ -98,8 +105,7 @@ export default function Command({ task, index }) {
                   alignItems: "center",
                 }}
               >
-                <p>{task.produtos.join(",")}</p>
-                <h4>Total: R${task.totalPrice}</h4>
+                {/* <p>{task.produtos.join(",")}</p> */}
               </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>

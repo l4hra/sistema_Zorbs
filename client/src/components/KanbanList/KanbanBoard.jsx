@@ -9,66 +9,48 @@ import ModalPagamento from "./CommandPaga";
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
-  const [backlog, setBacklog] = useState([]);
+  const [canceled, setcanceled] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [commands, setCommands] = useState([]);
 
   const handleClose = () => {
     setOpenDialog(false);
   };
 
-  useEffect(() => {
-    const sorvetes = [
-      {
-        id: 1,
-        title: "Pedido 1",
-        hora: "14:00",
-        produtos: ["Casquinha", "Sundae", "Milkshake"],
-        totalPrice: "15,99",
-        completed: true,
-      },
-      {
-        id: 2,
-        title: "Pedido 2",
-        hora: "14:30",
-        produtos: ["Casquinha", "Açaí", "Milkshake"],
-        totalPrice: "30,00",
-        completed: false,
-      },
-      {
-        id: 3,
-        title: "Pedido 3",
-        hora: "15:00",
-        produtos: ["Sorvete de Copo", "Sundae", "Sorvete de Palito"],
-        totalPrice: "58,99",
-        completed: true,
-      },
-    ];
+  async function carregaComanda() {
+    try {
+      const response = await fetch("http://localhost:5000/itemCommands");
+      const data = await response.json();
+      console.log("oioi", data);
 
-    setCompleted(sorvetes.filter((pedido) => pedido.completed));
-    setIncomplete(sorvetes.filter((pedido) => !pedido.completed));
+      setCommands(data);
+    } catch (error) {
+      console.error("Erro ao buscar as comandas:", error);
+    }
+  }
+  useEffect(() => {
+    carregaComanda();
   }, []);
+
+  useEffect(() => {
+    setCompleted(commands.filter((pedido) => pedido.completed));
+    setIncomplete(commands.filter((pedido) => !pedido.completed));
+    setcanceled(commands.filter((pedido) => pedido.canceled));
+  }, [commands]);
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-
-    if (
-      !destination ||
-      !source ||
-      source.droppableId === destination.droppableId
-    )
-      return;
-    if (destination.droppableId === "2") {
-      setOpenDialog(true);
+  
+    if (!destination || !source || source.droppableId === destination.droppableId) {
+      return; // Não faz nada se não houver destino ou se for na mesma coluna
     }
-
-    deletePreviousState(source.droppableId, draggableId);
-
-    const task = findItemById(draggableId, [
-      ...incomplete,
-      ...completed,
-      ...backlog,
-    ]);
-
+  
+    // Encontre a task usando o item_id, que é agora o draggableId
+    const task = findItemById(draggableId, [...incomplete, ...completed, ...canceled]);
+  
+    deletePreviousState(source.droppableId, task.item_id); // Use item_id para remover
+  
     setNewState(destination.droppableId, task);
   };
 
@@ -81,7 +63,7 @@ export default function Kanban() {
         setCompleted(removeItemById(taskId, completed));
         break;
       case "3":
-        setBacklog(removeItemById(taskId, backlog));
+        setcanceled(removeItemById(taskId, canceled));
         break;
     }
   }
@@ -97,9 +79,9 @@ export default function Kanban() {
         setCompleted([updatedTask, ...completed]);
         break;
 
-      case "3": // BACKLOG
+      case "3": // canceled
         updatedTask = { ...task, completed: false };
-        setBacklog([updatedTask, ...backlog]);
+        setcanceled([updatedTask, ...canceled]);
         break;
     }
   }
@@ -110,7 +92,6 @@ export default function Kanban() {
   function removeItemById(id, array) {
     return array.filter((item) => item.id != id);
   }
-
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -139,7 +120,7 @@ export default function Kanban() {
           />
           <Columns
             title={"CANCELADO"}
-            tasks={backlog}
+            tasks={canceled}
             id={"3"}
             color={"#BA1D1D"}
             icon={<ClearIcon />}
