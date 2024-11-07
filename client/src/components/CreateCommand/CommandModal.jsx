@@ -37,12 +37,7 @@ export default function CommandModal() {
         params: { categoria },  // Passa a categoria como parâmetro
       });
       if (response.status === 200)  {
-        const products = response.data.map((item) => {
-          return {...item, quantity: 1};
-        })
-        console.log('products map',products)
-        
-        setListItems();  // Atualiza o estado com os produtos recebidos
+        setListItems(response.data);  // Atualiza o estado com os produtos recebidos
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -76,7 +71,6 @@ export default function CommandModal() {
     ...selectedPicole,
   ];
 console.log('items dentro de allselect', allSelectedProducts);
-
   const handleClose = () => {
     setOpen(false);
     setIceCreams([]);
