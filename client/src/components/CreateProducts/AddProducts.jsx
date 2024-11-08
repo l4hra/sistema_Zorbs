@@ -41,12 +41,16 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
       unidade_medida: !unidade_medida ? "empty" : null,
       preco_custo:
         !preco_custo ? "empty" :
-        precoCustoNum <= 0 ? "zero" :
-        precoCustoNum > 100000 ? "greater_than_sale" : null,
+        precoCustoNum == 0 ? "zero" :
+        precoCustoNum < 0 ? "negativo" :
+        precoCustoNum > 100000 ? "greater_than_sale" : 
+        null,
       preco_venda:
         !preco_venda ? "empty" :
-        precoVendaNum <= 0 ? "zero" : 
-        precoVendaNum > 100000 ? "less_than_cost" : null,
+        precoVendaNum == 0 ? "zero" : 
+        precoVendaNum < 0 ? "negativo" :
+        precoVendaNum > 100000 ? "less_than_cost" : 
+        null,
     };
 
     setErrors(newErrors);
@@ -177,6 +181,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             helperText={
               errors.preco_custo === "empty" ? "Campo obrigatório" :
               errors.preco_custo === "zero" ? "O valor não pode ser zero" :
+              errors.preco_custo === "negativo" ? "O valor não pode ser negativo" :
               errors.preco_custo === "greater_than_sale" ? "O preço de custo é maior que o esperado" :
               ""
             }
@@ -205,6 +210,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             helperText={
               errors.preco_venda === "empty" ? "Campo obrigatório" :
               errors.preco_venda === "zero" ? "O valor não pode ser zero" :
+              errors.preco_venda === "negativo" ? "O valor não pode ser negativo" :
               errors.preco_venda === "less_than_cost" ? "O preço de venda é maior que o esperado" :
               ""
             }
