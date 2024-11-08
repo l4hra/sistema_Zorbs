@@ -8,11 +8,6 @@ export function validateProductData(product) {
         errors.push('O nome do produto deve ter no máximo 100 caracteres.');
     }
 
-    // Validando o tipo do produto
-    if (!product.type || typeof product.type !== 'string' || product.type.trim().length === 0) {
-        errors.push('O tipo do produto é obrigatório e deve ser uma string.');
-    }
-
     // Validando a categoria do produto
     if (!product.category || typeof product.category !== 'string' || product.category.trim().length === 0) {
         errors.push('A categoria do produto é obrigatória e deve ser uma string.');
