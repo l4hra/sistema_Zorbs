@@ -2,21 +2,20 @@ import conexao from "../../conexao.js";
 
 // Função para cadastrar produtos
 export async function createCommand(command) {
-  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, completed, canceled)
+  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, incompleted)
     VALUES (?,?,?,?,?)`;
   const params = [
     command.name,
     command.date_opening,
     command.totalPrice,
     command.payment,
-    command.completed,
-    command.canceled,
+    command.incompleted,
   ];
 
   try {
     const [retorno] = await conexao.query(sql, params);
-    console.log("comanda cadastrado");
-    return [201, "Comanda cadastrada"];
+   
+    return [201, "Comanda cadastrada com sucesso!"];
   } catch (error) {
     console.log(error);
     return [500, error];
@@ -36,7 +35,7 @@ export async function getAllCommands(req, res) {
   }
 }
 
-// Função para editar produtos
+// Função para editar 
 export async function updateCommand(id, command) {
   const sql = `UPDATE commands SET name = ?, date_opening = ?, totalPrice = ?, payment = ?, completed = ?, canceled = ?
                  WHERE id = ?`;

@@ -20,9 +20,8 @@ export default function Kanban() {
 
   async function carregaComanda() {
     try {
-      const response = await fetch("http://localhost:5000/itemCommands");
+      const response = await fetch("http://localhost:5000/commands");
       const data = await response.json();
-      console.log("oioi", data);
 
       setCommands(data);
     } catch (error) {
@@ -48,7 +47,7 @@ export default function Kanban() {
   
     // Encontre a task usando o item_id, que é agora o draggableId
     const task = findItemById(draggableId, [...incomplete, ...completed, ...canceled]);
-    deletePreviousState(source.droppableId, task.item_id); // Use item_id para remover
+    deletePreviousState(source.droppableId, task.id); // Use item_id para remover
   
     setNewState(destination.droppableId, task);
   };
@@ -85,11 +84,11 @@ export default function Kanban() {
     }
   }
   function findItemById(id, array) {
-    return array.find((item) => item.id_command == id);
+    return array.find((item) => item.id == id);
   }
 
   function removeItemById(id, array) {
-    return array.filter((item) => item.id_command != id);
+    return array.filter((item) => item.id != id);
   }
   return (
     <>

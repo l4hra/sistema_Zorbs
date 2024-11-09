@@ -7,31 +7,67 @@ import {
   Button,
   MenuItem,
   InputAdornment,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Swal from "sweetalert2";
 
 export default function EditProduct({ closeEvent, refreshProducts, product }) {
   const [name, setName] = useState(product?.name || "");
-  const [type, setType] = useState(product?.type || "");
   const [category, setCategory] = useState(product?.category || "");
   const [unidade_medida, setUnidade_medida] = useState(product?.unidade_medida || "");
   const [preco_custo, setPreco_custo] = useState(product?.preco_custo?.toString() || "");
   const [preco_venda, setPreco_venda] = useState(product?.preco_venda?.toString() || "");
   const [observacao, setObservacao] = useState(product?.observacao || "");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [errors, setErrors] = useState({
     name: false,
-    type: false,
     category: false,
     unidade_medida: false,
     preco_custo: false,
     preco_venda: false,
   });
 
+  const categoria = [
+    { value: "Bebida", label: "Bebida" },
+    { value: "Comida", label: "Comida" },
+    { value: "Sorvetes", label: "Sorvetes" },
+    { value: "Açai", label: "Açai" },
+    { value: "Picolé", label: "Picolé" },
+  ];
+
+  const handleValidation = () => {
+    const precoCustoNum = preco_custo ? Number(preco_custo.replace(",", ".")) : 0;
+    const precoVendaNum = preco_venda ? Number(preco_venda.replace(",", ".")) : 0;
+
+    let newErrors = {
+      name: !name ? "empty" : null,
+      category: !category ? "empty" : null,
+      unidade_medida: !unidade_medida ? "empty" : null,
+      preco_custo:
+        !preco_custo ? "empty" :
+        precoCustoNum == 0 ? "zero" :
+        precoCustoNum < 0 ? "negativo" :
+        precoCustoNum > 100000 ? "too_high" :
+        null,
+      preco_venda:
+        !preco_venda ? "empty" :
+        precoVendaNum == 0 ? "zero" :
+        precoVendaNum < 0 ? "negativo" :
+        precoVendaNum > 100000 ? "less_than_cost" :
+        null,
+    };
+
+    setErrors(newErrors);
+    // Verifica se há algum erro
+    return !Object.values(newErrors).includes(true);
+  };
+
   useEffect(() => {
     if (product) {
       setName(product.name || "");
-      setType(product.type || "");
       setCategory(product.category || "");
       setUnidade_medida(product.unidade_medida || "");
       setPreco_custo(product.preco_custo?.toString() || "");
@@ -39,21 +75,6 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       setObservacao(product.observacao || "");
     }
   }, [product]);
-
-  const handleValidation = () => {
-    let newErrors = {
-      name: !name,
-      type: !type,
-      category: !category,
-      unidade_medida: !unidade_medida,
-      preco_custo: !preco_custo || Number(preco_custo.replace(",", ".")) <= 0,
-      preco_venda: !preco_venda || Number(preco_venda.replace(",", ".")) <= 0,
-    };
-    setErrors(newErrors);
-
-    // Verifica se há algum erro
-    return !Object.values(newErrors).includes(true);
-  };
 
   const updateProduct = async () => {
     if (!handleValidation()) {
@@ -67,7 +88,6 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       },
       body: JSON.stringify({
         name,
-        type,
         category,
         unidade_medida,
         preco_custo: Number(preco_custo.replace(",", ".")),
@@ -80,18 +100,16 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       Swal.fire("Atualizado com sucesso!", "Seu produto foi atualizado.", "success");
       refreshProducts(); // Atualiza a lista de produtos
       closeEvent();
-    } else {
-      Swal.fire("Erro!", "Não foi possível atualizar o produto.", "error");
-    }
+    } 
+    // else {
+    //   setErrorMessage("Não foi possível adicionar o produto.");
+    //   setOpenSnackbar(true);
+    // }
   };
 
-  const currencies = [
-    { value: "Bebida", label: "Bebida" },
-    { value: "Comida", label: "Comida" },
-    { value: "Sorvetes", label: "Sorvetes" },
-    { value: "Açai", label: "Açai" },
-    { value: "Picolé", label: "Picolé" },
-  ];
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   return (
     <Box sx={{ m: 2 }}>
@@ -109,24 +127,11 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
+            inputProps={{ maxLength: 40 }}
             error={errors.name}
             helperText={errors.name && "Campo obrigatório"}
             onChange={(e) => setName(e.target.value)}
             value={name || ""}
-          />
-        </div>
-
-        <div style={{ gridColumn: 'span 1' }}>
-          <TextField
-            required
-            label="Tipo do Produto"
-            variant="outlined"
-            size="small"
-            fullWidth
-            error={errors.type}
-            helperText={errors.type && "Campo obrigatório"}
-            onChange={(e) => setType(e.target.value)}
-            value={type || ""}
           />
         </div>
 
@@ -143,7 +148,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             onChange={(e) => setCategory(e.target.value)}
             value={category || ""}
           >
-            {currencies.map((option) => (
+            {categoria.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -158,6 +163,7 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
+            inputProps={{ maxLength: 10 }}
             error={errors.unidade_medida}
             helperText={errors.unidade_medida && "Campo obrigatório"}
             onChange={(e) => setUnidade_medida(e.target.value)}
@@ -182,7 +188,13 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
             }}
             error={errors.preco_custo}
-            helperText={errors.preco_custo && "Campo obrigatório"}
+            helperText={
+              errors.preco_custo === "empty" ? "Campo obrigatório" :
+              errors.preco_custo === "zero" ? "O valor não pode ser zero" :
+              errors.preco_custo === "negativo" ? "O valor não pode ser negativo" :
+              errors.preco_custo === "greater_than_sale" ? "O preço de custo é maior que o esperado" :
+              ""
+            }
             onValueChange={(values) => setPreco_custo(values.value)}
             value={preco_custo}
           />
@@ -205,7 +217,13 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
             }}
             error={errors.preco_venda}
-            helperText={errors.preco_venda && "Campo obrigatório"}
+            helperText={
+              errors.preco_venda === "empty" ? "Campo obrigatório" :
+              errors.preco_venda === "zero" ? "O valor não pode ser zero" :
+              errors.preco_venda === "negativo" ? "O valor não pode ser negativo" :
+              errors.preco_venda === "less_than_cost" ? "O preço de venda é maior que o esperado" :
+              ""
+            }
             onValueChange={(values) => setPreco_venda(values.value)}
             value={preco_venda}
           />
@@ -251,6 +269,17 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
           Cancelar
         </Button>
       </div>
+
+      {/* <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar> */}
 
       <Box sx={{ m: 4 }} />
     </Box>

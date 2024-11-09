@@ -9,11 +9,10 @@ export async function addProducts(products) {
         return [400, errors];
     }
 
-    const sql = `INSERT INTO products (name, type, category, unidade_medida, preco_custo, preco_venda, observacao)
-    VALUES (?,?,?,?,?,?,?)`;
+    const sql = `INSERT INTO products (name, category, unidade_medida, preco_custo, preco_venda, observacao)
+    VALUES (?,?,?,?,?,?)`;
     const params = [
       products.name,
-      products.type,
       products.category,
       products.unidade_medida,
       products.preco_custo,
@@ -85,11 +84,10 @@ export async function updateProduct(id, product) {
         return [400, errors];
     }
 
-    const sql = `UPDATE products SET name = ?, type = ?, category = ?, unidade_medida = ?, preco_custo = ?, preco_venda = ?, observacao = ?
+    const sql = `UPDATE products SET name = ?, category = ?, unidade_medida = ?, preco_custo = ?, preco_venda = ?, observacao = ?
                  WHERE id = ?`;
     const params = [
         product.name,
-        product.type,
         product.category,
         product.unidade_medida,
         product.preco_custo,

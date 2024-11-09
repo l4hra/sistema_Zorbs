@@ -2,7 +2,7 @@ import { Draggable } from "@hello-pangea/dnd";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import EditCommand from "../EditCommand/EditCommand";
+import EditCommand from "../EditCommand/EditcommandModal";
 import { useEffect, useState } from "react";
 
 function NotaFiscalButton() {
@@ -28,29 +28,6 @@ function NotaFiscalButton() {
 }
 
 export default function Command({ task, index }) {
-  const [commands, setCommands] = useState([]);
-  const [name, setName] = useState();
-  const [date, setDate] = useState();
-
-  // useEffect(() => {
-  //   carregaComanda();
-  // }, []);
-
-  // const carregaComanda = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:5000/commands");
-  // console.log(response, 'oi')
-
-  //     const data = await response.json();
-  //     setName(data.name);
-  //     setDate(data.date_opening);
-  //     // setCommands(data);
-  //   } catch (error) {
-  //     console.error("Erro ao buscar as comandas:", error);
-  //   }
-  // };
-
-  console.log(name, 'nome')
   const formatTime = (datetime) => {
     const date = new Date(datetime);
     return date.toLocaleTimeString("pt-BR", {
@@ -62,8 +39,8 @@ export default function Command({ task, index }) {
   return (
     <>
       <Draggable
-        draggableId={`${task.command_id}`} // use apenas se command_id for único
-        key={task.command_id}
+        draggableId={`${task.id}`} // use apenas se id for único
+        key={task.id}
         index={index}
       >
         {(provided, snapshot) => (
@@ -88,7 +65,7 @@ export default function Command({ task, index }) {
                   justifyContent: "space-between",
                 }}
               >
-                <h3>#{task.command_name}</h3>
+                <h3>#{task.name}</h3>
 
                 <div
                   style={{
@@ -105,7 +82,7 @@ export default function Command({ task, index }) {
               <h4>Total: R${task.totalPrice}</h4>
 
               <h5>Forma de pagamento: {task.payment}</h5>
-              <p>Produto: {task.product_name}</p>
+              {/* <p>Produto: {task.product_name}</p> */}
               <div
                 style={{
                   display: "flex",
