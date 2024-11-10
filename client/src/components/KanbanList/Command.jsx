@@ -1,26 +1,13 @@
 import { Draggable } from "@hello-pangea/dnd";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import EditIcon from "@mui/icons-material/Edit";
-import EditCommand from "../EditCommand/EditCommand";
+import EditCommand from "../EditCommand/EditcommandModal";
+import { useEffect, useState } from "react";
 
 function NotaFiscalButton() {
   const gerarConteudoNotaFiscal = () => {
-    const notaFiscal = `
-      Sorveteria Zorbs
-      ----------------------------------------
-      Produtos:
-      1. Sorvete de Chocolate - R$ 10,00
-      2. Milkshake de Morango - R$ 12,00
-      3. Sundae de Caramelo - R$ 8,50
-      
-      Total: R$ 30,50
-      Data: ${new Date().toLocaleDateString()} 
-      Hora: ${new Date().toLocaleTimeString()}
-      ----------------------------------------
-      Obrigado pela sua compra!
-    `;
+    const notaFiscal = `       Sorveteria Zorbs       ----------------------------------------       Produtos:       1. Sorvete de Chocolate - R$ 10,00       2. Milkshake de Morango - R$ 12,00       3. Sundae de Caramelo - R$ 8,50              Total: R$ 30,50       Data: ${new Date().toLocaleDateString()}        Hora: ${new Date().toLocaleTimeString()}       ----------------------------------------       Obrigado pela sua compra!     `;
     return notaFiscal;
   };
 
@@ -34,25 +21,35 @@ function NotaFiscalButton() {
   };
 
   return (
-    <>
-      <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
-        <DownloadIcon />
-      </IconButton>
-    </>
+    <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
+      <DownloadIcon />
+    </IconButton>
   );
 }
 
 export default function Command({ task, index }) {
+  const formatTime = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+  
   return (
     <>
-      <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
+      <Draggable
+        draggableId={`${task.id}`} // use apenas se id for único
+        key={task.id}
+        index={index}
+      >
         {(provided, snapshot) => (
           <div
-            className="container"
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-            isDragging={snapshot.isDragging}
+          className="container"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
           >
             <div
               style={{
@@ -61,14 +58,14 @@ export default function Command({ task, index }) {
                 borderRadius: "5px",
                 marginBottom: "6px",
               }}
-            >
+              >
               <span
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                 }}
               >
-                <h3>#{task.title}</h3>
+                <h3>#{task.name}</h3>
 
                 <div
                   style={{
@@ -78,10 +75,14 @@ export default function Command({ task, index }) {
                     gap: "5px",
                   }}
                 >
-                  {task.hora}
+                  {formatTime(task.date_opening)}
                   <AccessTimeIcon style={{ width: "1rem" }} />
                 </div>
               </span>
+              <h4>Total: R${task.totalPrice}</h4>
+
+              <h5>Forma de pagamento: {task.payment}</h5>
+              {/* <p>Produto: {task.product_name}</p> */}
               <div
                 style={{
                   display: "flex",
@@ -89,8 +90,7 @@ export default function Command({ task, index }) {
                   alignItems: "center",
                 }}
               >
-                <p>{task.produtos.join(",")}</p>
-                <h4>Total: R${task.totalPrice}</h4>
+                {/* <p>{task.produtos.join(",")}</p> */}
               </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>

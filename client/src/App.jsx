@@ -11,6 +11,7 @@ import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import Companies from "./pages/Companies/Companies";
 import EditCompanies from "./components/EditCompanies/EditCompanies";
 import CreateCompanies from "./components/CreateCompanies/CreateCompanies";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/EditCompanies" exact element={<EditCompanies />}></Route>
         </Routes>
       </BrowserRouter>
+         <Toaster/>
     </>
   );
 }

@@ -6,8 +6,10 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField, Divider } from "@mui/material";
-import TableComponent from "./TableCommand";
-import IceCreamModal from "./IceCreamModal";
+import TableComponent from "./EditTableCommand";
+import IceCreamModal from "./EditIceCreamModal";
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
@@ -185,24 +187,19 @@ export default function CommandModal() {
         style={{
           display: "flex",
           flexDirection: "row-reverse",
-          margin: "2rem",
+          margin: "1rem",
           justifyContent: "space-between",
           alignItems: "baseline",
         }}
       >
-        <Button
-          onClick={handleOpen}
-          sx={{
-            backgroundColor: "#054f77",
-            color: "#fff",
-            width: "10%",
-            padding: "10px",
-          }}
-        >
-          + Nova comanda
-        </Button>
 
-        <h2>Comandas</h2>
+      <IconButton>
+        <EditIcon
+          onClick={handleOpen}
+        
+        />
+      </IconButton>
+
       </div>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box

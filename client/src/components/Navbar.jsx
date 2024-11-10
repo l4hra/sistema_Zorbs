@@ -161,6 +161,10 @@ export default function Navbar() {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            {/* <div>
+              <h2>{formatTime(time)}</h2>
+            </div> */}
+
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
