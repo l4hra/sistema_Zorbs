@@ -15,7 +15,7 @@ const fetchUsers = async () => {
   setLoading(true);
   setError(null);
   try {
-    const response = await fetch('http://localhost:5000/users');
+    const response = await fetch('http://localhost:5000/user');
     if (!response.ok) {
       throw new Error("Erro ao buscar usuários");
     }
@@ -25,7 +25,10 @@ const fetchUsers = async () => {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
       setError("Não foi possível conectar ao servidor. Verifique sua conexão com o banco de dados.");
     } else {
-      setError("Não foi possível buscar usuário, tente novamente mais tarde!")
+      <UsersList 
+        users={users} 
+        refreshUsers={refreshUsers} 
+      />
     }
     console.error('Erro ao buscar produtos:', error);
   } finally {
@@ -68,6 +71,14 @@ const fetchUsers = async () => {
           refreshUsers={refreshUsers}
           />
           </ErrorBoundary>
+          )}
+
+          {/* Caso não haja usuários e não esteja carregando, exibir uma mensagem */}
+          {!loading && !error && users.length === 0 && (
+            <Typography variant="body1" color="textSecondary" align='center'>
+              Nenhum usuário encontrado.
+            </Typography>
+        
           )}
         </Box>
       </Box>
