@@ -22,12 +22,12 @@ export async function addUser(users) {
     // }
 
     
-    const sql = `INSERT INTO users (name, passaword, confirm_ps, 
+    const sql = `INSERT INTO users (name, password, confirm_ps, 
     email, telefone, type_of_acess, status)
     VALUES (?,?,?,?,?,?,?)`;
     const params = [
         users.name,
-        users.passaword,
+        users.password,
         users.confirm_ps,
         users.email,
         users.telefone,
@@ -75,7 +75,7 @@ export async function updateUsers(id, users) {
     
     const sql = `UPDATE users SET 
     name = ?,
-    passaword = ?,
+    password = ?,
     confirm_ps = ?, 
     email = ?, 
     telefone = ?, 
@@ -84,7 +84,7 @@ export async function updateUsers(id, users) {
     WHERE id = ?`;
     const params = [
         users.name,
-        users.passaword,
+        users.password,
         users.confirm_ps,
         users.email,
         users.telefone,
