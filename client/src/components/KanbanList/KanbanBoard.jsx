@@ -21,9 +21,22 @@ export default function Kanban() {
   async function carregaComanda() {
     try {
       const response = await fetch("http://localhost:5000/commands");
-      const data = await response.json();
+      // const data = await response.json();
+      const grouped = data.reduce((acc, item) => {
+        const { id_command } = item;
+        
+        if (!acc[id_command]) {
+          acc[id_command] = { id_command, items: [] };
+        }
+      
+        acc[id_command].items.push(item);
+      
+        return acc;
+      }, {});
+      
+      const result = Object.values(grouped);
 
-      setCommands(data);
+      setCommands(result);
     } catch (error) {
       console.error("Erro ao buscar as comandas:", error);
     }
@@ -45,48 +58,87 @@ export default function Kanban() {
       return; // Não faz nada se não houver destino ou se for na mesma coluna
     }
   
-    // Encontre a task usando o item_id, que é agora o draggableId
     const task = findItemById(draggableId, [...incomplete, ...completed, ...canceled]);
-    deletePreviousState(source.droppableId, task.id); // Use item_id para remover
   
-    setNewState(destination.droppableId, task);
-  };
-
-  function deletePreviousState(sourceDroppableId, taskId) {
-    switch (sourceDroppableId) {
+    // Atualiza o status no backend de acordo com a coluna de destino
+    let status;
+    switch (destination.droppableId) {
       case "1":
-        setIncomplete(removeItemById(taskId, incomplete));
+        status = "incomplete";
         break;
       case "2":
-        setCompleted(removeItemById(taskId, completed));
+        status = "completed";
         break;
       case "3":
-        setcanceled(removeItemById(taskId, canceled));
+        status = "canceled";
         break;
     }
-  }
-  function setNewState(destinationDroppableId, task) {
-    let updatedTask;
-    switch (destinationDroppableId) {
-      case "1": // TO DO
-        updatedTask = { ...task, completed: false };
-        setIncomplete([updatedTask, ...incomplete]);
-        break;
-      case "2": // DONE
-        updatedTask = { ...task, completed: true };
-        setCompleted([updatedTask, ...completed]);
-        break;
+  
+    updateCommandStatus(task.id, status);
+  };
 
-      case "3": // canceled
-        updatedTask = { ...task, completed: false };
-        setcanceled([updatedTask, ...canceled]);
-        break;
+
+  async function updateCommandStatus(id, status) {
+    try {
+      const updatedCommand = {
+        completed: status === "completed",
+        incompleted: status === "incomplete",
+        canceled: status === "canceled",
+      };
+  
+      const response = await fetch(`http://localhost:5000/commands/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedCommand),
+      });
+  
+      if (response.ok) {
+        console.log("Comanda atualizada com sucesso");
+        carregaComanda(); // Recarrega as comandas para atualizar o estado
+      } else {
+        console.error("Erro ao atualizar a comanda");
+      }
+    } catch (error) {
+      console.error("Erro na requisição PUT:", error);
     }
   }
+
+  // function deletePreviousState(sourceDroppableId, taskId) {
+  //   switch (sourceDroppableId) {
+  //     case "1":
+  //       setIncomplete(removeItemById(taskId, incomplete));
+  //       break;
+  //     case "2":
+  //       setCompleted(removeItemById(taskId, completed));
+  //       break;
+  //     case "3":
+  //       setcanceled(removeItemById(taskId, canceled));
+  //       break;
+  //   }
+  // }
+  // function setNewState(destinationDroppableId, task) {
+  //   let updatedTask;
+  //   switch (destinationDroppableId) {
+  //     case "1": // TO DO
+  //       updatedTask = { ...task, completed: false };
+  //       setIncomplete([updatedTask, ...incomplete]);
+  //       break;
+  //     case "2": // DONE
+  //       updatedTask = { ...task, completed: true };
+  //       setCompleted([updatedTask, ...completed]);
+  //       break;
+
+  //     case "3": // canceled
+  //       updatedTask = { ...task, completed: false };
+  //       setcanceled([updatedTask, ...canceled]);
+  //       break;
+  //   }
+  // }
   function findItemById(id, array) {
     return array.find((item) => item.id == id);
   }
-
   function removeItemById(id, array) {
     return array.filter((item) => item.id != id);
   }
