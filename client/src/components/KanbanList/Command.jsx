@@ -34,22 +34,22 @@ export default function Command({ task, index }) {
       hour: "2-digit",
       minute: "2-digit",
     });
-  }
-  
+  };
+
   return (
     <>
       <Draggable
-        draggableId={`${task.id}`} // use apenas se id for único
-        key={task.id}
+        draggableId={`${task.id_command}`} // use apenas se id for único
+        key={task.id_command}
         index={index}
       >
         {(provided, snapshot) => (
           <div
-          className="container"
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-          isDragging={snapshot.isDragging}
+            className="container"
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            isDragging={snapshot.isDragging}
           >
             <div
               style={{
@@ -58,7 +58,7 @@ export default function Command({ task, index }) {
                 borderRadius: "5px",
                 marginBottom: "6px",
               }}
-              >
+            >
               <span
                 style={{
                   display: "flex",
