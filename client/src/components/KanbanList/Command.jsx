@@ -82,7 +82,16 @@ export default function Command({ task, index }) {
               <h4>Total: R${task.totalPrice}</h4>
 
               <h5>Forma de pagamento: {task.payment}</h5>
-              {/* <p>Produto: {task.product_name}</p> */}
+              <h5>
+                Produtos:
+                {task.items.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      {item.name} ({item.qtd_products} {item.und_medida})
+                    </div>
+                  );
+                })}
+              </h5>
               <div
                 style={{
                   display: "flex",

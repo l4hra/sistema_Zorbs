@@ -40,6 +40,7 @@ export async function getAllCommands(req, res) {
       db_zorbs.commands.canceled,
       db_zorbs.item_command.id AS item_command_id,
       db_zorbs.item_command.id_command,
+      db_zorbs.item_command.name AS item_name,
       db_zorbs.item_command.qtd_products,
       db_zorbs.item_command.und_medida,
       db_zorbs.item_command.value_item,
@@ -48,7 +49,7 @@ export async function getAllCommands(req, res) {
       db_zorbs.products.category AS product_category,
       db_zorbs.products.observacao AS product_observacao,
       db_zorbs.products.type AS product_type
-      FROM db_zorbs.commands INNER JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
+      FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
     `);
     res.status(200).json(rows);
   } catch (error) {
@@ -57,33 +58,6 @@ export async function getAllCommands(req, res) {
   }
 }
 
-// Função para editar
-// export async function updateCommand(id, command) {
-//   const sql = `UPDATE commands SET name = ?, date_opening = ?, totalPrice = ?, payment = ?, completed = ?, canceled = ?
-//                  WHERE id = ?`;
-//   const params = [
-//     command.name,
-//     command.date_opening,
-//     command.totalPrice,
-//     command.payment,
-//     command.completed,
-//     command.canceled,
-//     id, // Adicionando o id ao final para o WHERE
-//   ];
-
-//   try {
-//     const [result] = await conexao.query(sql, params);
-//     if (result.affectedRows > 0) {
-//       console.log("Comanda atualizado");
-//       return [200, "Comanda atualizado com sucesso"];
-//     } else {
-//       return [404, "Comanda não encontrada"];
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return [500, "Erro ao atualizar a Comanda"];
-//   }
-// }
 export async function updateCommand(id, command) {
   const sql = `UPDATE commands 
                SET 

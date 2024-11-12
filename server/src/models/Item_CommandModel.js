@@ -5,12 +5,12 @@ import conexao from "../../conexao.js";
 
 // Função para cadastrar produtos
 export async function createItemCommand(item) {
-  const sql = `INSERT INTO item_command (id_products, id_command, qtd_products, value_item, und_medida)
-                 VALUES (?,?,?,?,?)`;
-  console.log("chegou aqui");
+  const sql = `INSERT INTO item_command (id_products, id_command, name, qtd_products, value_item, und_medida)
+                 VALUES (?,?,?,?,?,?)`;
   const params = [
     item.id_products,
     item.id_command,
+    item.name,
     item.qtd_products,
     item.value_item,
     item.und_medida, // Corrigido aqui
@@ -18,14 +18,13 @@ export async function createItemCommand(item) {
 
   try {
     const [retorno] = await conexao.query(sql, params);
-    console.log("Item da comanda cadastrado");
+
     return [201, "Item da comanda cadastrado"];
   } catch (error) {
     console.log(error);
     return [500, error];
   }
 }
-
 // Função para vizualizar produtos
 
 export async function getAllItemCommands(req, res) {

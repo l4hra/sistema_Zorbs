@@ -5,7 +5,7 @@ import AlarmIcon from "@mui/icons-material/Alarm";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import ModalPagamento from "./CommandPaga";
-
+import toast from "react-hot-toast";
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
@@ -20,14 +20,14 @@ export default function Kanban() {
 
   async function carregaComanda() {
     try {
-      const response = await fetch("http://localhost:5000/itemCommands");
+      const response = await fetch("http://localhost:5000/commands");
       const data = await response.json();
       const grouped = data.reduce((acc, item) => {
         const { id_command } = item;
 
         if (!acc[id_command]) {
           acc[id_command] = {
-            id_command,
+            id_command: id_command,
             name: item.name,
             date_opening: item.date_opening,
             totalPrice: item.totalPrice,
@@ -41,7 +41,9 @@ export default function Kanban() {
 
         acc[id_command].items.push({
           item_command_id: item.item_command_id,
-          name: item.product_name,
+          name: item?.product_name ?? item.item_name,
+          qtd_products: item.qtd_products,
+          und_medida: item.und_medida,
         });
 
         return acc;
@@ -66,63 +68,89 @@ export default function Kanban() {
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
 
-    if (
-      !destination ||
-      !source ||
-      source.droppableId === destination.droppableId
-    ) {
-      return; // Não faz nada se não houver destino ou se for na mesma coluna
+    if (!destination || source.droppableId === destination.droppableId) {
+      return;
     }
 
-    // Encontre a task usando o item_id, que é agora o draggableId
     const task = findItemById(draggableId, [
       ...incomplete,
       ...completed,
       ...canceled,
     ]);
 
-    deletePreviousState(source.droppableId, task.item_id); // Use item_id para remover
+    let updatedIncomplete = [...incomplete];
+    let updatedCompleted = [...completed];
+    let updatedCanceled = [...canceled];
 
-    setNewState(destination.droppableId, task);
-  };
+    if (task.completed) {
+      updatedCompleted = removeItemById(task.id_command, updatedCompleted);
+    } else if (task.incompleted) {
+      updatedIncomplete = removeItemById(task.id_command, updatedIncomplete);
+    } else if (task.canceled) {
+      updatedCanceled = removeItemById(task.id_command, updatedCanceled);
+    }
 
-  function deletePreviousState(sourceDroppableId, taskId) {
-    switch (sourceDroppableId) {
+    let status;
+    switch (destination.droppableId) {
       case "1":
-        setIncomplete(removeItemById(taskId, incomplete));
+        status = "incomplete";
+        updatedIncomplete.push(task);
         break;
       case "2":
-        setCompleted(removeItemById(taskId, completed));
+        status = "completed";
+        updatedCompleted.push(task);
         break;
       case "3":
-        setcanceled(removeItemById(taskId, canceled));
+        status = "canceled";
+        updatedCanceled.push(task);
         break;
+      default:
+        return;
     }
-  }
-  function setNewState(destinationDroppableId, task) {
-    let updatedTask;
-    switch (destinationDroppableId) {
-      case "1": // TO DO
-        updatedTask = { ...task, completed: false };
-        setIncomplete([updatedTask, ...incomplete]);
-        break;
-      case "2": // DONE
-        updatedTask = { ...task, completed: true };
-        setCompleted([updatedTask, ...completed]);
-        break;
 
-      case "3": // canceled
-        updatedTask = { ...task, completed: false };
-        setcanceled([updatedTask, ...canceled]);
-        break;
-    }
-  }
+    updateCommandStatus(task.id_command, status);
+    setIncomplete(updatedIncomplete);
+    setCompleted(updatedCompleted);
+    setcanceled(updatedCanceled);
+  };
+
   function findItemById(id, array) {
     return array.find((item) => item.id_command == id);
   }
 
   function removeItemById(id, array) {
     return array.filter((item) => item.id_command != id);
+  }
+
+  async function updateCommandStatus(id, status) {
+    try {
+      const updatedCommand = {
+        completed: status === "completed",
+        incompleted: status === "incomplete",
+        canceled: status === "canceled",
+      };
+
+      const response = await fetch(`http://localhost:5000/commands/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedCommand),
+      });
+
+      if (response.ok) {
+        toast.success("Comanda atualizada com sucesso!", {
+          position: "bottom-left",
+          duration: 5000,
+        });
+
+        carregaComanda();
+      } else {
+        console.error("Erro ao atualizar a comanda");
+      }
+    } catch (error) {
+      console.error("Erro na requisição PUT:", error);
+    }
   }
   return (
     <>

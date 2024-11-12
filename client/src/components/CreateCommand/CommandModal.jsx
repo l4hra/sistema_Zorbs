@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -51,7 +51,7 @@ export default function CommandModal() {
     try {
       const response = await axios.get(`http://localhost:5000/commands`);
       if (response.status === 200) {
-        setComandaNumber(response.data.at(-1).id); // Atualiza o estado com as comandas recebidas
+        setComandaNumber(response.data.at(-1).id);
       }
     } catch (error) {
       console.error("Erro ao buscar comandas:", error);
@@ -60,44 +60,51 @@ export default function CommandModal() {
 
   // Criar Comanda
   const fetchCommand = async () => {
-    console.log('fetchCommand', selectedBeverages, iceCreams, total);
+    console.log("fetchCommand", selectedBeverages, iceCreams, total);
     try {
       const commandData = {
-        "name": generateComandaTitle(comandaNumber),
-        "date_opening": new Date(),
-        "totalPrice": total,
-        "payment": "Cartão de Crédito",
-        "incompleted": 1
+        name: generateComandaTitle(comandaNumber),
+        date_opening: new Date(),
+        totalPrice: total,
+        payment: "Cartão de Crédito",
+        incompleted: 1,
       };
-      for(const product of selectedBeverages) {
+      const response = await axios.post(
+        "http://localhost:5000/cadastroCommand",
+        commandData
+      );
+      for (const product of selectedBeverages) {
         const productData = {
-          "id_products": product.id,
-          "id_command": comandaNumber,
-          "qtd_products": product.quantity,
-          "value_item": product.preco_venda,
-          "und_medida": "unidade"
-        }
-        await axios.post(`http://localhost:5000/createItemCommand`, productData);
+          id_products: product.id,
+          id_command: comandaNumber + 1,
+          name: null,
+          qtd_products: product.quantity,
+          value_item: product.preco_venda,
+          und_medida: "unidade",
+        };
+        await axios.post(
+          "http://localhost:5000/createItemCommand",
+          productData
+        );
       }
-      for(const ice of iceCreams) {
+      for (const ice of iceCreams) {
         const iceData = {
-          "id_products": null, //sorvete não tem id por enquanto..
-          "id_command": comandaNumber,
-          "qtd_products": ice.weight,
-          "value_item": ice.price,
-          "und_medida": "kg"
-        }
-        await axios.post(`http://localhost:5000/createItemCommand`, iceData);
+          id_products: null, //sorvete não tem id por enquanto..
+          id_command: comandaNumber + 1,
+          name: ice.name,
+          qtd_products: ice.weight,
+          value_item: ice.price,
+          und_medida: "kg",
+        };
+        await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
-     const response = await axios.post(`http://localhost:5000/cadastroCommand`, commandData);
-     //chamar toast
-     toast.success(response.data, {
-      position: "bottom-left",
-      duration: 5000,
-    });
+      //chamar toast
+      toast.success(response.data, {
+        position: "bottom-left",
+        duration: 5000,
+      });
 
       handleClose();
-
     } catch (error) {
       console.error("Erro ao criar a comanda:", error);
     }
@@ -162,16 +169,24 @@ export default function CommandModal() {
   const handleQuantityChange = (id, operator) => {
     if (operator === "+") {
       const newItems = handleQuantity(id, allSelectedProducts, operator);
-      setSelectedBeverages(newItems.filter((item) => !item.hasOwnProperty("weight")));
+      setSelectedBeverages(
+        newItems.filter((item) => !item.hasOwnProperty("weight"))
+      );
       setIceCreams(newItems.filter((item) => item.hasOwnProperty("weight")));
     } else if (operator === "-") {
       const newItems = handleQuantity(id, allSelectedProducts, operator);
-      setSelectedBeverages(newItems.filter((item) => !item.hasOwnProperty("weight")));
+      setSelectedBeverages(
+        newItems.filter((item) => !item.hasOwnProperty("weight"))
+      );
       setIceCreams(newItems.filter((item) => item.hasOwnProperty("weight")));
     }
   };
 
-  const total = allSelectedProducts.reduce((acc, item) => acc + (item.preco_venda ?? item.price) * (item?.quantity ?? 1), 0);
+  const total = allSelectedProducts.reduce(
+    (acc, item) =>
+      acc + (item.preco_venda ?? item.price) * (item?.quantity ?? 1),
+    0
+  );
 
   // Chama a função de busca ao carregar o componente (quando a categoria for '?')
   useEffect(() => {
@@ -204,7 +219,12 @@ export default function CommandModal() {
 
         <h2>Comandas</h2>
       </div>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
         <Box
           sx={{
             position: "absolute",
@@ -266,7 +286,10 @@ export default function CommandModal() {
               )}
             /> */}
 
-            <div className="sorvete" style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+            <div
+              className="sorvete"
+              style={{ display: "flex", gap: "5px", alignItems: "center" }}
+            >
               <Autocomplete
                 sx={{ width: "90%" }}
                 multiple
@@ -276,7 +299,13 @@ export default function CommandModal() {
                 filterSelectedOptions
                 onChange={handleIceCreamsChange}
                 noOptionsText="Nenhum sorvete"
-                renderInput={(params) => <TextField {...params} label="Sorvetes" placeholder="Sorvetes" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Sorvetes"
+                    placeholder="Sorvetes"
+                  />
+                )}
                 value={iceCreams}
               />
 
@@ -316,7 +345,11 @@ export default function CommandModal() {
             /> */}
           </div>
 
-          <TableComponent allSelectedProducts={allSelectedProducts} handleQuantityChange={handleQuantityChange} total={total} />
+          <TableComponent
+            allSelectedProducts={allSelectedProducts}
+            handleQuantityChange={handleQuantityChange}
+            total={total}
+          />
 
           <div
             className="buttons"
