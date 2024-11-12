@@ -311,38 +311,6 @@ export default function CommandModal() {
 
               <IceCreamModal onDataChange={handleIceCreamDataChange} />
             </div>
-
-            {/* <div
-              className="acai"
-              style={{ display: "flex", gap: "5px", alignItems: "center" }}
-            >
-              <Autocomplete
-                sx={{ width: "90%" }}
-                multiple
-                id="tags-outlined"
-                getOptionLabel={(option) => option.name}
-                options={acai}
-                filterSelectedOptions
-                noOptionsText="Nenhum açaí"
-                onChange={handleAcaiChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="Açaí" placeholder="Açaí" />
-                )}
-              />
-
-              <AcaiModal onDataChange={handleAcaiDataChange} />
-            </div> */}
-            {/* <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={listPicole}
-              getOptionLabel={(option) => option.name}
-              filterSelectedOptions
-              onChange={handlePicoleChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Picolé" placeholder="Picolé" />
-              )}
-            /> */}
           </div>
 
           <TableComponent

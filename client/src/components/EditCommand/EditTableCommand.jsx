@@ -11,18 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 
-// const itemsData = [
-//   { id: 1, name: "Coca cola 600ml", price: 10, quantity: 2 },
-//   { id: 2, name: "Água c/ gás 300ml", price: 5, quantity: 2 },
-//   { id: 3, name: "Sorvete #1", price: 15, quantity: 1 },
-//   { id: 4, name: "Açaí #1", price: 20, quantity: 1 },
-// ];
-
-export default function TableComponent({
-  allSelectedProducts,
-  handleQuantityChange,
-  total,
-}) {
+export default function TableComponent({ items, handleQuantityChange, total }) {
   // const [items, setItems] = useState(itemsData);
 
   return (
@@ -45,39 +34,48 @@ export default function TableComponent({
           </TableRow>
         </TableHead>
         <TableBody>
-          {allSelectedProducts &&
-            allSelectedProducts.map((item) => (
+          {items &&
+            items.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  {item.name} | R${item.preco_venda ?? item.price}
+                  {item.name}
+                  {/* {item.name} | R${item.preco_venda ?? item.price} */}
                 </TableCell>
-                {!item.weight ? (<TableCell align="right">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    style={{
-                      backgroundColor: "#f2f2f2",
-                      border: "1px solid gray",
-                      color: "black",
-                    }}
-                    onClick={() => handleQuantityChange(item.id, "-")}
-                  >
-                    -
-                  </Button>
-                  <span style={{ margin: "0 10px" }}>{item.quantity}</span>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    style={{
-                      backgroundColor: "#f2f2f2",
-                      border: "1px solid gray",
-                      color: "black",
-                    }}
-                    onClick={() => handleQuantityChange(item.id, "+")}
-                  >
-                    +
-                  </Button>
-                </TableCell>) : <TableCell align="right">Peso do sorvete {item.weight}kg</TableCell> }
+                {!item.weight ? (
+                  <TableCell align="right">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      style={{
+                        backgroundColor: "#f2f2f2",
+                        border: "1px solid gray",
+                        color: "black",
+                      }}
+                      onClick={() => handleQuantityChange(item.id, "-")}
+                    >
+                      -
+                    </Button>
+                    <span style={{ margin: "0 10px" }}>
+                      {item.qtd_products}
+                    </span>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      style={{
+                        backgroundColor: "#f2f2f2",
+                        border: "1px solid gray",
+                        color: "black",
+                      }}
+                      onClick={() => handleQuantityChange(item.id, "+")}
+                    >
+                      +
+                    </Button>
+                  </TableCell>
+                ) : (
+                  <TableCell align="right">
+                    Peso do sorvete {item.weight}kg
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           <TableRow>

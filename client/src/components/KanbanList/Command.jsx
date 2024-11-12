@@ -3,14 +3,35 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditCommand from "../EditCommand/EditcommandModal";
-import { useEffect, useState } from "react";
 
-function NotaFiscalButton() {
+function NotaFiscalButton({ task }) {
+  // Função para gerar o conteúdo da nota fiscal
   const gerarConteudoNotaFiscal = () => {
-    const notaFiscal = `       Sorveteria Zorbs       ----------------------------------------       Produtos:       1. Sorvete de Chocolate - R$ 10,00       2. Milkshake de Morango - R$ 12,00       3. Sundae de Caramelo - R$ 8,50              Total: R$ 30,50       Data: ${new Date().toLocaleDateString()}        Hora: ${new Date().toLocaleTimeString()}       ----------------------------------------       Obrigado pela sua compra!     `;
+    // Gerando a lista de produtos dinamicamente
+    const listaDeProdutos = task.items
+      .map((item, index) => {
+        return `${item.qtd_products}}. ${item.name} -  ${item.und_medida}`;
+      })
+      .join("\n");
+
+    // Construindo o texto da nota fiscal
+    const notaFiscal = `
+       Sorveteria Zorbs   
+    
+    ----------------------------------------     
+      Produtos:  
+      ${listaDeProdutos}  
+    ----------------------------------------    
+       Total: R$ ${task.totalPrice ?? 0}
+       Data do cupom fiscal: ${new Date().toLocaleDateString()} as ${new Date().toLocaleTimeString()}         
+    ----------------------------------------    
+       Obrigado pela sua compra!     
+    `;
+
     return notaFiscal;
   };
 
+  // Função para gerar e baixar o arquivo .txt
   const gerarTxtNotaFiscal = () => {
     const conteudo = gerarConteudoNotaFiscal();
     const blob = new Blob([conteudo], { type: "text/plain" });
@@ -20,6 +41,7 @@ function NotaFiscalButton() {
     link.click();
   };
 
+  // Botão para download da nota fiscal
   return (
     <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
       <DownloadIcon />
@@ -35,7 +57,7 @@ export default function Command({ task, index }) {
       minute: "2-digit",
     });
   };
-
+  console.log("sorvetes items", task);
   return (
     <>
       <Draggable
@@ -103,8 +125,14 @@ export default function Command({ task, index }) {
               </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-                <NotaFiscalButton />
-                <EditCommand />
+                <NotaFiscalButton task={task} />
+                <EditCommand
+                  id={task.id_command}
+                  nameCommand={task.name}
+                  items={task.items}
+                  totalPrice={task.totalPrice}
+                  qtdProduct={task.qtd_products}
+                />
               </div>
             </div>
             {provided.placeholder}

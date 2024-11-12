@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -8,27 +8,25 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { TextField, Divider } from "@mui/material";
 import TableComponent from "./EditTableCommand";
 import IceCreamModal from "./EditIceCreamModal";
-import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
-export default function CommandModal() {
+export default function CommandModal({
+  id,
+  nameCommand,
+  items,
+  totalPrice,
+  qtdProduct,
+}) {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
-  // const [acai, setAcai] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
-  // const [selectedFoods, setSelectedFoods] = useState([]);
-  // const [selectedPicole, setSelectedPicole] = useState([]);
   const [comandaNumber, setComandaNumber] = useState(0);
   const [listItems, setListItems] = useState([]);
   const handleOpen = () => {
     setOpen(true);
-  };
-
-  const generateComandaTitle = (number) => {
-    const formattedNumber = (number + 1).toString().padStart(3, "0");
-    return `Pedido N°${formattedNumber}`;
   };
 
   // Listar Produtos
@@ -53,7 +51,7 @@ export default function CommandModal() {
     try {
       const response = await axios.get(`http://localhost:5000/commands`);
       if (response.status === 200) {
-        setComandaNumber(response.data.at(-1).id); // Atualiza o estado com as comandas recebidas
+        setComandaNumber(response.data.at(-1).id);
       }
     } catch (error) {
       console.error("Erro ao buscar comandas:", error);
@@ -62,44 +60,50 @@ export default function CommandModal() {
 
   // Criar Comanda
   const fetchCommand = async () => {
-    console.log('fetchCommand', selectedBeverages, iceCreams, total);
     try {
       const commandData = {
-        "name": generateComandaTitle(comandaNumber),
-        "date_opening": new Date(),
-        "totalPrice": total,
-        "payment": "Cartão de Crédito",
-        "incompleted": 1
+        name: generateComandaTitle(comandaNumber),
+        date_opening: new Date(),
+        totalPrice: total,
+        payment: "Cartão de Crédito",
+        incompleted: 1,
       };
-      for(const product of selectedBeverages) {
+      const response = await axios.post(
+        "http://localhost:5000/cadastroCommand",
+        commandData
+      );
+      for (const product of selectedBeverages) {
         const productData = {
-          "id_products": product.id,
-          "id_command": comandaNumber,
-          "qtd_products": product.quantity,
-          "value_item": product.preco_venda,
-          "und_medida": "unidade"
-        }
-        await axios.post(`http://localhost:5000/createItemCommand`, productData);
+          id_products: product.id,
+          id_command: comandaNumber + 1,
+          name: null,
+          qtd_products: product.quantity,
+          value_item: product.preco_venda,
+          und_medida: "unidade",
+        };
+        await axios.post(
+          "http://localhost:5000/createItemCommand",
+          productData
+        );
       }
-      for(const ice of iceCreams) {
+      for (const ice of iceCreams) {
         const iceData = {
-          "id_products": null, //sorvete não tem id por enquanto..
-          "id_command": comandaNumber,
-          "qtd_products": ice.weight,
-          "value_item": ice.price,
-          "und_medida": "kg"
-        }
-        await axios.post(`http://localhost:5000/createItemCommand`, iceData);
+          id_products: null, //sorvete não tem id por enquanto..
+          id_command: comandaNumber + 1,
+          name: ice.name,
+          qtd_products: ice.weight,
+          value_item: ice.price,
+          und_medida: "kg",
+        };
+        await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
-     const response = await axios.post(`http://localhost:5000/cadastroCommand`, commandData);
-     //chamar toast
-     toast.success(response.data, {
-      position: "bottom-left",
-      duration: 5000,
-    });
+      //chamar toast
+      toast.success(response.data, {
+        position: "bottom-left",
+        duration: 5000,
+      });
 
       handleClose();
-
     } catch (error) {
       console.error("Erro ao criar a comanda:", error);
     }
@@ -109,10 +113,6 @@ export default function CommandModal() {
     setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
   };
 
-  // const handleAcaiDataChange = (data) => {
-  //   setAcai((prevAcai) => [...prevAcai, data]);
-  // };
-
   const handleBeveragesChange = (event, value) => {
     setSelectedBeverages(
       value.map((item) => {
@@ -120,18 +120,9 @@ export default function CommandModal() {
       })
     );
   };
-  // const handleFoodsChange = (event, value) => setSelectedFoods(value);
-  const handleIceCreamsChange = (event, value) => setIceCreams(value);
-  // const handleAcaiChange = (event, value) => setAcai(value);
-  // const handlePicoleChange = (event, value) => setSelectedPicole(value);
 
-  const allSelectedProducts = [
-    ...selectedBeverages,
-    // ...selectedFoods,
-    ...iceCreams,
-    // ...acai,
-    // ...selectedPicole,
-  ];
+  const handleIceCreamsChange = (event, value) => setIceCreams(value);
+
   const handleClose = () => {
     setOpen(false);
     setSelectedBeverages([]);
@@ -144,7 +135,10 @@ export default function CommandModal() {
       //se estiver adicionando
       const newItems = list.map((item) => {
         if (item.id === id) {
-          return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 };
+          return {
+            ...item,
+            qtdProduct: item.qtdProduct ? item.qtdProduct + 1 : 1,
+          };
         }
         return item;
       });
@@ -153,27 +147,34 @@ export default function CommandModal() {
       //se estiver removendo
       const newItems = list.map((item) => {
         if (item.id === id) {
-          return { ...item, quantity: item.quantity ? item.quantity - 1 : 0 };
+          return {
+            ...item,
+            qtdProduct: item.qtdProduct ? item.qtdProduct - 1 : 0,
+          };
         }
         return item;
       });
-      return newItems.filter((item) => item.quantity > 0);
+      return newItems.filter((item) => item.qtdProduct > 0);
     }
   };
 
   const handleQuantityChange = (id, operator) => {
     if (operator === "+") {
-      const newItems = handleQuantity(id, allSelectedProducts, operator);
-      setSelectedBeverages(newItems.filter((item) => !item.hasOwnProperty("weight")));
+      const newItems = handleQuantity(id, items, operator);
+      setSelectedBeverages(
+        newItems.filter((item) => !item.hasOwnProperty("weight"))
+      );
       setIceCreams(newItems.filter((item) => item.hasOwnProperty("weight")));
     } else if (operator === "-") {
-      const newItems = handleQuantity(id, allSelectedProducts, operator);
-      setSelectedBeverages(newItems.filter((item) => !item.hasOwnProperty("weight")));
+      const newItems = handleQuantity(id, items, operator);
+      setSelectedBeverages(
+        newItems.filter((item) => !item.hasOwnProperty("weight"))
+      );
       setIceCreams(newItems.filter((item) => item.hasOwnProperty("weight")));
     }
   };
 
-  const total = allSelectedProducts.reduce((acc, item) => acc + (item.preco_venda ?? item.price) * (item?.quantity ?? 1), 0);
+  const total = (totalPrice ?? 0) * (qtdProduct ?? 1);
 
   // Chama a função de busca ao carregar o componente (quando a categoria for '?')
   useEffect(() => {
@@ -192,16 +193,16 @@ export default function CommandModal() {
           alignItems: "baseline",
         }}
       >
-
-      <IconButton>
-        <EditIcon
-          onClick={handleOpen}
-        
-        />
-      </IconButton>
-
+        <IconButton>
+          <EditIcon onClick={handleOpen} />
+        </IconButton>
       </div>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
         <Box
           sx={{
             position: "absolute",
@@ -224,7 +225,7 @@ export default function CommandModal() {
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            {generateComandaTitle(comandaNumber)}
+            {nameCommand}
           </Typography>
           <Box height={10} />
           <Divider />
@@ -233,12 +234,12 @@ export default function CommandModal() {
             multiple
             sx={{ width: "100%" }}
             id="tags-outlined"
-            options={listItems}
+            options={listItems} // Lista completa de produtos
             getOptionLabel={(option) => option.name}
             filterSelectedOptions
             onChange={handleBeveragesChange}
             renderInput={(params) => <TextField {...params} label="Produtos" />}
-            value={selectedBeverages}
+            value={items}
           />
 
           <div
@@ -251,19 +252,10 @@ export default function CommandModal() {
               marginBottom: "25px",
             }}
           >
-            {/* <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={listItemsFoods}
-              getOptionLabel={(option) => option.name}
-              filterSelectedOptions
-              onChange={handleFoodsChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Comidas" placeholder="Comidas" />
-              )}
-            /> */}
-
-            <div className="sorvete" style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+            <div
+              className="sorvete"
+              style={{ display: "flex", gap: "5px", alignItems: "center" }}
+            >
               <Autocomplete
                 sx={{ width: "90%" }}
                 multiple
@@ -273,47 +265,25 @@ export default function CommandModal() {
                 filterSelectedOptions
                 onChange={handleIceCreamsChange}
                 noOptionsText="Nenhum sorvete"
-                renderInput={(params) => <TextField {...params} label="Sorvetes" placeholder="Sorvetes" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Sorvetes"
+                    placeholder="Sorvetes"
+                  />
+                )}
                 value={iceCreams}
               />
 
               <IceCreamModal onDataChange={handleIceCreamDataChange} />
             </div>
-
-            {/* <div
-              className="acai"
-              style={{ display: "flex", gap: "5px", alignItems: "center" }}
-            >
-              <Autocomplete
-                sx={{ width: "90%" }}
-                multiple
-                id="tags-outlined"
-                getOptionLabel={(option) => option.name}
-                options={acai}
-                filterSelectedOptions
-                noOptionsText="Nenhum açaí"
-                onChange={handleAcaiChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="Açaí" placeholder="Açaí" />
-                )}
-              />
-
-              <AcaiModal onDataChange={handleAcaiDataChange} />
-            </div> */}
-            {/* <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={listPicole}
-              getOptionLabel={(option) => option.name}
-              filterSelectedOptions
-              onChange={handlePicoleChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Picolé" placeholder="Picolé" />
-              )}
-            /> */}
           </div>
 
-          <TableComponent allSelectedProducts={allSelectedProducts} handleQuantityChange={handleQuantityChange} total={total} />
+          <TableComponent
+            items={items}
+            handleQuantityChange={handleQuantityChange}
+            total={total}
+          />
 
           <div
             className="buttons"
@@ -332,7 +302,7 @@ export default function CommandModal() {
               }}
               onClick={fetchCommand}
             >
-              Criar
+              Editar
             </Button>
 
             <Button
