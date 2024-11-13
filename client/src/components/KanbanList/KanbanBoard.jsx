@@ -61,7 +61,7 @@ export default function Kanban() {
 
   useEffect(() => {
     setCompleted(commands.filter((pedido) => pedido.completed));
-    setIncomplete(commands.filter((pedido) => !pedido.completed));
+    setIncomplete(commands.filter((pedido) => pedido.incompleted));
     setcanceled(commands.filter((pedido) => pedido.canceled));
   }, [commands]);
 

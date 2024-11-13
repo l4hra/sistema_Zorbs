@@ -121,7 +121,7 @@ export default function CommandModal() {
   const handleBeveragesChange = (event, value) => {
     setSelectedBeverages(
       value.map((item) => {
-        return { ...item, quantity: 1 };
+        return { ...item, quantity: item?.quantity ?? 1 };
       })
     );
   };
@@ -256,7 +256,9 @@ export default function CommandModal() {
             multiple
             sx={{ width: "100%" }}
             id="tags-outlined"
-            options={listItems}
+            options={listItems.filter(
+              (item) => !selectedBeverages.map((e) => e.id).includes(item.id)
+            )}
             getOptionLabel={(option) => option.name}
             filterSelectedOptions
             onChange={handleBeveragesChange}

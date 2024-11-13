@@ -46,9 +46,7 @@ export default function TableDashboard() {
       headerName: "Status",
 
       width: 160,
-      valueGetter: (value, row) =>
-        `${row.firstName || ""} ${row.lastName || ""}`,
-    },
+    }
   ];
   return (
     <>
