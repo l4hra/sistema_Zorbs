@@ -25,10 +25,12 @@ export async function createCommand(command) {
 // Função para visualizar produtos
 
 export async function getAllCommands(req, res) {
-  console.log("CommandController getCommand");
+  console.log("olhando", req.query["date"]);
+  const dateQuery = req.query["date"];
 
   try {
-    const [rows] = await conexao.query(`
+    const [rows] = await conexao.query(
+      `
       SELECT 
       db_zorbs.commands.id,
       db_zorbs.commands.name,
@@ -50,7 +52,10 @@ export async function getAllCommands(req, res) {
       db_zorbs.products.observacao AS product_observacao,
       db_zorbs.products.type AS product_type
       FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
-    `);
+      WHERE date_opening = ?
+    `,
+      [dateQuery]
+    );
     res.status(200).json(rows);
   } catch (error) {
     console.log(error);

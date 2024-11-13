@@ -7,6 +7,12 @@ import Autocomplete from "@mui/joy/Autocomplete";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import TableDashboard from "../../components/Dashboard/TableDashboard";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { ptBR } from "@mui/x-date-pickers/locales";
+import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
+import dayjs from "dayjs";
 
 export default function Dashboard({ title, color }) {
   const opt = [
@@ -23,6 +29,7 @@ export default function Dashboard({ title, color }) {
     { id: 11, label: "Novembro" },
     { id: 12, label: "Dezembro" },
   ];
+  dayjs.locale("pt-br");
   return (
     <>
       <Navbar />
@@ -40,7 +47,19 @@ export default function Dashboard({ title, color }) {
             }}
           >
             <h2>Dashboard</h2>
-            <Autocomplete placeholder="Mês" options={opt} sx={{ width: 300 }} />
+            {/* <Autocomplete placeholder="Mês" options={opt} sx={{ width: 300 }} /> */}
+
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale="pt-br"
+              localeText={
+                ptBR.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+            >
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker label="Filtre" format="DD/MM/YYYY" />
+              </DemoContainer>
+            </LocalizationProvider>
           </div>
           <div
             style={{

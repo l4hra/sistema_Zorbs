@@ -14,10 +14,7 @@ import axios from "axios";
 export default function CommandModal() {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
-  // const [acai, setAcai] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
-  // const [selectedFoods, setSelectedFoods] = useState([]);
-  // const [selectedPicole, setSelectedPicole] = useState([]);
   const [comandaNumber, setComandaNumber] = useState(0);
   const [listItems, setListItems] = useState([]);
   const handleOpen = () => {
@@ -114,10 +111,6 @@ export default function CommandModal() {
     setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
   };
 
-  // const handleAcaiDataChange = (data) => {
-  //   setAcai((prevAcai) => [...prevAcai, data]);
-  // };
-
   const handleBeveragesChange = (event, value) => {
     setSelectedBeverages(
       value.map((item) => {
@@ -125,18 +118,10 @@ export default function CommandModal() {
       })
     );
   };
-  // const handleFoodsChange = (event, value) => setSelectedFoods(value);
-  const handleIceCreamsChange = (event, value) => setIceCreams(value);
-  // const handleAcaiChange = (event, value) => setAcai(value);
-  // const handlePicoleChange = (event, value) => setSelectedPicole(value);
 
-  const allSelectedProducts = [
-    ...selectedBeverages,
-    // ...selectedFoods,
-    ...iceCreams,
-    // ...acai,
-    // ...selectedPicole,
-  ];
+  const handleIceCreamsChange = (event, value) => setIceCreams(value);
+
+  const allSelectedProducts = [...selectedBeverages, ...iceCreams];
   const handleClose = () => {
     setOpen(false);
     setSelectedBeverages([]);
@@ -217,7 +202,7 @@ export default function CommandModal() {
           + Nova comanda
         </Button>
 
-        <h2>Comandas</h2>
+        {/* <h2>Comandas</h2> */}
       </div>
       <Modal
         open={open}
