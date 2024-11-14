@@ -87,7 +87,7 @@ export default function Command({ task, index }) {
                   justifyContent: "space-between",
                 }}
               >
-                <h3>#Pedido N°0{task.id_command}</h3>
+                <h3>#Pedido N°00{task.id_command}</h3>
 
                 <div
                   style={{

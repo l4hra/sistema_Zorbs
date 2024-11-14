@@ -115,7 +115,7 @@ export default function IceCreamModal({ onDataChange }) {
               <TextField
                 label="Peso do sorvete"
                 id="outlined-start-adornment"
-                sx={{ width: "90%" }}
+                sx={{ width: "100%" }}
                 maxRows={1}
                 minRows={1}
                 value={weight}
@@ -129,12 +129,6 @@ export default function IceCreamModal({ onDataChange }) {
                   },
                 }}
               />
-
-              <IconButton
-                style={{ backgroundColor: "#9FD6D2", borderRadius: "5px" }}
-              >
-                <SearchIcon />
-              </IconButton>
             </div>
 
             <div
@@ -154,7 +148,7 @@ export default function IceCreamModal({ onDataChange }) {
                 maxRows={1}
                 minRows={1}
                 onChange={handlePriceChange}
-                sx={{ width: "90%" }}
+                sx={{ width: "100%" }}
                 slotProps={{
                   input: {
                     startAdornment: (
@@ -163,12 +157,6 @@ export default function IceCreamModal({ onDataChange }) {
                   },
                 }}
               />
-
-              <IconButton
-                style={{ backgroundColor: "#9FD6D2", borderRadius: "5px" }}
-              >
-                <SearchIcon />
-              </IconButton>
             </div>
 
             <TextField

@@ -7,6 +7,7 @@ import { useEffect } from "react";
 
 export default function TableDashboard({ selectedDate }) {
   const [rows, setRows] = useState([]);
+  // const nameCommand = "Pedido"
 
   const getCommands = async () => {
     if (!selectedDate) return;
@@ -15,7 +16,6 @@ export default function TableDashboard({ selectedDate }) {
         `http://localhost:5000/commandsFilter?date=${selectedDate}`
       );
       const data = await response.json();
-      console.log("data", data);
       setRows(data);
     } catch (error) {
       console.error("Erro ao buscar comandas:", error);
@@ -60,11 +60,11 @@ export default function TableDashboard({ selectedDate }) {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 10,
               },
             },
           }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[25]}
           checkboxSelection
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           disableRowSelectionOnClick
