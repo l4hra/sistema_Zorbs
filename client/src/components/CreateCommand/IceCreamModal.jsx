@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import { InputAdornment, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
+import InputMask from "react-input-mask";
 import CreateIcon from "@mui/icons-material/Create";
 
 export default function IceCreamModal({ onDataChange }) {
@@ -15,7 +15,7 @@ export default function IceCreamModal({ onDataChange }) {
   const [quantity, setQuantity] = useState();
 
   const [weight, setWeight] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [observation, setObservation] = useState("");
 
   const handleOpenChild = () => {
@@ -32,14 +32,6 @@ export default function IceCreamModal({ onDataChange }) {
     setName(event.target.value);
   };
 
-  const handleWeightChange = (event) => {
-    setWeight(event.target.value);
-  };
-
-  const handlePriceChange = (event) => {
-    setPrice(event.target.value);
-  };
-
   const handleObservationChange = (event) => {
     setObservation(event.target.value);
   };
@@ -53,6 +45,16 @@ export default function IceCreamModal({ onDataChange }) {
     setName("Sorvete#1");
     setWeight("");
   };
+
+  const handleWeightChange = (event) => {
+    setWeight(event.target.value);
+  };
+
+  // Função de tratamento para o campo de preço
+  const handlePriceChange = (event) => {
+    setPrice(event.target.value);
+  };
+
   return (
     <>
       <IconButton
@@ -112,23 +114,37 @@ export default function IceCreamModal({ onDataChange }) {
                 marginTop: "15px",
               }}
             >
-              <TextField
-                label="Peso do sorvete"
-                id="outlined-start-adornment"
-                sx={{ width: "100%" }}
-                maxRows={1}
-                minRows={1}
+              <InputMask
+                mask="9*.999" // Aceita vários dígitos antes da vírgula e 3 dígitos após
                 value={weight}
                 onChange={handleWeightChange}
-                placeholder="00.000"
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">kg</InputAdornment>
-                    ),
-                  },
+                placeholder="0.000"
+                maskChar=""
+                // Aceitar vírgula ou ponto como separador
+                beforeMaskedValueChange={(newState, oldState, userInput) => {
+                  let { value } = newState;
+                  if (userInput === ",") {
+                    value = value.replace(",", ".");
+                  }
+                  return { ...newState, value };
                 }}
-              />
+              >
+                {(inputProps) => (
+                  <TextField
+                    {...inputProps}
+                    label="Peso do sorvete"
+                    id="outlined-weight"
+                    sx={{ width: "100%" }}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">kg</InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+                )}
+              </InputMask>
             </div>
 
             <div
@@ -140,23 +156,36 @@ export default function IceCreamModal({ onDataChange }) {
                 marginBottom: "20px",
               }}
             >
-              <TextField
-                label="Preço do sorvete"
-                id="outlined-start-adornment"
-                placeholder="00,00"
+              <InputMask
+                mask="99.99" // Aceita vários dígitos antes da vírgula e 2 dígitos após
                 value={price}
-                maxRows={1}
-                minRows={1}
                 onChange={handlePriceChange}
-                sx={{ width: "100%" }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">R$</InputAdornment>
-                    ),
-                  },
+                placeholder="00.00"
+                maskChar=""
+                beforeMaskedValueChange={(newState, oldState, userInput) => {
+                  let { value } = newState;
+                  if (userInput === ",") {
+                    value = value.replace(",", ".");
+                  }
+                  return { ...newState, value };
                 }}
-              />
+              >
+                {(inputProps) => (
+                  <TextField
+                    {...inputProps}
+                    label="Preço do sorvete"
+                    id="outlined-price"
+                    sx={{ width: "100%" }}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">R$</InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+                )}
+              </InputMask>
             </div>
 
             <TextField

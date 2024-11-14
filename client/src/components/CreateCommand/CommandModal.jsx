@@ -11,7 +11,7 @@ import IceCreamModal from "./IceCreamModal";
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
-export default function CommandModal() {
+export default function CommandModal({ updateBoard }) {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
@@ -20,8 +20,6 @@ export default function CommandModal() {
   const handleOpen = () => {
     setOpen(true);
   };
-
-  
 
   // Listar Produtos
   const fetchProducts = async (categoria) => {
@@ -40,7 +38,6 @@ export default function CommandModal() {
     }
   };
 
-
   // Criar Comanda
   const fetchCommand = async () => {
     if (selectedBeverages.length === 0 && iceCreams.length === 0) {
@@ -54,7 +51,6 @@ export default function CommandModal() {
 
     try {
       const commandData = {
-       
         date_opening: new Date(),
         totalPrice: total,
         payment: "Cartão de Crédito",
@@ -170,7 +166,6 @@ export default function CommandModal() {
   // Chama a função de busca ao carregar o componente (quando a categoria for '?')
   useEffect(() => {
     fetchProducts(); // Passa a categoria "?" para buscar os produtos
-    
   }, []);
 
   return (
@@ -226,7 +221,7 @@ export default function CommandModal() {
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-           Novo pedido
+            Novo pedido
           </Typography>
           <Box height={10} />
           <Divider />

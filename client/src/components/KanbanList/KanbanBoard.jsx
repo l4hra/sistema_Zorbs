@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
+import CommandModal from "../CreateCommand/CommandModal";
 
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);
@@ -156,6 +157,7 @@ export default function Kanban() {
     }
   }
   dayjs.locale("pt-br");
+
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -191,6 +193,7 @@ export default function Kanban() {
           />
         </div>
         <ModalPagamento open={openDialog} handleClose={handleClose} />
+        {/* <CommandModal updateBoard={carregaComanda} /> */}
       </DragDropContext>
     </>
   );

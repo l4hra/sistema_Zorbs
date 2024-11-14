@@ -57,7 +57,7 @@ export default function Command({ task, index }) {
       minute: "2-digit",
     });
   };
-  console.log("sorvetes items", task);
+
   return (
     <>
       <Draggable
