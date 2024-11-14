@@ -32,7 +32,6 @@ export default function Kanban() {
         if (!acc[id_command]) {
           acc[id_command] = {
             id_command: id_command,
-            name: item.name,
             date_opening: item.date_opening,
             totalPrice: item.totalPrice,
             payment: item.payment,

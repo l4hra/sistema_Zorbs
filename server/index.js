@@ -46,6 +46,7 @@ app.use(
 );
 app.use(express.json());
 
+
 app.post("/cadastroCommand", cadastroCommand);
 app.get("/commands", getAllCommands);
 app.get("/commandsFilter", getFilterCommands);

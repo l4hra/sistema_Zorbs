@@ -15,7 +15,6 @@ import axios from "axios";
 
 export default function CommandModal({
   id,
-  nameCommand,
   items,
   totalPrice,
   qtdProduct,
@@ -62,7 +61,6 @@ export default function CommandModal({
   const fetchCommand = async () => {
     try {
       const commandData = {
-        name: generateComandaTitle(comandaNumber),
         date_opening: new Date(),
         totalPrice: total,
         payment: "Cartão de Crédito",
@@ -225,7 +223,7 @@ export default function CommandModal({
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            {nameCommand}
+            Pedido N°0{id}
           </Typography>
           <Box height={10} />
           <Divider />

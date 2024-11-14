@@ -2,21 +2,17 @@ import conexao from "../../conexao.js";
 
 // Função para cadastrar produtos
 export async function createCommand(command) {
-  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, incompleted)
-    VALUES (?,?,?,?,?)`;
+  const sql = `INSERT INTO commands (date_opening, totalPrice, payment, incompleted)
+    VALUES (?,?,?,?)`;
   const params = [
-    command.name,
     command.date_opening,
     command.totalPrice,
     command.payment,
     command.incompleted,
   ];
-
-
-
   try {
     const [retorno] = await conexao.query(sql, params);
-    return [201, "Comanda cadastrada com sucesso!"];
+    return [201, {message: "Comanda cadastrada com sucesso!", id_command: retorno.insertId}];
   } catch (error) {
     console.log(error);
     return [500, error];
@@ -48,7 +44,6 @@ export async function getAllCommands(req, res) {
       `
       SELECT 
       db_zorbs.commands.id,
-      db_zorbs.commands.name,
       db_zorbs.commands.date_opening,
       db_zorbs.commands.totalPrice,
       db_zorbs.commands.payment,
@@ -84,7 +79,7 @@ export async function getFilterCommands(req, res) {
       `
       SELECT 
       db_zorbs.commands.id,
-      db_zorbs.commands.name,
+   
       db_zorbs.commands.date_opening,
       db_zorbs.commands.totalPrice,
       db_zorbs.commands.payment,

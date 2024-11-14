@@ -15,16 +15,13 @@ export default function CommandModal() {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
-  const [comandaNumber, setComandaNumber] = useState(0);
+
   const [listItems, setListItems] = useState([]);
   const handleOpen = () => {
     setOpen(true);
   };
 
-  const generateComandaTitle = (number) => {
-    const formattedNumber = (number + 1).toString().padStart(3, "0");
-    return `Pedido N°${formattedNumber}`;
-  };
+  
 
   // Listar Produtos
   const fetchProducts = async (categoria) => {
@@ -43,24 +40,21 @@ export default function CommandModal() {
     }
   };
 
-  // Listar Comandas
-  const fetchCommands = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5000/commands`);
-      if (response.status === 200) {
-        setComandaNumber(response.data.at(-1).id);
-      }
-    } catch (error) {
-      console.error("Erro ao buscar comandas:", error);
-    }
-  };
 
   // Criar Comanda
   const fetchCommand = async () => {
-    console.log("fetchCommand", selectedBeverages, iceCreams, total);
+    if (selectedBeverages.length === 0 && iceCreams.length === 0) {
+      toast.error("A comanda não pode ser criada  vazia.", {
+        position: "bottom-left",
+        duration: 5000,
+      });
+
+      return;
+    }
+
     try {
       const commandData = {
-        name: generateComandaTitle(comandaNumber),
+       
         date_opening: new Date(),
         totalPrice: total,
         payment: "Cartão de Crédito",
@@ -73,7 +67,7 @@ export default function CommandModal() {
       for (const product of selectedBeverages) {
         const productData = {
           id_products: product.id,
-          id_command: comandaNumber + 1,
+          id_command: response.data.id_command,
           name: null,
           qtd_products: product.quantity,
           value_item: product.preco_venda,
@@ -87,7 +81,7 @@ export default function CommandModal() {
       for (const ice of iceCreams) {
         const iceData = {
           id_products: null, //sorvete não tem id por enquanto..
-          id_command: comandaNumber + 1,
+          id_command: response.data.id_command,
           name: ice.name,
           qtd_products: ice.weight,
           value_item: ice.price,
@@ -96,7 +90,7 @@ export default function CommandModal() {
         await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
       //chamar toast
-      toast.success(response.data, {
+      toast.success(response.data.message, {
         position: "bottom-left",
         duration: 5000,
       });
@@ -176,7 +170,7 @@ export default function CommandModal() {
   // Chama a função de busca ao carregar o componente (quando a categoria for '?')
   useEffect(() => {
     fetchProducts(); // Passa a categoria "?" para buscar os produtos
-    fetchCommands();
+    
   }, []);
 
   return (
@@ -232,7 +226,7 @@ export default function CommandModal() {
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            {generateComandaTitle(comandaNumber)}
+           Novo pedido
           </Typography>
           <Box height={10} />
           <Divider />
