@@ -13,7 +13,10 @@ import {
   atualizaItemCommand,
 } from "./src/controllers/Item_CommandController.js";
 import { getUsers } from "./src/models/UserModel.js";
-import { getAllCommands } from "./src/models/CommandModel.js";
+import {
+  getAllCommands,
+  getFilterCommands,
+} from "./src/models/CommandModel.js";
 import { getAllItemCommands } from "./src/models/Item_CommandModel.js";
 import {
   cadastroUser,
@@ -45,6 +48,7 @@ app.use(express.json());
 
 app.post("/cadastroCommand", cadastroCommand);
 app.get("/commands", getAllCommands);
+app.get("/commandsFilter", getFilterCommands);
 app.put("/commands/:id", atualizaCommand);
 // app.delete("/products/:id", updateCommand);
 

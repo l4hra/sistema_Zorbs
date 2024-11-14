@@ -6,10 +6,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import ModalPagamento from "./CommandPaga";
 import toast from "react-hot-toast";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { ptBR } from "@mui/x-date-pickers/locales";
+
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
 
@@ -18,26 +15,17 @@ export default function Kanban() {
   const [incomplete, setIncomplete] = useState([]);
   const [canceled, setcanceled] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedDate, setSelectedDate] = useState();
+
   const [commands, setCommands] = useState([]);
 
   const handleClose = () => {
     setOpenDialog(false);
   };
 
-  const handleDateChange = async (date) => {
-    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD");
-    setSelectedDate(formattedDate);
-    await carregaComanda(formattedDate); // Chamar imediatamente ao alterar a data
-  };
   async function carregaComanda() {
-    if (!selectedDate) return;
     try {
-      const response = await fetch(
-        `http://localhost:5000/commands?date=${selectedDate}`
-      );
+      const response = await fetch(`http://localhost:5000/commands`);
       const data = await response.json();
-      console.log("response", data);
       const grouped = data.reduce((acc, item) => {
         const { id_command } = item;
 
@@ -73,7 +61,7 @@ export default function Kanban() {
   }
   useEffect(() => {
     carregaComanda();
-  }, [selectedDate]);
+  }, []);
 
   useEffect(() => {
     setCompleted(commands.filter((pedido) => pedido.completed));
@@ -172,30 +160,6 @@ export default function Kanban() {
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div
-          style={{
-            display: "flex",
-
-            flexDirection: " row-reverse ",
-          }}
-        >
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale="pt-br"
-            localeText={
-              ptBR.components.MuiLocalizationProvider.defaultProps.localeText
-            }
-          >
-            <DemoContainer components={["DatePicker"]}>
-              <DatePicker
-                label="Filtre as comandas"
-                format="DD/MM/YYYY"
-                value={selectedDate ? dayjs(selectedDate) : null}
-                onChange={handleDateChange}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-        </div>
         <div
           style={{
             display: "flex",

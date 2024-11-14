@@ -11,11 +11,16 @@ export async function createCommand(command) {
     command.payment,
     command.incompleted,
   ];
-
+  // Itens ramon
+  const sqlItemComanda = 'INSERT INTO item_command (id_command,id_products,qtd_products,value_item,und_medida,name) VALUES (?,?,?,?,?,?,?)';
   try {
     const [retorno] = await conexao.query(sql, params);
-
-    return [201, "Comanda cadastrada com sucesso!"];
+    // if(retorno.affectedRows > 0){
+      const paramsItem = [retorno.insertId]
+      const [retornoItem] = await conexao.query(sqlItemComanda,paramsItem)
+    // }
+    console.log("teste agora", retorno);
+    return [201, insertId];
   } catch (error) {
     console.log(error);
     return [500, error];
@@ -26,6 +31,40 @@ export async function createCommand(command) {
 
 export async function getAllCommands(req, res) {
   console.log("olhando", req.query["date"]);
+  try {
+    const [rows] = await conexao.query(
+      `
+      SELECT 
+      db_zorbs.commands.id,
+      db_zorbs.commands.name,
+      db_zorbs.commands.date_opening,
+      db_zorbs.commands.totalPrice,
+      db_zorbs.commands.payment,
+      db_zorbs.commands.completed,
+      db_zorbs.commands.incompleted,
+      db_zorbs.commands.canceled,
+      db_zorbs.item_command.id AS item_command_id,
+      db_zorbs.item_command.id_command,
+      db_zorbs.item_command.name AS item_name,
+      db_zorbs.item_command.qtd_products,
+      db_zorbs.item_command.und_medida,
+      db_zorbs.item_command.value_item,
+      db_zorbs.products.id AS product_id,
+      db_zorbs.products.name AS product_name,
+      db_zorbs.products.category AS product_category,
+      db_zorbs.products.observacao AS product_observacao,
+      db_zorbs.products.type AS product_type
+      FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
+    `
+    );
+    res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao buscar comandas", error });
+  }
+}
+
+export async function getFilterCommands(req, res) {
   const dateQuery = req.query["date"];
 
   try {
@@ -52,7 +91,7 @@ export async function getAllCommands(req, res) {
       db_zorbs.products.observacao AS product_observacao,
       db_zorbs.products.type AS product_type
       FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
-      WHERE date_opening = ?
+       WHERE DATE(date_opening) = ?
     `,
       [dateQuery]
     );

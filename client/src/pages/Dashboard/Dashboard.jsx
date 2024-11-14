@@ -13,22 +13,17 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { ptBR } from "@mui/x-date-pickers/locales";
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Dashboard({ title, color }) {
-  const opt = [
-    { id: 1, label: "Janeiro" },
-    { id: 2, label: "Fevereiro" },
-    { id: 3, label: "Março" },
-    { id: 4, label: "Abril" },
-    { id: 5, label: "Maio" },
-    { id: 6, label: "Junho" },
-    { id: 7, label: "Julho" },
-    { id: 8, label: "Agosto" },
-    { id: 9, label: "Setembro" },
-    { id: 10, label: "Outubro" },
-    { id: 11, label: "Novembro" },
-    { id: 12, label: "Dezembro" },
-  ];
+  const [selectedDate, setSelectedDate] = useState();
+
+  const handleDateChange = async (date) => {
+    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD");
+    setSelectedDate(formattedDate);
+  };
+
   dayjs.locale("pt-br");
   return (
     <>
@@ -57,7 +52,12 @@ export default function Dashboard({ title, color }) {
               }
             >
               <DemoContainer components={["DatePicker"]}>
-                <DatePicker label="Filtre" format="DD/MM/YYYY" />
+                <DatePicker
+                  label="Filtre as comandas"
+                  format="DD/MM/YYYY"
+                  value={selectedDate ? dayjs(selectedDate) : null}
+                  onChange={handleDateChange}
+                />
               </DemoContainer>
             </LocalizationProvider>
           </div>
@@ -97,7 +97,7 @@ export default function Dashboard({ title, color }) {
           >
             {/* <LineChart /> */}
 
-            <TableDashboard />
+            <TableDashboard selectedDate={selectedDate} />
           </div>
         </Box>
       </Box>

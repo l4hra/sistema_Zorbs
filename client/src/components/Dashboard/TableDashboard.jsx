@@ -5,12 +5,15 @@ import { ptBR } from "@mui/x-data-grid/locales";
 import { useState } from "react";
 import { useEffect } from "react";
 
-export default function TableDashboard() {
+export default function TableDashboard({ selectedDate }) {
   const [rows, setRows] = useState([]);
 
   const getCommands = async () => {
+    if (!selectedDate) return;
     try {
-      const response = await fetch("http://localhost:5000/commands");
+      const response = await fetch(
+        `http://localhost:5000/commandsFilter?date=${selectedDate}`
+      );
       const data = await response.json();
       console.log("data", data);
       setRows(data);
@@ -21,7 +24,7 @@ export default function TableDashboard() {
 
   useEffect(() => {
     getCommands();
-  }, []);
+  }, [selectedDate]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
@@ -46,7 +49,7 @@ export default function TableDashboard() {
       headerName: "Status",
 
       width: 160,
-    }
+    },
   ];
   return (
     <>
