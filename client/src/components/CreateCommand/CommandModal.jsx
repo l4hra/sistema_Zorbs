@@ -10,6 +10,7 @@ import TableComponent from "./TableCommand";
 import IceCreamModal from "./IceCreamModal";
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
+import { formatDateForMySQL } from "../../../../server/src/utils/config";
 
 export default function CommandModal() {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function CommandModal() {
   };
 
   const generateComandaTitle = (number) => {
-    const formattedNumber = (number + 1).toString().padStart(3, "0");
+    const formattedNumber = (number).toString().padStart(3, "0");
     return `Pedido N°${formattedNumber}`;
   };
 
@@ -51,7 +52,10 @@ export default function CommandModal() {
     try {
       const response = await axios.get(`http://localhost:5000/commands`);
       if (response.status === 200) {
-        setComandaNumber(response.data.at(-1).id); // Atualiza o estado com as comandas recebidas
+        if (response.data.length === 0)
+          setComandaNumber(1);
+        else
+          setComandaNumber(response.data.at(-1).id);
       }
     } catch (error) {
       console.error("Erro ao buscar comandas:", error);
@@ -60,26 +64,34 @@ export default function CommandModal() {
 
   // Criar Comanda
   const fetchCommand = async () => {
-    console.log('fetchCommand', selectedBeverages, iceCreams, total);
+    // console.log('fetchCommand', selectedBeverages, iceCreams, total);
+    var idCommand = 0;
     try {
       const commandData = {
         "name": generateComandaTitle(comandaNumber),
-        "date_opening": new Date(),
+        "date_opening": formatDateForMySQL(new Date(), true),
         "totalPrice": total,
         "payment": "Cartão de Crédito",
-        "incompleted": 1
+        "completed": 0,
+        "incompleted": 1,
+        "canceled": 0
       };
-      for(const product of selectedBeverages) {
+      const response = await axios.post(`http://localhost:5000/cadastroCommand`, commandData);
+
+      await axios.get(`http://localhost:5000/commands`).then(r => { idCommand = r.data.at(-1).id });
+
+
+      for (const product of selectedBeverages) {
         const productData = {
           "id_products": product.id,
-          "id_command": comandaNumber,
+          "id_command": idCommand,
           "qtd_products": product.quantity,
           "value_item": product.preco_venda,
           "und_medida": "unidade"
         }
         await axios.post(`http://localhost:5000/createItemCommand`, productData);
       }
-      for(const ice of iceCreams) {
+      for (const ice of iceCreams) {
         const iceData = {
           "id_products": null, //sorvete não tem id por enquanto..
           "id_command": comandaNumber,
@@ -89,12 +101,11 @@ export default function CommandModal() {
         }
         await axios.post(`http://localhost:5000/createItemCommand`, iceData);
       }
-     const response = await axios.post(`http://localhost:5000/cadastroCommand`, commandData);
-     //chamar toast
-     toast.success(response.data, {
-      position: "bottom-left",
-      duration: 5000,
-    });
+      //chamar toast
+      toast.success(response.data, {
+        position: "bottom-left",
+        duration: 5000,
+      });
 
       handleClose();
 

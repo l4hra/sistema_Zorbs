@@ -2,14 +2,16 @@ import conexao from "../../conexao.js";
 
 // Função para cadastrar produtos
 export async function createCommand(command) {
-  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, incompleted)
-    VALUES (?,?,?,?,?)`;
+  const sql = `INSERT INTO commands (name, date_opening, totalPrice, payment, completed, incompleted, canceled)
+    VALUES (?,?,?,?,?,?,?)`;
   const params = [
     command.name,
     command.date_opening,
     command.totalPrice,
     command.payment,
+    command.completed,
     command.incompleted,
+    command.canceled,
   ];
 
   try {
@@ -28,6 +30,16 @@ export async function getAllCommands(req, res) {
 
   try {
     const [rows] = await conexao.query("SELECT * FROM commands");
+    res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao buscar comandas", error });
+  }
+}
+
+export async function getCommands(id, res) {
+  try {
+    const [rows] = await conexao.query("SELECT * FROM commands WHERE Id = ?", id);
     res.status(200).json(rows);
   } catch (error) {
     console.log(error);
