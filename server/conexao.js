@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise';
 const conexao = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: '154869',
     database: 'db_zorbs',
     waitForConnections: true,
     connectionLimit: 10,

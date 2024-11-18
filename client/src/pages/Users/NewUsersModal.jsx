@@ -18,7 +18,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
   const [type_of_acess, setTypeOfAccess] = useState("");
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
-  const [passaword, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [confirm_ps, setConfirmPs] = useState("");
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -28,7 +28,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
 
   const [errors, setErrors] = useState({
     name: false,
-    passaword: false,
+    password: false,
     confirm_ps: false,
     email: false,
     telefone: false,
@@ -39,21 +39,22 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
   const handleValidation = () => {
     let newErrors = {
       name: !name,
-      passaword: !passaword,
-      confirm_ps: !confirm_ps,
-      email: !email,
-      telefone: !telefone,
+      password: !password || !validatePassword(password),
+      confirm_ps: !confirm_ps || confirm_ps !== password,
+      email: !email || !validateEmail(email),
+      telefone: !telefone || telefone.length < 19, // Valida se telefone possui 19 caracteres
       type_of_acess: !type_of_acess,
       status: !status,
     };
     setErrors(newErrors);
-
+  
     // Verifica se há algum erro
     return !Object.values(newErrors).includes(true);
   };
 
   const createUser = async () => {
     if (!handleValidation()) {
+      Swal.fire("Erro!", "Verifique os campos obrigatórios.", "error");
       return;
     }
 
@@ -64,7 +65,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
       },
       body: JSON.stringify({
         name,
-        passaword,
+        password,
         confirm_ps,
         email,
         telefone,
@@ -77,7 +78,6 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
       Swal.fire("Criado com sucesso!", "Seu usuário foi adicionado.", "success");
       refreshUser(); // Atualiza a lista de produtos
       closeEvent();
-      location.reload(true);
     } else {
       Swal.fire("Erro!", "Não foi possível adicionar o usuário.", "error");
     }
@@ -124,36 +124,16 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
 
     // Valida a senha e atualiza os erros
     if (value === "" || validatePassword(value)) {
-      setErrors({ passaword: false });
+      setErrors({ password: false });
     } else {
-      setErrors({ passaword: true });
+      setErrors({ password: true });
     }
   };
-  function validatePassword(value, confirm_ps) {
-    // Verifica o comprimento da senha
-    if (senha.length < 8) {
-      return "A senha deve ter pelo menos 8 caracteres.";
-    }
-    // Verifica a presença de pelo menos uma letra maiúscula
-    if (!/[A-Z]/.test(value)) {
-      return "A senha deve conter pelo menos uma letra maiúscula.";
-    }
-    // Verifica a presença de pelo menos uma letra minúscula
-    if (!/[a-z]/.test(value)) {
-      return "A senha deve conter pelo menos uma letra minúscula.";
-    }
-    // Verifica a presença de pelo menos um número
-    if (!/[0-9]/.test(value)) {
-      return "A senha deve conter pelo menos um número.";
-    }
-    // Verifica a presença de pelo menos um símbolo especial
-    if (!/[^A-Za-z0-9]/.test(value)) {
-      return "A senha deve conter pelo menos um símbolo especial (ex.: !, @, #, etc.).";
-    }
-    if (passaword !== confirm_ps) {
-      return "As senhas não correspondem.";
-    }
-  }
+  const validatePassword = (value) => {
+    return (
+      value.length >= 8 
+    );
+  };
 
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -166,21 +146,41 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     event.preventDefault();
   };
 
-  const formatPhone = (value) => {
-    // Remove tudo que não é número
-    value = value.replace(/\D/g, "");
+  // const formatPhone = (value) => {
+  //   // Remove tudo que não é número
+  //   value = value.replace(/\D/g, "");
 
-    // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
-    return value
+  //   // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
+  //   return value
+  //     .replace(/^(\d{2})(\d)/g, "+$1 $2") // Adiciona o código do país
+  //     .replace(/(\d{2})(\d)/, "($1) $2") // Adiciona o DDD entre parênteses
+  //     .replace(/(\d{5})(\d)/, "$1-$2"); // Adiciona o hífen no meio do número
+  // };
+
+  // const handleChangePhone = (e) => {
+  //   const formattedPhone = formatPhone(e.target.value);
+  //   setTelefone(formattedPhone);
+  //   const { value } = event.target;
+  //   const numericValue = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+  //   if (numericValue.length <= 12) {
+  //     setTelefone(numericValue); // Atualiza apenas se tiver até 13 números
+  //   }
+  // };
+// Formatação de telefone
+const formatPhone = (value) => {
+  value = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+  return value
       .replace(/^(\d{2})(\d)/g, "+$1 $2") // Adiciona o código do país
       .replace(/(\d{2})(\d)/, "($1) $2") // Adiciona o DDD entre parênteses
       .replace(/(\d{5})(\d)/, "$1-$2"); // Adiciona o hífen no meio do número
-  };
+};
 
-  const handleChangePhone = (e) => {
-    const formattedPhone = formatPhone(e.target.value);
-    setTelefone(formattedPhone);
-  };
+const handleChangePhone = (e) => {
+  const formattedPhone = formatPhone(e.target.value);
+  setTelefone(formattedPhone);
+};
+
+
 
   return (
     <Modal
@@ -227,21 +227,6 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
           </IconButton>
         </Typography>
 
-        <TextField
-            required
-            margin="dense"
-            id="name"
-            name="name"
-            label="Nome do Usuário"
-            type="name"
-            fullWidth
-            variant="outlined"
-            error={errors.name}
-            helperText={errors.name && "Campo Obrigatório"}
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-        
         <div
           style={{
             display: "grid",
@@ -249,6 +234,20 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             gap: "0.9em",
           }}
         >
+          <div style={{ gridColumn: "1 / span 2" }}>
+            <TextField
+              required
+              label="Nome do Usuário"
+              variant="outlined"
+              size="small"
+              fullWidth
+              error={errors.name}
+              helperText={errors.name && "Campo obrigatório"}
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              inputProps={{ maxLength: 50 }} // Limite de 50 caracteres para o nome
+            />
+          </div>
           <TextField
             required
             margin="dense"
@@ -258,10 +257,11 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             type={showPassword ? "text" : "password"}
             fullWidth
             variant="outlined"
-            error={errors.passaword}
-            helperText={errors.passaword && "Campo Obrigatório"}
+            error={errors.password}
+            helperText={errors.password && "Use 8 caracteres ou mais para sua senha"}
             onChange={handlePasswordChange}
-            value={passaword}
+            value={password}
+            inputProps={{ maxLength: 15 }} // Limite de 15 caracteres para a senha
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -287,9 +287,10 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             fullWidth
             variant="outlined"
             error={errors.confirm_ps}
-            helperText={errors.confirm_ps && "Campo Obrigatório"}
+            helperText={errors.confirm_ps && "As senhas não são iguais. Tente novamente."}
             onChange={(e) => setConfirmPs(e.target.value)}
             value={confirm_ps}
+            inputProps={{ maxLength: 15 }} // Limite de 15 caracteres para a senha
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -319,6 +320,8 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             helperText={errors.email && "Campo Obrigatório"}
             onChange={handleEmailChange}
             value={email}
+            inputProps={{ maxLength: 40 }} // Limite de 50 caracteres para o email
+
           />
           <TextField
             required
@@ -327,13 +330,16 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
             name="telefone"
             label="Telefone"
             type="tel"
-            placeholder="(xx) xxxxx-xxxx"
+            placeholder="+xx (xx) xxxxx-xxxx"
             fullWidth
             variant="outlined"
             error={errors.telefone}
             helperText={errors.telefone && "Campo Obrigatório"}
             onChange={handleChangePhone}
             value={telefone}
+            inputProps={{
+              maxLength: 19,
+            }}
           />
 
           <TextField
