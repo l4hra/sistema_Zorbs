@@ -64,28 +64,25 @@ export async function getAllItemCommands(req, res) {
 }
 
 // Função para editar produtos
-export async function updateItemCommand(id, item) {
-  const sql = `UPDATE item_command SET id_products = ?, id_command = ?, qtd_products = ?, value_item = ?, und_medida = ?
-                 WHERE id = ?`;
-  const params = [
-    item.id_products,
-    item.id_command,
-    item.qtd_products,
-    item.value_item,
-    item.und_medida,
-    id,
-  ];
+export async function updateItemCommand(idCommand, item) {
+  await deleteItemCommandByIdCommand(idCommand);
+  return await createItemCommand(item);
+}
+
+export async function deleteItemCommandByIdCommand(idCommand) {
+  const sql = `DELETE FROM item_command WHERE id_command = ?`;
+  const params = idCommand;
 
   try {
     const [result] = await conexao.query(sql, params);
     if (result.affectedRows > 0) {
-      console.log("Item de comanda atualizado");
-      return [200, "Item de comanda atualizado com sucesso"];
+      console.log("Item de comanda deletado");
+      return [200, "Item de comanda deletado com sucesso"];
     } else {
-      return [404, "Item de comanda não encontrada"];
+      return [404, "Comanda não encontrada"];
     }
   } catch (error) {
     console.log(error);
-    return [500, "Erro ao atualizar a Item de comanda"];
+    return [500, error];
   }
 }

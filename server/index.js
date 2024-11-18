@@ -1,6 +1,7 @@
 import {
   cadastroCommand,
   atualizaCommand,
+  editarCommand,
 } from "./src/controllers/CommandController.js";
 import { getCompanies } from "./src/models/CompaniesModel.js";
 import {
@@ -46,11 +47,12 @@ app.use(
 );
 app.use(express.json());
 
-
 app.post("/cadastroCommand", cadastroCommand);
 app.get("/commands", getAllCommands);
 app.get("/commandsFilter", getFilterCommands);
 app.put("/commands/:id", atualizaCommand);
+app.put("/commandEdit/:id", editarCommand);
+
 // app.delete("/products/:id", updateCommand);
 
 app.post("/createItemCommand", criarItemCommand);

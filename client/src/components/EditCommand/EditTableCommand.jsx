@@ -11,9 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function TableComponent({ items, handleQuantityChange, total }) {
-  // const [items, setItems] = useState(itemsData);
-
+export default function TableComponent({
+  allSelectedProducts,
+  handleQuantityChange,
+  total,
+}) {
   return (
     <TableContainer>
       <Table>
@@ -28,18 +30,17 @@ export default function TableComponent({ items, handleQuantityChange, total }) {
                 component="div"
                 style={{ color: "#fff", fontWeight: "bold" }}
               >
-                Items
+                Itens
               </Typography>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {items &&
-            items.map((item) => (
+          {allSelectedProducts &&
+            allSelectedProducts.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  {item.name}
-                  {/* {item.name} | R${item.preco_venda ?? item.price} */}
+                  {item.name} | R${item.preco_venda ?? item.price}
                 </TableCell>
                 {!item.weight ? (
                   <TableCell align="right">
@@ -55,9 +56,7 @@ export default function TableComponent({ items, handleQuantityChange, total }) {
                     >
                       -
                     </Button>
-                    <span style={{ margin: "0 10px" }}>
-                      {item.qtd_products}
-                    </span>
+                    <span style={{ margin: "0 10px" }}>{item.quantity}</span>
                     <Button
                       variant="outlined"
                       size="small"

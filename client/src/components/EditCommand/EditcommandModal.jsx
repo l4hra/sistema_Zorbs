@@ -13,30 +13,39 @@ import IconButton from "@mui/material/IconButton";
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
-export default function CommandModal({
-  id,
-  items,
-  totalPrice,
-  qtdProduct,
-}) {
+export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
-  const [comandaNumber, setComandaNumber] = useState(0);
   const [listItems, setListItems] = useState([]);
   const handleOpen = () => {
     setOpen(true);
   };
 
-  // Listar Produtos
+  useEffect(() => {
+    // Filtra bebidas e sorvetes da lista inicial
+    const initialBeverages = items.filter((item) => !item.weight); // Bebidas
+    const initialIceCreams = items.filter((item) => item.weight); // Sorvetes
+
+    // Define o estado inicial
+    setSelectedBeverages(
+      initialBeverages.map((item) => ({
+        ...item,
+        quantity: item.qtd_products || item.quantity || 1,
+      }))
+    );
+
+    setIceCreams(
+      initialIceCreams.map((item) => ({
+        ...item,
+        weight: item.qtd_products || item.weight || 1,
+      }))
+    );
+  }, [items]);
+
   const fetchProducts = async (categoria) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/products`
-        // {
-        //   params: { categoria },  // Passa a categoria como parâmetro
-        // }
-      );
+      const response = await axios.get(`http://localhost:5000/products`);
       if (response.status === 200) {
         setListItems(response.data); // Atualiza o estado com os produtos recebidos
       }
@@ -45,65 +54,42 @@ export default function CommandModal({
     }
   };
 
-  // Listar Comandas
-  const fetchCommands = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5000/commands`);
-      if (response.status === 200) {
-        setComandaNumber(response.data.at(-1).id);
-      }
-    } catch (error) {
-      console.error("Erro ao buscar comandas:", error);
-    }
-  };
-
-  // Criar Comanda
-  const fetchCommand = async () => {
-    try {
-      const commandData = {
-        date_opening: new Date(),
-        totalPrice: total,
-        payment: "Cartão de Crédito",
-        incompleted: 1,
-      };
-      const response = await axios.post(
-        "http://localhost:5000/cadastroCommand",
-        commandData
-      );
-      for (const product of selectedBeverages) {
-        const productData = {
-          id_products: product.id,
-          id_command: comandaNumber + 1,
-          name: null,
-          qtd_products: product.quantity,
-          value_item: product.preco_venda,
-          und_medida: "unidade",
-        };
-        await axios.post(
-          "http://localhost:5000/createItemCommand",
-          productData
-        );
-      }
-      for (const ice of iceCreams) {
-        const iceData = {
-          id_products: null, //sorvete não tem id por enquanto..
-          id_command: comandaNumber + 1,
-          name: ice.name,
-          qtd_products: ice.weight,
-          value_item: ice.price,
-          und_medida: "kg",
-        };
-        await axios.post("http://localhost:5000/createItemCommand", iceData);
-      }
-      //chamar toast
-      toast.success(response.data, {
+  const fetchUpdateCommand = async () => {
+    if (selectedBeverages.length === 0 && iceCreams.length === 0) {
+      toast.error("A comanda não pode ser atualizada vazia.", {
         position: "bottom-left",
         duration: 5000,
       });
+      return;
+    }
 
-      handleClose();
+    try {
+      const commandData = [...selectedBeverages, ...iceCreams].map((item) => {
+        const isIceCream = item.hasOwnProperty("weight");
+
+        return {
+          id_products: item.id || null,
+          id_command: id,
+          name: item.name || null,
+          qtd_products: isIceCream ? ice.weight : product.quantity,
+          value_item: (item.preco_venda || item.price || "0.00").toString(),
+          und_medida: item.und_medida || (isIceCream ? "kg" : "unidade"),
+        };
+      });
+
+      await axios.put(`http://localhost:5000/itemCommands`, {
+        items: commandData,
+      });
+      toast.success("Comanda atualizada com sucesso!", {
+        position: "bottom-left",
+        duration: 5000,
+      });
     } catch (error) {
-      console.error("Erro ao criar a comanda:", error);
+      console.error("Erro ao atualizar a comanda:", error);
+      toast.error("Erro ao atualizar a comanda.", {
+        position: "bottom-left",
+        duration: 5000,
+      });
     }
   };
 
@@ -112,19 +98,26 @@ export default function CommandModal({
   };
 
   const handleBeveragesChange = (event, value) => {
-    setSelectedBeverages(
-      value.map((item) => {
-        return { ...item, quantity: 1 };
-      })
+    const updatedBeverages = value.map((item) => ({
+      ...item,
+      quantity: item?.quantity ?? 1,
+    }));
+    setSelectedBeverages(updatedBeverages);
+  };
+  const handleIceCreamsChange = (event, value) => {
+    setIceCreams(
+      value.map((item) => ({
+        ...item,
+        weight: item?.weight ?? 1,
+      }))
     );
   };
-
-  const handleIceCreamsChange = (event, value) => setIceCreams(value);
+  const allSelectedProducts = [...selectedBeverages, ...iceCreams];
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedBeverages([]);
-    setIceCreams([]);
+    // setSelectedBeverages([]);
+    // setIceCreams([]);
     // setAcai([]);
   };
 
@@ -133,10 +126,7 @@ export default function CommandModal({
       //se estiver adicionando
       const newItems = list.map((item) => {
         if (item.id === id) {
-          return {
-            ...item,
-            qtdProduct: item.qtdProduct ? item.qtdProduct + 1 : 1,
-          };
+          return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 };
         }
         return item;
       });
@@ -145,39 +135,34 @@ export default function CommandModal({
       //se estiver removendo
       const newItems = list.map((item) => {
         if (item.id === id) {
-          return {
-            ...item,
-            qtdProduct: item.qtdProduct ? item.qtdProduct - 1 : 0,
-          };
+          return { ...item, quantity: item.quantity ? item.quantity - 1 : 0 };
         }
         return item;
       });
-      return newItems.filter((item) => item.qtdProduct > 0);
+      return newItems.filter((item) => item.quantity > 0);
     }
   };
-
   const handleQuantityChange = (id, operator) => {
-    if (operator === "+") {
-      const newItems = handleQuantity(id, items, operator);
-      setSelectedBeverages(
-        newItems.filter((item) => !item.hasOwnProperty("weight"))
-      );
-      setIceCreams(newItems.filter((item) => item.hasOwnProperty("weight")));
-    } else if (operator === "-") {
-      const newItems = handleQuantity(id, items, operator);
-      setSelectedBeverages(
-        newItems.filter((item) => !item.hasOwnProperty("weight"))
-      );
-      setIceCreams(newItems.filter((item) => item.hasOwnProperty("weight")));
-    }
+    const updatedItems = handleQuantity(id, allSelectedProducts, operator);
+    const updatedBeverages = updatedItems.filter(
+      (item) => !item.hasOwnProperty("weight")
+    );
+    const updatedIceCreams = updatedItems.filter((item) =>
+      item.hasOwnProperty("weight")
+    );
+
+    setSelectedBeverages(updatedBeverages);
+    setIceCreams(updatedIceCreams);
   };
 
-  const total = (totalPrice ?? 0) * (qtdProduct ?? 1);
+  const total = allSelectedProducts.reduce(
+    (acc, item) =>
+      acc + (item.preco_venda ?? item.price) * (item?.quantity ?? 1),
+    0
+  );
 
-  // Chama a função de busca ao carregar o componente (quando a categoria for '?')
   useEffect(() => {
-    fetchProducts(); // Passa a categoria "?" para buscar os produtos
-    fetchCommands();
+    fetchProducts();
   }, []);
 
   return (
@@ -223,7 +208,7 @@ export default function CommandModal({
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            Pedido N°0{id}
+            Pedido N°00{id}
           </Typography>
           <Box height={10} />
           <Divider />
@@ -232,12 +217,14 @@ export default function CommandModal({
             multiple
             sx={{ width: "100%" }}
             id="tags-outlined"
-            options={listItems} // Lista completa de produtos
+            options={listItems.filter(
+              (item) => !selectedBeverages.some((e) => e.id === item.id)
+            )}
             getOptionLabel={(option) => option.name}
             filterSelectedOptions
             onChange={handleBeveragesChange}
             renderInput={(params) => <TextField {...params} label="Produtos" />}
-            value={items}
+            value={selectedBeverages}
           />
 
           <div
@@ -278,11 +265,10 @@ export default function CommandModal({
           </div>
 
           <TableComponent
-            items={items}
+            allSelectedProducts={[...selectedBeverages, ...iceCreams]}
             handleQuantityChange={handleQuantityChange}
             total={total}
           />
-
           <div
             className="buttons"
             style={{
@@ -298,7 +284,7 @@ export default function CommandModal({
                 color: "#fff",
                 width: "15%",
               }}
-              onClick={fetchCommand}
+              onClick={fetchUpdateCommand}
             >
               Editar
             </Button>

@@ -80,6 +80,7 @@ export async function getAllCommands(req, res) {
 export async function getFilterCommands(req, res) {
   const dateQuery = req.query["date"];
   try {
+    // Consulta para obter as comandas detalhadas, agora com `DATETIME`
     const [rows] = await conexao.query(
       `
       SELECT 
@@ -88,14 +89,31 @@ export async function getFilterCommands(req, res) {
         totalPrice,
         payment,
         completed,
-        incompleted,
         canceled
       FROM db_zorbs.commands
-      WHERE DATE(date_opening) = ?
+      WHERE DATE(date_opening) = ?  -- Use DATE() para extrair a data
     `,
       [dateQuery]
     );
-    res.status(200).json(rows);
+
+    // Consulta para contar as comandas 'complete', 'canceled' e somar o lucro separado
+    const [statusCount] = await conexao.query(
+      `
+      SELECT 
+        SUM(completed = 1) AS complete,
+        SUM(canceled = 1) AS canceled,
+        SUM(CASE WHEN completed = 1 THEN totalPrice ELSE 0 END) AS completeProfit,
+        SUM(CASE WHEN canceled = 1 THEN totalPrice ELSE 0 END) AS canceledProfit
+      FROM db_zorbs.commands
+      WHERE DATE(date_opening) = ?  
+    `,
+      [dateQuery]
+    );
+
+    res.status(200).json({
+      rows, // Dados das comandas
+      statusCount: statusCount[0], // Contagem, lucro das comandas 'completed' e 'canceled'
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Erro ao buscar comandas", error });
@@ -130,3 +148,52 @@ export async function updateCommand(id, command) {
     return [500, "Erro ao atualizar a comanda"];
   }
 }
+
+// export async function editCommand(id, command) {
+//   const sqlUpdateCommand = `
+//     UPDATE commands
+//     SET date_opening = ?, totalPrice = ?, payment = ?, incompleted = ?, completed = ?, canceled = ?
+//     WHERE id = ?
+//   `;
+//   const commandParams = [
+//     command.date_opening,
+//     command.totalPrice,
+//     command.payment,
+//     command.incompleted,
+//     command.completed,
+//     command.canceled,
+//     command.id,
+//   ];
+
+//   try {
+//     // Atualiza dados da comanda
+//     await conexao.query(sqlUpdateCommand, commandParams);
+
+//     // Deletar itens antigos da comanda para evitar duplicação
+//     const sqlDeleteItems = `DELETE FROM item_command WHERE id_command = ?`;
+//     await conexao.query(sqlDeleteItems, [command.id]);
+
+//     // Inserir produtos atualizados na comanda
+//     for (const product of command.items) {
+//       const productData = [
+//         product.id,
+//         command.id,
+//         product.name,
+//         product.qtd_products,
+//         product.value_item,
+//         product.und_medida,
+//       ];
+
+//       const sqlInsertItem = `
+//         INSERT INTO item_command (id_products, id_command, name, qtd_products, value_item, und_medida)
+//         VALUES (?, ?, ?, ?, ?, ?)
+//       `;
+//       await conexao.query(sqlInsertItem, productData);
+//     }
+
+//     return [200, { message: "Comanda atualizada com sucesso!" }];
+//   } catch (error) {
+//     console.log("Erro ao atualizar a comanda:", error);
+//     return [500, { message: "Erro ao atualizar a comanda", error }];
+//   }
+// }

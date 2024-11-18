@@ -15,8 +15,8 @@ export default function TableDashboard({ selectedDate }) {
       const response = await fetch(
         `http://localhost:5000/commandsFilter?date=${selectedDate}`
       );
-      const data = await response.json();
-      setRows(data);
+      const { rows } = await response.json();
+      setRows(rows);
     } catch (error) {
       console.error("Erro ao buscar comandas:", error);
     }
@@ -27,11 +27,13 @@ export default function TableDashboard({ selectedDate }) {
   }, [selectedDate]);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
     {
       field: "name",
       headerName: "Nome comanda",
       width: 150,
+      renderCell: (params) => {
+        return <span>{`Pedido N°00${params.row?.id || ""}`}</span>;
+      },
     },
     {
       field: "totalPrice",

@@ -93,7 +93,10 @@ export default function CommandModal({ updateBoard }) {
 
       handleClose();
     } catch (error) {
-      console.error("Erro ao criar a comanda:", error);
+      toast.error("Erro ao criar a comanda", {
+        position: "bottom-left",
+        duration: 5000,
+      });
     }
   };
 
@@ -112,6 +115,7 @@ export default function CommandModal({ updateBoard }) {
   const handleIceCreamsChange = (event, value) => setIceCreams(value);
 
   const allSelectedProducts = [...selectedBeverages, ...iceCreams];
+
   const handleClose = () => {
     setOpen(false);
     setSelectedBeverages([]);

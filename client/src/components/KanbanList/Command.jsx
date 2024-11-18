@@ -52,12 +52,14 @@ function NotaFiscalButton({ task }) {
 export default function Command({ task, index }) {
   const formatTime = (datetime) => {
     const date = new Date(datetime);
-    return date.toLocaleTimeString("pt-BR", {
+    const timeFormatter = new Intl.DateTimeFormat("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "America/Sao_Paulo",
     });
-  };
 
+    return timeFormatter.format(date);
+  };
   return (
     <>
       <Draggable
