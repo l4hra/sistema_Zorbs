@@ -47,7 +47,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
       status: !status,
     };
     setErrors(newErrors);
-  
+
     // Verifica se há algum erro
     return !Object.values(newErrors).includes(true);
   };
@@ -75,7 +75,11 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     });
 
     if (response.ok) {
-      Swal.fire("Criado com sucesso!", "Seu usuário foi adicionado.", "success");
+      Swal.fire(
+        "Criado com sucesso!",
+        "Seu usuário foi adicionado.",
+        "success"
+      );
       refreshUser(); // Atualiza a lista de produtos
       closeEvent();
     } else {
@@ -130,9 +134,7 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     }
   };
   const validatePassword = (value) => {
-    return (
-      value.length >= 8 
-    );
+    return value.length >= 8;
   };
 
   const handleClickShowPassword = () => {
@@ -166,21 +168,19 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
   //     setTelefone(numericValue); // Atualiza apenas se tiver até 13 números
   //   }
   // };
-// Formatação de telefone
-const formatPhone = (value) => {
-  value = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
-  return value
+  // Formatação de telefone
+  const formatPhone = (value) => {
+    value = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+    return value
       .replace(/^(\d{2})(\d)/g, "+$1 $2") // Adiciona o código do país
       .replace(/(\d{2})(\d)/, "($1) $2") // Adiciona o DDD entre parênteses
       .replace(/(\d{5})(\d)/, "$1-$2"); // Adiciona o hífen no meio do número
-};
+  };
 
-const handleChangePhone = (e) => {
-  const formattedPhone = formatPhone(e.target.value);
-  setTelefone(formattedPhone);
-};
-
-
+  const handleChangePhone = (e) => {
+    const formattedPhone = formatPhone(e.target.value);
+    setTelefone(formattedPhone);
+  };
 
   return (
     <Modal
@@ -201,9 +201,6 @@ const handleChangePhone = (e) => {
           transform: "translate(-50%, -50%)",
           width: 1100,
           bgcolor: "background.paper",
-          borderRadius: "5px",
-          boxShadow: 20,
-          p: 4,
           overflowY: "auto",
           outline: "none",
           boxShadow: 20,
@@ -258,7 +255,9 @@ const handleChangePhone = (e) => {
             fullWidth
             variant="outlined"
             error={errors.password}
-            helperText={errors.password && "Use 8 caracteres ou mais para sua senha"}
+            helperText={
+              errors.password && "Use 8 caracteres ou mais para sua senha"
+            }
             onChange={handlePasswordChange}
             value={password}
             inputProps={{ maxLength: 15 }} // Limite de 15 caracteres para a senha
@@ -287,7 +286,9 @@ const handleChangePhone = (e) => {
             fullWidth
             variant="outlined"
             error={errors.confirm_ps}
-            helperText={errors.confirm_ps && "As senhas não são iguais. Tente novamente."}
+            helperText={
+              errors.confirm_ps && "As senhas não são iguais. Tente novamente."
+            }
             onChange={(e) => setConfirmPs(e.target.value)}
             value={confirm_ps}
             inputProps={{ maxLength: 15 }} // Limite de 15 caracteres para a senha
@@ -321,7 +322,6 @@ const handleChangePhone = (e) => {
             onChange={handleEmailChange}
             value={email}
             inputProps={{ maxLength: 40 }} // Limite de 50 caracteres para o email
-
           />
           <TextField
             required

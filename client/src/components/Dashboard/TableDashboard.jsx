@@ -2,90 +2,57 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
+import { useState } from "react";
+import { useEffect } from "react";
 
-export default function TableDashboard() {
+export default function TableDashboard({ selectedDate }) {
+  const [rows, setRows] = useState([]);
+  // const nameCommand = "Pedido"
+
+  const getCommands = async () => {
+    if (!selectedDate) return;
+    try {
+      const response = await fetch(
+        `http://localhost:5000/commandsFilter?date=${selectedDate}`
+      );
+      const { rows } = await response.json();
+      setRows(rows);
+    } catch (error) {
+      console.error("Erro ao buscar comandas:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCommands();
+  }, [selectedDate]);
+
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
     {
-      field: "firstName",
-      headerName: "Período",
-      width: 250,
-      editable: true,
+      field: "name",
+      headerName: "Nome comanda",
+      width: 150,
+      renderCell: (params) => {
+        return <span>{`Pedido N°00${params.row?.id || ""}`}</span>;
+      },
     },
     {
-      field: "lastName",
-      headerName: "Nome",
-      width: 250,
-      editable: true,
+      field: "totalPrice",
+      headerName: "Total",
+      width: 150,
     },
     {
-      field: "age",
-      headerName: "Total comanda:",
+      field: "payment",
+      headerName: "Forma de pagamento",
 
       width: 250,
-      editable: true,
     },
     {
-      field: "status",
-      headerName: "Status:",
+      field: "oi",
+      headerName: "Status",
 
-      width: 250,
-      editable: true,
+      width: 160,
     },
   ];
-
-  const rows = [
-    {
-      id: 1,
-      lastName: "Comanda#005",
-      firstName: "05/10",
-      age: "R$10,60",
-      status: "Cancelada",
-    },
-    {
-      id: 2,
-      lastName: "Comanda#005",
-      firstName: "10/10",
-      age: "R$355,06",
-      status: "Finalizada",
-    },
-    {
-      id: 3,
-      lastName: "Comanda#005",
-      firstName: "15/10",
-      age: "R$85,00",
-      status: "Cancelada",
-    },
-    {
-      id: 4,
-      lastName: "Comanda#005",
-      firstName: "19/10",
-      age: "R$45,66",
-      status: "Finalizada",
-    },
-    {
-      id: 5,
-      lastName: "Comanda#005",
-      firstName: "20/10",
-      age: "R$15,66",
-      status: "Finalizada",
-    },
-    {
-      id: 6,
-      lastName: "Comanda#005",
-      firstName: "25/10",
-      age: "R$15,66",
-      status: "Finalizada",
-    },
-    {
-      id: 7,
-      lastName: "Comanda#005",
-      firstName: "30/10",
-      age: "R$71,66",
-      status: "Finalizada",
-    },
-  ];
-
   return (
     <>
       <Box sx={{ height: 400, width: "85%" }}>
@@ -95,11 +62,11 @@ export default function TableDashboard() {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 10,
               },
             },
           }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[25]}
           checkboxSelection
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           disableRowSelectionOnClick

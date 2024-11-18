@@ -5,135 +5,158 @@ import AlarmIcon from "@mui/icons-material/Alarm";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import ModalPagamento from "./CommandPaga";
+import toast from "react-hot-toast";
+
+import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
+import dayjs from "dayjs";
+import CommandModal from "../CreateCommand/CommandModal";
 
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
-  const [backlog, setBacklog] = useState([]);
+  const [canceled, setcanceled] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [commands, setCommands] = useState([]);
 
   const handleClose = () => {
     setOpenDialog(false);
   };
 
-  useEffect(() => {
-    const sorvetes = [
-      {
-        id: 1,
-        title: "Pedido 1",
-        hora: "14:00",
-        produtos: ["Casquinha", "Sundae", "Milkshake"],
-        totalPrice: "15,99",
-        completed: true,
-      },
-      {
-        id: 2,
-        title: "Pedido 2",
-        hora: "14:30",
-        produtos: ["Casquinha", "Açaí", "Milkshake"],
-        totalPrice: "30,00",
-        completed: false,
-      },
-      {
-        id: 3,
-        title: "Pedido 3",
-        hora: "15:00",
-        produtos: ["Sorvete de Copo", "Sundae", "Sorvete de Palito"],
-        totalPrice: "58,99",
-        completed: true,
-      },
-      {
-        id: 4,
-        title: "Pedido 4",
-        hora: "15:30",
-        produtos: ["Casquinha", "Sorvete de Palito", "Milkshake"],
-        totalPrice: "32,60",
-        completed: false,
-      },
-      {
-        id: 5,
-        title: "Pedido 5",
-        hora: "16:00",
-        produtos: ["Sorvete de Copo", "Açaí", "Sundae"],
-        totalPrice: "10,15",
-        completed: true,
-      },
-      {
-        id: 6,
-        title: "Pedido 6",
-        hora: "16:30",
-        produtos: ["Casquinha", "Açaí", "Sorvete de Palito"],
-        totalPrice: "47,50",
-        completed: false,
-      },
-    ];
+  async function carregaComanda() {
+    try {
+      const response = await fetch(`http://localhost:5000/commands`);
+      const data = await response.json();
+      const grouped = data.reduce((acc, item) => {
+        const { id_command } = item;
 
-    setCompleted(sorvetes.filter((pedido) => pedido.completed));
-    setIncomplete(sorvetes.filter((pedido) => !pedido.completed));
+        if (!acc[id_command]) {
+          acc[id_command] = {
+            id_command: id_command,
+            date_opening: item.date_opening,
+            totalPrice: item.totalPrice,
+            payment: item.payment,
+            completed: item.completed,
+            incompleted: item.incompleted,
+            canceled: item.canceled,
+            items: [],
+          };
+        }
+
+        acc[id_command].items.push({
+          item_command_id: item.item_command_id,
+          name: item?.product_name ?? item.item_name,
+          qtd_products: item.qtd_products,
+          und_medida: item.und_medida,
+        });
+
+        return acc;
+      }, {});
+
+      const result = Object.values(grouped);
+      setCommands(result);
+    } catch (error) {
+      console.error("Erro ao buscar as comandas:", error);
+    }
+  }
+  useEffect(() => {
+    carregaComanda();
   }, []);
+
+  useEffect(() => {
+    setCompleted(commands.filter((pedido) => pedido.completed));
+    setIncomplete(commands.filter((pedido) => pedido.incompleted));
+    setcanceled(commands.filter((pedido) => pedido.canceled));
+  }, [commands]);
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
 
-    if (
-      !destination ||
-      !source ||
-      source.droppableId === destination.droppableId
-    )
+    if (!destination || source.droppableId === destination.droppableId) {
       return;
-    if (destination.droppableId === "2") {
-      setOpenDialog(true);
     }
-
-    deletePreviousState(source.droppableId, draggableId);
 
     const task = findItemById(draggableId, [
       ...incomplete,
       ...completed,
-      ...backlog,
+      ...canceled,
     ]);
 
-    setNewState(destination.droppableId, task);
-  };
+    let updatedIncomplete = [...incomplete];
+    let updatedCompleted = [...completed];
+    let updatedCanceled = [...canceled];
 
-  function deletePreviousState(sourceDroppableId, taskId) {
-    switch (sourceDroppableId) {
+    if (task.completed) {
+      updatedCompleted = removeItemById(task.id_command, updatedCompleted);
+    } else if (task.incompleted) {
+      updatedIncomplete = removeItemById(task.id_command, updatedIncomplete);
+    } else if (task.canceled) {
+      updatedCanceled = removeItemById(task.id_command, updatedCanceled);
+    }
+
+    let status;
+    switch (destination.droppableId) {
       case "1":
-        setIncomplete(removeItemById(taskId, incomplete));
+        status = "incomplete";
+        updatedIncomplete.push(task);
         break;
       case "2":
-        setCompleted(removeItemById(taskId, completed));
+        status = "completed";
+        updatedCompleted.push(task);
         break;
       case "3":
-        setBacklog(removeItemById(taskId, backlog));
+        status = "canceled";
+        updatedCanceled.push(task);
         break;
+      default:
+        return;
     }
-  }
-  function setNewState(destinationDroppableId, task) {
-    let updatedTask;
-    switch (destinationDroppableId) {
-      case "1": // TO DO
-        updatedTask = { ...task, completed: false };
-        setIncomplete([updatedTask, ...incomplete]);
-        break;
-      case "2": // DONE
-        updatedTask = { ...task, completed: true };
-        setCompleted([updatedTask, ...completed]);
-        break;
 
-      case "3": // BACKLOG
-        updatedTask = { ...task, completed: false };
-        setBacklog([updatedTask, ...backlog]);
-        break;
-    }
-  }
+    updateCommandStatus(task.id_command, status);
+    setIncomplete(updatedIncomplete);
+    setCompleted(updatedCompleted);
+    setcanceled(updatedCanceled);
+  };
+
   function findItemById(id, array) {
-    return array.find((item) => item.id == id);
+    return array.find((item) => item.id_command == id);
   }
 
   function removeItemById(id, array) {
-    return array.filter((item) => item.id != id);
+    return array.filter((item) => item.id_command != id);
   }
+
+  async function updateCommandStatus(id, status) {
+    try {
+      const updatedCommand = {
+        completed: status === "completed",
+        incompleted: status === "incomplete",
+        canceled: status === "canceled",
+      };
+
+      const response = await fetch(`http://localhost:5000/commands/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedCommand),
+      });
+
+      if (response.ok) {
+        toast.success("Comanda atualizada com sucesso!", {
+          position: "bottom-left",
+          duration: 5000,
+        });
+
+        carregaComanda();
+      } else {
+        console.error("Erro ao atualizar a comanda");
+      }
+    } catch (error) {
+      console.error("Erro na requisição PUT:", error);
+    }
+  }
+  dayjs.locale("pt-br");
 
   return (
     <>
@@ -163,13 +186,14 @@ export default function Kanban() {
           />
           <Columns
             title={"CANCELADO"}
-            tasks={backlog}
+            tasks={canceled}
             id={"3"}
             color={"#BA1D1D"}
             icon={<ClearIcon />}
           />
         </div>
         <ModalPagamento open={openDialog} handleClose={handleClose} />
+        {/* <CommandModal updateBoard={carregaComanda} /> */}
       </DragDropContext>
     </>
   );

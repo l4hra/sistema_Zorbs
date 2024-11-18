@@ -1,29 +1,37 @@
 import { Draggable } from "@hello-pangea/dnd";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import EditIcon from "@mui/icons-material/Edit";
-import EditCommand from "../EditCommand/EditCommand";
+import EditCommand from "../EditCommand/EditcommandModal";
 
-function NotaFiscalButton() {
+function NotaFiscalButton({ task }) {
+  // Função para gerar o conteúdo da nota fiscal
   const gerarConteudoNotaFiscal = () => {
+    // Gerando a lista de produtos dinamicamente
+    const listaDeProdutos = task.items
+      .map((item, index) => {
+        return `${item.qtd_products}}. ${item.name} -  ${item.und_medida}`;
+      })
+      .join("\n");
+
+    // Construindo o texto da nota fiscal
     const notaFiscal = `
-      Sorveteria Zorbs
-      ----------------------------------------
-      Produtos:
-      1. Sorvete de Chocolate - R$ 10,00
-      2. Milkshake de Morango - R$ 12,00
-      3. Sundae de Caramelo - R$ 8,50
-      
-      Total: R$ 30,50
-      Data: ${new Date().toLocaleDateString()} 
-      Hora: ${new Date().toLocaleTimeString()}
-      ----------------------------------------
-      Obrigado pela sua compra!
+       Sorveteria Zorbs   
+    
+    ----------------------------------------     
+      Produtos:  
+      ${listaDeProdutos}  
+    ----------------------------------------    
+       Total: R$ ${task.totalPrice ?? 0}
+       Data do cupom fiscal: ${new Date().toLocaleDateString()} as ${new Date().toLocaleTimeString()}         
+    ----------------------------------------    
+       Obrigado pela sua compra!     
     `;
+
     return notaFiscal;
   };
 
+  // Função para gerar e baixar o arquivo .txt
   const gerarTxtNotaFiscal = () => {
     const conteudo = gerarConteudoNotaFiscal();
     const blob = new Blob([conteudo], { type: "text/plain" });
@@ -33,19 +41,32 @@ function NotaFiscalButton() {
     link.click();
   };
 
+  // Botão para download da nota fiscal
   return (
-    <>
-      <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
-        <DownloadIcon />
-      </IconButton>
-    </>
+    <IconButton variant="contained" onClick={gerarTxtNotaFiscal}>
+      <DownloadIcon />
+    </IconButton>
   );
 }
 
 export default function Command({ task, index }) {
+  const formatTime = (datetime) => {
+    const date = new Date(datetime);
+    const timeFormatter = new Intl.DateTimeFormat("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "America/Sao_Paulo",
+    });
+
+    return timeFormatter.format(date);
+  };
   return (
     <>
-      <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
+      <Draggable
+        draggableId={`${task.id_command}`} // use apenas se id for único
+        key={task.id_command}
+        index={index}
+      >
         {(provided, snapshot) => (
           <div
             className="container"
@@ -68,7 +89,7 @@ export default function Command({ task, index }) {
                   justifyContent: "space-between",
                 }}
               >
-                <h3>#{task.title}</h3>
+                <h3>#Pedido N°00{task.id_command}</h3>
 
                 <div
                   style={{
@@ -78,10 +99,23 @@ export default function Command({ task, index }) {
                     gap: "5px",
                   }}
                 >
-                  {task.hora}
+                  {formatTime(task.date_opening)}
                   <AccessTimeIcon style={{ width: "1rem" }} />
                 </div>
               </span>
+              <h4>Total: R${task.totalPrice}</h4>
+
+              <h5>Forma de pagamento: {task.payment}</h5>
+              <h5>
+                Produtos:
+                {task.items.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      {item.name} ({item.qtd_products} {item.und_medida})
+                    </div>
+                  );
+                })}
+              </h5>
               <div
                 style={{
                   display: "flex",
@@ -89,13 +123,18 @@ export default function Command({ task, index }) {
                   alignItems: "center",
                 }}
               >
-                <p>{task.produtos.join(",")}</p>
-                <h4>Total: R${task.totalPrice}</h4>
+                {/* <p>{task.produtos.join(",")}</p> */}
               </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-                <NotaFiscalButton />
-                <EditCommand />
+                <NotaFiscalButton task={task} />
+                <EditCommand
+                  id={task.id_command}
+                  nameCommand={task.name}
+                  items={task.items}
+                  totalPrice={task.totalPrice}
+                  qtdProduct={task.qtd_products}
+                />
               </div>
             </div>
             {provided.placeholder}
