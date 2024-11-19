@@ -68,14 +68,6 @@ export default function Products() {
             </ErrorBoundary>
           )}
 
-          {/* Caso não haja produtos e não esteja carregando, exibir uma mensagem
-          {!loading && !error && products.length === 0 && (
-            
-            <Typography variant="body1" color="textSecondary" align='center'>
-              Nenhum produto encontrado.
-            </Typography>
-        
-          )} */}
         </Box>
       </Box>
     </div>

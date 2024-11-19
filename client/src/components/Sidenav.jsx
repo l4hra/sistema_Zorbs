@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -16,9 +15,7 @@ import BuildingIcon from "@mui/icons-material/DomainAddRounded";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../appStore";
 import casinha from "../../public/assets/casinha.svg";
-import dashboard from "../../public/assets/dashboard.svg";
 import loja from "../../public/assets/loja.svg";
-import config from "../../public/assets/config.svg";
 import carrinho from "../../public/assets/carrinho.svg";
 import users from "../../public/assets/adicionar-usuario.svg";
 
@@ -79,9 +76,8 @@ const Drawer = styled(MuiDrawer, {
   ],
 }));
 
-export default function Sidenav({ color }) {
+export default function Sidenav() {
   const theme = useTheme();
-  //const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const updateOpen = useAppStore((state) => state.updateOpen);
   const open = useAppStore((state) => state.dopen);
@@ -367,107 +363,6 @@ export default function Sidenav({ color }) {
               />
             </ListItemButton>
           </ListItem>
-          {/* <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Config");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <img src={config} height={25} />
-              </ListItemIcon>
-              <ListItemText
-                primary="Configuração"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem> */}
-          
-          {/* <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <RelatorioIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Slot 1"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem> */}
         </List>
       </Drawer>
     </Box>

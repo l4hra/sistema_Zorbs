@@ -10,18 +10,16 @@ import TableRow from "@mui/material/TableRow";
 import {
   Box,
   Button,
-  Divider,
   TextField,
   Typography,
   Dialog,
   Modal,
   Stack,
 } from "@mui/material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import NewUsersModal from "./NewUsersModal";
+import NewUsersModal from "../../components/CreateUser/NewUsersModal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
-import EditUsers from "./EditUsers";
+import EditUsers from "../../components/EditUser/EditUsers";
 import Swal from "sweetalert2";
 
 
@@ -33,26 +31,10 @@ const columns = [
   { id: "option", label: "Opções", minWidth: 170 },
 ];
 
-const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "80%", // Aumente para 80% da largura da tela
-  maxWidth: "800px", // Limite a largura máxima
-  bgcolor: "#ffffff",
-  borderRadius: "12px",
-  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-  p: 4,
-  outline: "none",
-  maxHeight: "90vh",
-  overflowY: "auto",
-};
-
 export default function UsersList() {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
@@ -81,14 +63,14 @@ export default function UsersList() {
     setRows(data);
   }
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setPage(0);
+  // };
 
   const deleteUser = async (id) => {
     const result = await Swal.fire({
@@ -244,7 +226,7 @@ export default function UsersList() {
           labelRowsPerPage="Linhas por página:"
           labelDisplayedRows={({ from, to, count }) =>
             `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`
-        }
+          }
         />
       </Paper>
     </>

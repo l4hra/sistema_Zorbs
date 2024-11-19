@@ -54,7 +54,6 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
 
   const createUser = async () => {
     if (!handleValidation()) {
-      Swal.fire("Erro!", "Verifique os campos obrigatórios.", "error");
       return;
     }
 
@@ -87,12 +86,12 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     }
   };
 
-  const handleChangeSetAccess = (event) => {
-    setAccess(event.target.value);
-  };
-  const handleChangeSetStatus = (event) => {
-    setStatus(event.target.value);
-  };
+  // const handleChangeSetAccess = (event) => {
+  //   setAccess(event.target.value);
+  // };
+  // const handleChangeSetStatus = (event) => {
+  //   setStatus(event.target.value);
+  // };
 
   const typeAcess = [
     { value: "Funcionário", label: "Funcionário" },
