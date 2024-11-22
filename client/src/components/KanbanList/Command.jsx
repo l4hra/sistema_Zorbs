@@ -60,6 +60,7 @@ export default function Command({ task, index }) {
 
     return timeFormatter.format(date);
   };
+
   return (
     <>
       <Draggable

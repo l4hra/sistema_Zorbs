@@ -15,7 +15,7 @@ export default function CommandModal({ updateBoard }) {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
-
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const [listItems, setListItems] = useState([]);
   const handleOpen = () => {
     setOpen(true);
@@ -38,6 +38,16 @@ export default function CommandModal({ updateBoard }) {
     }
   };
 
+  const dataHora = () => {
+    const data = new Date();
+    const dateCalender = dateCalender.to;
+    return data.toLocaleTimeString("pt-br", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
   // Criar Comanda
   const fetchCommand = async () => {
     if (selectedBeverages.length === 0 && iceCreams.length === 0) {
@@ -49,11 +59,19 @@ export default function CommandModal({ updateBoard }) {
       return;
     }
 
+    if (!selectedPayment) {
+      toast.error("Selecione uma forma de pagamento.", {
+        position: "bottom-left",
+        duration: 5000,
+      });
+      return;
+    }
+
     try {
       const commandData = {
         date_opening: new Date(),
         totalPrice: total,
-        payment: "Cartão de Crédito",
+        payment: selectedPayment.label,
         incompleted: 1,
       };
       const response = await axios.post(
@@ -104,6 +122,10 @@ export default function CommandModal({ updateBoard }) {
     setIceCreams((prevIceCreams) => [...prevIceCreams, data]);
   };
 
+  const handlePaymentChange = (event, value) => {
+    setSelectedPayment(value);
+  };
+
   const handleBeveragesChange = (event, value) => {
     setSelectedBeverages(
       value.map((item) => {
@@ -120,6 +142,8 @@ export default function CommandModal({ updateBoard }) {
     setOpen(false);
     setSelectedBeverages([]);
     setIceCreams([]);
+    setSelectedPayment(null);
+
     // setAcai([]);
   };
 
@@ -172,6 +196,29 @@ export default function CommandModal({ updateBoard }) {
     fetchProducts(); // Passa a categoria "?" para buscar os produtos
   }, []);
 
+  const payment = [
+    { id: "1", label: "Pix" },
+    {
+      id: "2",
+      label: "Dinheiro",
+    },
+    {
+      id: "3",
+      label: "Cartão de crédito",
+    },
+    {
+      id: "4",
+      label: "Cartão de débito",
+    },
+    {
+      id: "5",
+      label: "Cartão refeição",
+    },
+    {
+      id: "6",
+      label: "Cartão alimentação",
+    },
+  ];
   return (
     <>
       <div
@@ -254,18 +301,6 @@ export default function CommandModal({ updateBoard }) {
               marginBottom: "25px",
             }}
           >
-            {/* <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={listItemsFoods}
-              getOptionLabel={(option) => option.name}
-              filterSelectedOptions
-              onChange={handleFoodsChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Comidas" placeholder="Comidas" />
-              )}
-            /> */}
-
             <div
               className="sorvete"
               style={{ display: "flex", gap: "5px", alignItems: "center" }}
@@ -291,6 +326,16 @@ export default function CommandModal({ updateBoard }) {
 
               <IceCreamModal onDataChange={handleIceCreamDataChange} />
             </div>
+            <Autocomplete
+              disablePortal
+              options={payment}
+              getOptionLabel={(option) => option.label}
+              value={selectedPayment}
+              onChange={handlePaymentChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Forma de pagamento" />
+              )}
+            />
           </div>
 
           <TableComponent

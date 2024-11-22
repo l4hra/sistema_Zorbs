@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
+import LogoutIcon from "@mui/icons-material/LogoutOutlined";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +15,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useAppStore } from "../appStore";
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
 const AppBar = styled(
   MuiAppBar,
@@ -49,7 +50,7 @@ export default function Navbar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
-    navigate("/EditPerfil")
+    navigate("/EditPerfil");
     // setAnchorEl(event.currentTarget);
   };
 
@@ -122,6 +123,20 @@ export default function Navbar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton>
+        <p>Logout</p>
+      </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -170,9 +185,18 @@ export default function Navbar() {
               },
             }}
           >
-            <div>
-              <h2>{formatTime(time)}</h2>
-            </div> 
+            <div
+              style={{
+                backgroundColor: "gray",
+                padding: "5px",
+                borderRadius: "5px",
+                marginRight: "5px",
+              }}
+            >
+              <h2 style={{ fontFamily: "Electrolize", color: "#ffff" }}>
+                {formatTime(time)}
+              </h2>
+            </div>
 
             <IconButton
               size="large"
@@ -183,6 +207,7 @@ export default function Navbar() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+
             <IconButton
               size="large"
               edge="end"
@@ -193,6 +218,16 @@ export default function Navbar() {
               color="inherit"
             >
               <SettingsRoundedIcon />
+            </IconButton>
+
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <LogoutIcon />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
