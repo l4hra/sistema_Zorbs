@@ -15,7 +15,7 @@ const fetchUsers = async () => {
   setLoading(true);
   setError(null);
   try {
-    const response = await fetch('http://localhost:5000/user');
+    const response = await fetch('http://localhost:5000/users');
     if (!response.ok) {
       throw new Error("Erro ao buscar usuários");
     }
