@@ -10,6 +10,7 @@ export async function createCommand(command) {
     command.payment,
     command.incompleted,
   ];
+  console.log("batata", command);
   try {
     const [retorno] = await conexao.query(sql, params);
     return [
