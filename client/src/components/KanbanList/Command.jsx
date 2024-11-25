@@ -3,6 +3,9 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditCommand from "../EditCommand/EditcommandModal";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
 
 function NotaFiscalButton({ task }) {
   // Função para gerar o conteúdo da nota fiscal
@@ -51,15 +54,12 @@ function NotaFiscalButton({ task }) {
 
 export default function Command({ task, index }) {
   const formatTime = (datetime) => {
-    const date = new Date(datetime);
-    const timeFormatter = new Intl.DateTimeFormat("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "America/Sao_Paulo",
-    });
-
-    return timeFormatter.format(date);
+    return dayjs(datetime, "DD-MM-YYYY HH:mm:ss").format("HH:mm:ss");
   };
+  dayjs.extend(localizedFormat);
+
+  console.log('horaaa', task.date_opening)
+  console.log('task', task)
 
   return (
     <>

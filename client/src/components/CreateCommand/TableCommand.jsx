@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ export default function TableComponent({
   total,
 }) {
   return (
-    <TableContainer>
+    <TableContainer component={Paper} style={{ maxHeight: "300px" }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -35,7 +35,10 @@ export default function TableComponent({
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        {/* Corpo da tabela com rolagem */}
+        <TableBody
+        
+        >
           {allSelectedProducts &&
             allSelectedProducts.map((item) => (
               <TableRow key={item.id}>
@@ -77,6 +80,12 @@ export default function TableComponent({
                 )}
               </TableRow>
             ))}
+        </TableBody>
+      </Table>
+
+      
+      <Table>
+        <TableBody>
           <TableRow>
             <TableCell colSpan={1} align="right">
               <Typography variant="h6" component="div" align="left">

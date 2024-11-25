@@ -6,10 +6,10 @@ import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import ModalPagamento from "./CommandPaga";
 import toast from "react-hot-toast";
+import CommandModal from "../CreateCommand/CommandModal";
 
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
-import CommandModal from "../CreateCommand/CommandModal";
 
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);

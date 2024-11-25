@@ -10,7 +10,6 @@ export async function createCommand(command) {
     command.payment,
     command.incompleted,
   ];
-  console.log("batata", command);
   try {
     const [retorno] = await conexao.query(sql, params);
     return [
@@ -66,9 +65,8 @@ export async function getAllCommands(req, res) {
       db_zorbs.products.id AS product_id,
       db_zorbs.products.name AS product_name,
       db_zorbs.products.category AS product_category,
-      db_zorbs.products.observacao AS product_observacao,
-      db_zorbs.products.type AS product_type
-      FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
+      db_zorbs.products.observacao AS product_observacao
+    FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
     `
     );
     res.status(200).json(rows);

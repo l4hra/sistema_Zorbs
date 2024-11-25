@@ -40,13 +40,21 @@ export default function CommandModal({ updateBoard }) {
 
   const dataHora = () => {
     const data = new Date();
-    const dateCalender = dateCalender.to;
-    return data.toLocaleTimeString("pt-br", {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-    });
+      hour12: false, // Use 24-hour format
+    };
+    const formattedDate = data.toLocaleString("pt-BR", options);
+  
+    // Converte para o formato correto para o banco de dados (YYYY-MM-DD HH:mm:ss)
+    return formattedDate.replace(/\//g, "-").replace(",", "");
   };
+  
 
   // Criar Comanda
   const fetchCommand = async () => {
@@ -103,12 +111,14 @@ export default function CommandModal({ updateBoard }) {
         };
         await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
+
       //chamar toast
       toast.success(response.data.message, {
         position: "bottom-left",
         duration: 5000,
       });
 
+   
       handleClose();
     } catch (error) {
       toast.error("Erro ao criar a comanda", {
@@ -139,11 +149,11 @@ export default function CommandModal({ updateBoard }) {
   const allSelectedProducts = [...selectedBeverages, ...iceCreams];
 
   const handleClose = () => {
+    
     setOpen(false);
     setSelectedBeverages([]);
     setIceCreams([]);
     setSelectedPayment(null);
-
     // setAcai([]);
   };
 

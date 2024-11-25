@@ -51,7 +51,7 @@ app.post("/cadastroCommand", cadastroCommand);
 app.get("/commands", getAllCommands);
 app.get("/commandsFilter", getFilterCommands);
 app.put("/commands/:id", atualizaCommand);
-app.put("/commandEdit/:id", editarCommand);
+// app.put("/commandEdit/:id", editarCommand);
 
 // app.delete("/products/:id", updateCommand);
 
