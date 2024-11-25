@@ -26,7 +26,7 @@ export default function Dashboard({ title, color }) {
   const [canceledProfit, setCanceledProfit] = useState(0);
 
   const handleDateChange = (date) => {
-    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD"); // Formata a data para 'YYYY-MM-DD'
+    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD");
     setSelectedDate(formattedDate);
   };
 
@@ -78,7 +78,14 @@ export default function Dashboard({ title, color }) {
             >
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  label="Filtre as comandas"
+                  label="Data de Inicio"
+                  format="DD/MM/YYYY"
+                  value={selectedDate ? dayjs(selectedDate) : null}
+                  onChange={handleDateChange}
+                />
+
+                <DatePicker
+                  label="Date de término"
                   format="DD/MM/YYYY"
                   value={selectedDate ? dayjs(selectedDate) : null}
                   onChange={handleDateChange}

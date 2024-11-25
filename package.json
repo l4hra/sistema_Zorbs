@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "dayjs-plugin-utc": "^0.1.2",
     "react-input-mask": "^2.0.4"
   }
 }

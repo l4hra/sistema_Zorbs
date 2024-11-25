@@ -61,9 +61,7 @@ export default function Kanban() {
   }
   useEffect(() => {
     carregaComanda();
-  }, []);
 
-  useEffect(() => {
     setCompleted(commands.filter((pedido) => pedido.completed));
     setIncomplete(commands.filter((pedido) => pedido.incompleted));
     setcanceled(commands.filter((pedido) => pedido.canceled));
@@ -157,7 +155,7 @@ export default function Kanban() {
     }
   }
   dayjs.locale("pt-br");
-
+  console.log("alo", incomplete);
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -193,7 +191,7 @@ export default function Kanban() {
           />
         </div>
         <ModalPagamento open={openDialog} handleClose={handleClose} />
-        {/* <CommandModal updateBoard={carregaComanda} /> */}
+        <CommandModal updateBoard={carregaComanda} />
       </DragDropContext>
     </>
   );

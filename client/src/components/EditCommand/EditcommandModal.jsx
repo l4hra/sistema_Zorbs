@@ -23,11 +23,8 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
   };
 
   useEffect(() => {
-    // Filtra bebidas e sorvetes da lista inicial
     const initialBeverages = items.filter((item) => !item.weight); // Bebidas
     const initialIceCreams = items.filter((item) => item.weight); // Sorvetes
-
-    // Define o estado inicial
     setSelectedBeverages(
       initialBeverages.map((item) => ({
         ...item,
@@ -47,7 +44,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
     try {
       const response = await axios.get(`http://localhost:5000/products`);
       if (response.status === 200) {
-        setListItems(response.data); // Atualiza o estado com os produtos recebidos
+        setListItems(response.data);
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);

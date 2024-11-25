@@ -4,8 +4,8 @@ import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditCommand from "../EditCommand/EditcommandModal";
 import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 function NotaFiscalButton({ task }) {
   // Função para gerar o conteúdo da nota fiscal
@@ -52,14 +52,23 @@ function NotaFiscalButton({ task }) {
   );
 }
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 export default function Command({ task, index }) {
   const formatTime = (datetime) => {
-    return dayjs(datetime, "DD-MM-YYYY HH:mm:ss").format("HH:mm:ss");
-  };
-  dayjs.extend(localizedFormat);
+    try {
+      // Trate o horário como local (já no fuso de Brasília)
+      const localTime = dayjs(datetime).tz("America/Sao_Paulo").format("HH:mm");
 
-  console.log('horaaa', task.date_opening)
-  console.log('task', task)
+      console.log("Horário original (salvo no banco):", datetime);
+      console.log("Horário exibido (fuso Brasília):", localTime);
+      return localTime;
+    } catch (error) {
+      console.error("Erro ao formatar horário:", error);
+      return "Erro no horário";
+    }
+  };
 
   return (
     <>
