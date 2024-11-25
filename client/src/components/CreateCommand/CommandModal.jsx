@@ -40,7 +40,7 @@ export default function CommandModal({ updateBoard }) {
 
   const dataHora = () => {
     const data = new Date();
-    const dateCalender = dateCalender.to
+    const dateCalender = dateCalender.to;
     return data.toLocaleTimeString("pt-br", {
       hour: "2-digit",
       minute: "2-digit",
@@ -69,7 +69,7 @@ export default function CommandModal({ updateBoard }) {
 
     try {
       const commandData = {
-        date_opening: dataHora,
+        date_opening: new Date(),
         totalPrice: total,
         payment: selectedPayment.label,
         incompleted: 1,
@@ -142,6 +142,8 @@ export default function CommandModal({ updateBoard }) {
     setOpen(false);
     setSelectedBeverages([]);
     setIceCreams([]);
+    setSelectedPayment(null);
+
     // setAcai([]);
   };
 
