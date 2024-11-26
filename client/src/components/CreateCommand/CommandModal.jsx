@@ -93,7 +93,7 @@ export default function CommandModal({ updateBoard }) {
         await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
 
-      // updateBoard();
+      // updateBoard()
 
       //chamar toast
       toast.success(response.data.message, {
