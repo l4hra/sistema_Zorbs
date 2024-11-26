@@ -186,12 +186,7 @@ export default function Navbar() {
             }}
           >
             <div
-              style={{
-                backgroundColor: "gray",
-                padding: "5px",
-                borderRadius: "5px",
-                marginRight: "5px",
-              }}
+              
             >
               <h2 style={{ fontFamily: "Electrolize", color: "#ffff" }}>
                 {formatTime(time)}
