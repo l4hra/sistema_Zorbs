@@ -17,26 +17,30 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 export default function Dashboard({ title, color }) {
-  const [selectedDate, setSelectedDate] = useState(
-    dayjs().format("YYYY-MM-DD")
-  );
+  const [startDate, setStartDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [completedCount, setCompletedCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
   const [completeProfit, setCompleteProfit] = useState(0);
   const [canceledProfit, setCanceledProfit] = useState(0);
 
-  const handleDateChange = (date) => {
-    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD"); // Formata a data para 'YYYY-MM-DD'
-    setSelectedDate(formattedDate);
+  const handleStartDateChange = (date) => {
+    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD");
+    setStartDate(formattedDate);
   };
 
+  const handleEndDateChange = (date) => {
+    const formattedDate = dayjs(date.$d).format("YYYY-MM-DD");
+    setEndDate(formattedDate);
+  };
   const fetchCommandStatus = async () => {
+    if (!startDate || !endDate) return;
     try {
       const response = await fetch(
-        `http://localhost:5000/commandsFilter?date=${selectedDate}`
+        `http://localhost:5000/commandsFilter?startDate=${startDate}&endDate=${endDate}`
       );
       const data = await response.json();
-      setCompletedCount(data.statusCount.complete || 0);
+      setCompletedCount(data.statusCount.completed || 0);
       setCanceledCount(data.statusCount.canceled || 0);
       setCompleteProfit(data.statusCount.completeProfit || 0);
       setCanceledProfit(data.statusCount.canceledProfit || 0);
@@ -44,10 +48,9 @@ export default function Dashboard({ title, color }) {
       console.error("Erro ao buscar status das comandas:", error);
     }
   };
-
   useEffect(() => {
     fetchCommandStatus();
-  }, [selectedDate]);
+  }, [startDate, endDate]);
 
   dayjs.locale("pt-br");
   return (
@@ -78,10 +81,17 @@ export default function Dashboard({ title, color }) {
             >
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  label="Filtre as comandas"
+                  label="Data de Início"
                   format="DD/MM/YYYY"
-                  value={selectedDate ? dayjs(selectedDate) : null}
-                  onChange={handleDateChange}
+                  value={startDate ? dayjs(startDate) : null}
+                  onChange={handleStartDateChange}
+                />
+
+                <DatePicker
+                  label="Data de Término"
+                  format="DD/MM/YYYY"
+                  value={endDate ? dayjs(endDate) : null}
+                  onChange={handleEndDateChange}
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -122,7 +132,7 @@ export default function Dashboard({ title, color }) {
           >
             {/* <LineChart /> */}
 
-            <TableDashboard selectedDate={selectedDate} />
+            <TableDashboard startDate={startDate} endDate={endDate} />
           </div>
         </Box>
       </Box>

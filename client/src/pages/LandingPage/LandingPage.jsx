@@ -3,6 +3,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import Tooltip from "@mui/joy/Tooltip";
 import zorbs from "../../../public/assets/esquilo.png";
 import waves from "../../../public/assets/waves.svg";
+import { Button } from "@mui/material";
 
 export default function LandingPage() {
   const handleClick = () => {
@@ -30,16 +31,16 @@ export default function LandingPage() {
           <nav>
             <ul>
               <li>
-                <a href="#home">Home</a>
+                <a href="#home">Inicio</a>
               </li>
               <li>
-                <a href="#about">About</a>
+                <a href="#about">Sobre</a>
               </li>
               <li>
-                <a href="#contact">Contact</a>
+                <a href="#contact">Contato</a>
               </li>
 
-              <li>button</li>
+              <Button style={{ margin: "0" }}>button</Button>
             </ul>
           </nav>
         </header>
