@@ -3,9 +3,9 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditCommand from "../EditCommand/EditcommandModal";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+
+import moment from "moment";
+
 
 function NotaFiscalButton({ task }) {
   // Função para gerar o conteúdo da nota fiscal
@@ -52,28 +52,25 @@ function NotaFiscalButton({ task }) {
   );
 }
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+
 
 export default function Command({ task, index }) {
+
+console.log('task', task)
   const formatTime = (datetime) => {
     try {
-      // Trate o horário como local (já no fuso de Brasília)
-      const localTime = dayjs(datetime).tz("America/Sao_Paulo").format("HH:mm");
-
-      console.log("Horário original (salvo no banco):", datetime);
-      console.log("Horário exibido (fuso Brasília):", localTime);
+      const localTime = moment(datetime).format("HH:mm");
       return localTime;
     } catch (error) {
-      console.error("Erro ao formatar horário:", error);
-      return "Erro no horário";
+      console.error("Erro ao formatar horário:", error.message || error);
+      return "Erro no horário"; 
     }
   };
 
   return (
     <>
       <Draggable
-        draggableId={`${task.id_command}`} // use apenas se id for único
+        draggableId={`${task.id_command}`}
         key={task.id_command}
         index={index}
       >
@@ -138,6 +135,7 @@ export default function Command({ task, index }) {
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
                 <NotaFiscalButton task={task} />
+                {task?.incompleted && (
                 <EditCommand
                   id={task.id_command}
                   nameCommand={task.name}
@@ -145,6 +143,7 @@ export default function Command({ task, index }) {
                   totalPrice={task.totalPrice}
                   qtdProduct={task.qtd_products}
                 />
+              ) || null}
               </div>
             </div>
             {provided.placeholder}

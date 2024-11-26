@@ -17,8 +17,6 @@ export default function Kanban() {
   const [canceled, setcanceled] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [commands, setCommands] = useState([]);
-
   const handleClose = () => {
     setOpenDialog(false);
   };
@@ -48,24 +46,23 @@ export default function Kanban() {
           name: item?.product_name ?? item.item_name,
           qtd_products: item.qtd_products,
           und_medida: item.und_medida,
+          value_item: item.value_item,
         });
 
         return acc;
       }, {});
 
       const result = Object.values(grouped);
-      setCommands(result);
+      setCompleted(result.filter((pedido) => pedido.completed));
+      setIncomplete(result.filter((pedido) => pedido.incompleted));
+      setcanceled(result.filter((pedido) => pedido.canceled));
     } catch (error) {
       console.error("Erro ao buscar as comandas:", error);
     }
   }
   useEffect(() => {
     carregaComanda();
-
-    setCompleted(commands.filter((pedido) => pedido.completed));
-    setIncomplete(commands.filter((pedido) => pedido.incompleted));
-    setcanceled(commands.filter((pedido) => pedido.canceled));
-  }, [commands]);
+  }, []);
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -155,7 +152,7 @@ export default function Kanban() {
     }
   }
   dayjs.locale("pt-br");
-  console.log("alo", incomplete);
+
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>

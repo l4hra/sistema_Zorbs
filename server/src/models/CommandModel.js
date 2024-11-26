@@ -50,7 +50,7 @@ export async function getAllCommands(req, res) {
       `
       SELECT 
       db_zorbs.commands.id,
-      db_zorbs.commands.date_opening,
+       CONVERT_TZ(db_zorbs.commands.date_opening, '+00:00', '-03:00') AS date_opening,
       db_zorbs.commands.totalPrice,
       db_zorbs.commands.payment,
       db_zorbs.commands.completed,

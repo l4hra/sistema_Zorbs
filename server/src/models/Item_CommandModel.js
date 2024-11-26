@@ -66,7 +66,11 @@ export async function getAllItemCommands(req, res) {
 // Função para editar produtos
 export async function updateItemCommand(idCommand, item) {
   await deleteItemCommandByIdCommand(idCommand);
-  return await createItemCommand(item);
+  for(const iterator of item.items) {
+    await createItemCommand(iterator);
+  }
+
+  return [200, "Comanda atualizada"];
 }
 
 export async function deleteItemCommandByIdCommand(idCommand) {

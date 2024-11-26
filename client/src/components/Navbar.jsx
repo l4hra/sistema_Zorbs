@@ -124,7 +124,7 @@ export default function Navbar() {
         <p>Notifications</p>
       </MenuItem>
 
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -135,7 +135,7 @@ export default function Navbar() {
           <LogoutIcon />
         </IconButton>
         <p>Logout</p>
-      </MenuItem>
+      </MenuItem> */}
 
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -185,10 +185,8 @@ export default function Navbar() {
               },
             }}
           >
-            <div
-              
-            >
-              <h2 style={{ fontFamily: "Electrolize", color: "#ffff" }}>
+            <div>
+              <h2 style={{ fontFamily: "Electrolize", color: "black" }}>
                 {formatTime(time)}
               </h2>
             </div>
@@ -215,7 +213,7 @@ export default function Navbar() {
               <SettingsRoundedIcon />
             </IconButton>
 
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="primary-search-account-menu"
@@ -223,7 +221,7 @@ export default function Navbar() {
               color="inherit"
             >
               <LogoutIcon />
-            </IconButton>
+            </IconButton> */}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

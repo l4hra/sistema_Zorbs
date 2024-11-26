@@ -30,7 +30,7 @@ export default function CommandModal({ updateBoard }) {
         // }
       );
       if (response.status === 200) {
-        setListItems(response.data); // Atualiza o estado com os produtos recebidos
+        setListItems(response.data);
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);

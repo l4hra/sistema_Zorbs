@@ -18,6 +18,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
   const [listItems, setListItems] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -60,6 +61,14 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
       return;
     }
 
+
+    if (!selectedPayment) {
+      toast.error("Selecione uma forma de pagamento.", {
+        position: "bottom-left",
+        duration: 5000,
+      });
+      return;
+    }
     try {
       const commandData = [...selectedBeverages, ...iceCreams].map((item) => {
         const isIceCream = item.hasOwnProperty("weight");
@@ -68,19 +77,20 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
           id_products: item.id || null,
           id_command: id,
           name: item.name || null,
-          qtd_products: isIceCream ? ice.weight : product.quantity,
-          value_item: (item.preco_venda || item.price || "0.00").toString(),
+          qtd_products: isIceCream ? item.weight : item.quantity,
+          value_item: (item.preco_venda || item.price || item.value_item || "0.00").toString(),
           und_medida: item.und_medida || (isIceCream ? "kg" : "unidade"),
         };
       });
 
-      await axios.put(`http://localhost:5000/itemCommands`, {
+      await axios.put(`http://localhost:5000/itemCommands/${id}`, {
         items: commandData,
       });
       toast.success("Comanda atualizada com sucesso!", {
         position: "bottom-left",
         duration: 5000,
       });
+      handleClose();
     } catch (error) {
       console.error("Erro ao atualizar a comanda:", error);
       toast.error("Erro ao atualizar a comanda.", {
@@ -122,7 +132,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
     if (operator === "+") {
       //se estiver adicionando
       const newItems = list.map((item) => {
-        if (item.id === id) {
+        if ((item.id || item.item_command_id) === id) {
           return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 };
         }
         return item;
@@ -131,7 +141,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
     } else if (operator === "-") {
       //se estiver removendo
       const newItems = list.map((item) => {
-        if (item.id === id) {
+        if ((item.id || item.item_command_id) === id) {
           return { ...item, quantity: item.quantity ? item.quantity - 1 : 0 };
         }
         return item;
@@ -152,15 +162,51 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
     setIceCreams(updatedIceCreams);
   };
 
+  
+  const handlePaymentChange = (event, value) => {
+    setSelectedPayment(value);
+  };
+
+  
   const total = allSelectedProducts.reduce(
     (acc, item) =>
-      acc + (item.preco_venda ?? item.price) * (item?.quantity ?? 1),
+      acc + (item.preco_venda || item.price || item.value_item || 0) * (item?.quantity ?? 1),
     0
   );
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+
+
+  const payment = [
+    { id: "1", label: "Pix" },
+    {
+      id: "2",
+      label: "Dinheiro",
+    },
+    {
+      id: "3",
+      label: "Cartão de crédito",
+    },
+    {
+      id: "4",
+      label: "Cartão de débito",
+    },
+    {
+      id: "5",
+      label: "Cartão refeição",
+    },
+    {
+      id: "6",
+      label: "Cartão alimentação",
+    },
+    {
+      id: "7",
+      label: "Não definido",
+    },
+  ];
 
   return (
     <>
@@ -173,8 +219,8 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
           alignItems: "baseline",
         }}
       >
-        <IconButton>
-          <EditIcon onClick={handleOpen} />
+        <IconButton onClick={handleOpen}>
+          <EditIcon />
         </IconButton>
       </div>
       <Modal
@@ -259,6 +305,17 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
 
               <IceCreamModal onDataChange={handleIceCreamDataChange} />
             </div>
+
+            <Autocomplete
+              disablePortal
+              options={payment}
+              getOptionLabel={(option) => option.label}
+              value={selectedPayment}
+              onChange={handlePaymentChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Forma de pagamento" />
+              )}
+            />
           </div>
 
           <TableComponent

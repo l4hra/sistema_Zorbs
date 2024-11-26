@@ -40,7 +40,7 @@ export default function TableComponent({
             allSelectedProducts.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  {item.name} | R${item.preco_venda ?? item.price}
+                  {item.name} | R${item.preco_venda || item.price || item.value_item}
                 </TableCell>
                 {!item.weight ? (
                   <TableCell align="right">
@@ -52,7 +52,7 @@ export default function TableComponent({
                         border: "1px solid gray",
                         color: "black",
                       }}
-                      onClick={() => handleQuantityChange(item.id, "-")}
+                      onClick={() => handleQuantityChange(item.id || item.item_command_id, "-")}
                     >
                       -
                     </Button>
@@ -65,7 +65,7 @@ export default function TableComponent({
                         border: "1px solid gray",
                         color: "black",
                       }}
-                      onClick={() => handleQuantityChange(item.id, "+")}
+                      onClick={() => handleQuantityChange(item.id || item.item_command_id, "+")}
                     >
                       +
                     </Button>
