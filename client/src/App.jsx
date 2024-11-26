@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import Companies from "./pages/Companies/Companies";
 import EditCompanies from "./components/EditCompanies/EditCompanies";
+import EditPerfil from "./components/EditPerfil/EditPerfil";
 import CreateCompanies from "./components/CreateCompanies/CreateCompanies";
 import { Toaster } from "react-hot-toast";
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/Companies" exact element={<Companies />}></Route>
           <Route path="/CreateCompanies" exact element={<CreateCompanies />}></Route>
           <Route path="/EditCompanies" exact element={<EditCompanies />}></Route>
+          <Route path="/EditPerfil" exact element={<EditPerfil />}></Route>
         </Routes>
       </BrowserRouter>
          <Toaster/>
