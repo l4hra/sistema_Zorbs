@@ -1,4 +1,4 @@
-import { addProducts, deleteProduct, getProducts, updateProduct } from "../models/ProductModel.js";
+import { addProducts, getProducts, updateProduct, toggleProductStatus } from "../models/ProductModel.js";
 import { validateProductData, validateProductId } from "../validations/productsValidation.js";
 
 export async function cadastroProduct(req, res){
@@ -33,26 +33,6 @@ export async function listaProdutos(req,res) {
         }
 }
 
-export async function excluirProduct(req, res) {
-    console.log(`ProductsController excluirProduct`);
-    const { id } = req.params;
-    
-    // Validar o ID do produto antes de excluir
-    const validationErrors = validateProductId(Number(id));
-    if (validationErrors.length > 0) {
-        return res.status(400).json({ errors: validationErrors });
-    }
-
-    try {
-        // Chamando a função de exclusão do produto e capturando status e mensagem de resposta
-        const [status, resposta] = await deleteProduct(Number(id));
-        res.status(status).json(resposta);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Erro ao deletar produto', error });
-    }
-}
-
 export async function atualizaProduct(req, res) {
     console.log('ProductsController atualizaProduct');
     const { id } = req.params;
@@ -76,3 +56,18 @@ export async function atualizaProduct(req, res) {
         res.status(500).json({ message: 'Erro ao atualizar produto', error });
     }
 }
+
+export async function toggleProduct(req, res) {
+    console.log('ProductsController toggleProduct');
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const [statusCode, response] = await toggleProductStatus(Number(id), status);
+        res.status(statusCode).json(response);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Erro ao atualizar status do produto', error });
+    }
+}
+

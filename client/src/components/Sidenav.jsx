@@ -18,6 +18,7 @@ import casinha from "../../public/assets/casinha.svg";
 import loja from "../../public/assets/loja.svg";
 import carrinho from "../../public/assets/carrinho.svg";
 import users from "../../public/assets/adicionar-usuario.svg";
+import LogoutIcon from "@mui/icons-material/LogoutOutlined";
 
 const drawerWidth = 240;
 
@@ -351,6 +352,59 @@ export default function Sidenav() {
               </ListItemIcon>
               <ListItemText
                 primary="Usuários Zorbs"
+                sx={[
+                  open
+                    ? {
+                        opacity: 1,
+                      }
+                    : {
+                        opacity: 0,
+                      },
+                ]}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            disablePadding
+            sx={{ display: "block", width: "100%" }}
+            onClick={() => {
+              navigate("/Login");
+            }}
+          >
+            <ListItemButton
+              sx={[
+                {
+                  minHeight: 48,
+                  px: 2.5,
+                },
+                open
+                  ? {
+                      justifyContent: "initial",
+                    }
+                  : {
+                      justifyContent: "center",
+                    },
+              ]}
+            >
+              <ListItemIcon
+                sx={[
+                  {
+                    minWidth: 0,
+                    justifyContent: "center",
+                  },
+                  open
+                    ? {
+                        mr: 3,
+                      }
+                    : {
+                        mr: "auto",
+                      },
+                ]}
+              >
+                <LogoutIcon sx={{ color: "#fff" }} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Sair"
                 sx={[
                   open
                     ? {

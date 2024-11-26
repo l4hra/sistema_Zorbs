@@ -381,31 +381,31 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
         </div>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
           <Button
-            onClick={closeEvent}
-            sx={{
-              width: 150,
-              color: "white",
-              mr: 1,
-              backgroundColor: "#F90808",
-              "&:hover": {
-                backgroundColor: "#115293",
-              },
-            }}
-          >
-            Cancelar
-          </Button>
-          <Button
             onClick={createUser}
             sx={{
               width: 150,
               color: "white",
-              backgroundColor: "#09A176",
+              mr: 1,
+              backgroundColor: "#46C001",
               "&:hover": {
-                backgroundColor: "#388e3c",
+                backgroundColor: "#3EA201",
               },
             }}
           >
             Salvar
+          </Button>
+          <Button
+            onClick={closeEvent}
+            sx={{
+              width: 150,
+              color: "white",
+              backgroundColor: "#f8615b",
+              "&:hover": {
+                backgroundColor: "#FF0000",
+              },
+            }}
+          >
+            Cancelar
           </Button>
         </Box>
       </Box>

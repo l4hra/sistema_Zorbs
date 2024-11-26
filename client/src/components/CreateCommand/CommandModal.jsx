@@ -31,7 +31,8 @@ export default function CommandModal({ updateBoard }) {
         // }
       );
       if (response.status === 200) {
-        setListItems(response.data); // Atualiza o estado com os produtos recebidos
+        const activeProducts = response.data.filter((product) => product.status === "Ativo");
+        setListItems(activeProducts); // Atualiza o estado com os produtos recebidos
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -289,6 +290,7 @@ export default function CommandModal({ updateBoard }) {
             onChange={handleBeveragesChange}
             renderInput={(params) => <TextField {...params} label="Produtos" />}
             value={selectedBeverages}
+            noOptionsText={listItems.length === 0 ? "Nenhum produto encontrado." : "Nenhum produto disponível."}
           />
 
           <div

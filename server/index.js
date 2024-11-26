@@ -29,11 +29,10 @@ import express from "express";
 
 import {
   cadastroProduct,
-  excluirProduct,
   atualizaProduct,
   listaProdutos,
+  toggleProduct,
 } from "./src/controllers/ProductsController.js";
-//import { getProducts } from './src/models/ProductModel.js';
 
 const app = express();
 const port = 5000;
@@ -41,36 +40,37 @@ const port = 5000;
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: "GET,POST,PUT,DELETE",
+    methods: "GET,POST,PUT,DELETE,PATCH",
     allowedHeaders: "Content-Type,Authorization", // apenas requisições vindas desse localhost:5173 serão permitidas
   })
 );
 app.use(express.json());
 
+//Rotas Comandas
 app.post("/cadastroCommand", cadastroCommand);
 app.get("/commands", getAllCommands);
 app.get("/commandsFilter", getFilterCommands);
 app.put("/commands/:id", atualizaCommand);
 app.put("/commandEdit/:id", editarCommand);
 
-// app.delete("/products/:id", updateCommand);
-
+//Rotas Item comanda
 app.post("/createItemCommand", criarItemCommand);
 app.get("/itemCommands", getAllItemCommands);
 app.put("/itemCommands/:id", atualizaItemCommand);
 
+//Rotas Produtos
 app.post("/registerProduct", cadastroProduct);
-//app.get('/products', getProducts);
-//Rota filtrando categoria
 app.get("/products/:categoria?", listaProdutos);
-app.delete("/products/:id", excluirProduct);
 app.put("/products/:id", atualizaProduct);
+app.patch("/products/:id/status", toggleProduct);
 
+//Rota Empresa
 app.get("/companies", getCompanies);
 app.post("/createCompanies", createCompanies);
 app.delete("/deleteCompanies/:id", excluirCompanies);
 app.put("/updateCompanies/:id", atualizaCompanies);
 
+//Rota usuários
 app.get("/users", getUsers);
 app.post("/cadastroUser", cadastroUser);
 app.delete("/deleteUser/:id", excluirUsers);
