@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
-import LogoutIcon from "@mui/icons-material/LogoutOutlined";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -16,6 +15,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useAppStore } from "../appStore";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 const AppBar = styled(
   MuiAppBar,
@@ -124,7 +124,7 @@ export default function Navbar() {
         <p>Notifications</p>
       </MenuItem>
 
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -135,7 +135,7 @@ export default function Navbar() {
           <LogoutIcon />
         </IconButton>
         <p>Logout</p>
-      </MenuItem>
+      </MenuItem> */}
 
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -186,12 +186,7 @@ export default function Navbar() {
             }}
           >
             <div
-              style={{
-                backgroundColor: "gray",
-                padding: "5px",
-                borderRadius: "5px",
-                marginRight: "5px",
-              }}
+              
             >
               <h2 style={{ fontFamily: "Electrolize", color: "#ffff" }}>
                 {formatTime(time)}
@@ -217,18 +212,9 @@ export default function Navbar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <SettingsRoundedIcon />
+              <AccountCircleRoundedIcon />
             </IconButton>
 
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <LogoutIcon />
-            </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

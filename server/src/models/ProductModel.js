@@ -50,30 +50,6 @@ export async function getProducts(categoria) {
     }
 }
 
-// Função para deletar produtos
-export async function deleteProduct(id) {
-    const idErrors = validateProductId(id);
-
-    if (idErrors.length > 0) {
-        return [400, idErrors];
-    }
-
-    const sql = 'DELETE FROM products WHERE id = ?';
-    
-    try {
-        const [result] = await conexao.query(sql, [id]);
-        if (result.affectedRows > 0) {
-            console.log('Produto deletado');
-            return [200, 'Produto deletado com sucesso'];
-        } else {
-            return [404, 'Produto não encontrado'];
-        }
-    } catch (error) {
-        console.log(error);
-        return [500, 'Erro ao deletar o produto'];
-    }
-}
-
 // Função para editar produtos
 export async function updateProduct(id, product) {
     const idErrors = validateProductId(id);
@@ -110,7 +86,20 @@ export async function updateProduct(id, product) {
     }
 }
 
-// 
-function teste (...opcoes){
-    opcoes['categoria']
+export async function toggleProductStatus(id, status) {
+    const sql = `UPDATE products SET status = ? WHERE id = ?`;
+    const newStatus = status === 'Ativo' ? 'Inativo' : 'Ativo';
+
+    try {
+        const [result] = await conexao.query(sql, [newStatus, id]);
+        if (result.affectedRows > 0) {
+            console.log(`Produto ${id} atualizado para ${newStatus}`);
+            return [200, `Produto atualizado para ${newStatus}`];
+        } else {
+            return [404, 'Produto não encontrado'];
+        }
+    } catch (error) {
+        console.log(error);
+        return [500, 'Erro ao atualizar o status do produto'];
+    }
 }

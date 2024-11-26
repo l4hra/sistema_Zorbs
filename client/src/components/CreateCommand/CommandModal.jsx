@@ -21,7 +21,6 @@ export default function CommandModal({ updateBoard }) {
     setOpen(true);
   };
 
-  // Listar Produtos
   const fetchProducts = async (categoria) => {
     try {
       const response = await axios.get(
@@ -31,21 +30,12 @@ export default function CommandModal({ updateBoard }) {
         // }
       );
       if (response.status === 200) {
-        setListItems(response.data); // Atualiza o estado com os produtos recebidos
+        const activeProducts = response.data.filter((product) => product.status === "Ativo");
+        setListItems(activeProducts); // Atualiza o estado com os produtos recebidos
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     }
-  };
-
-  const dataHora = () => {
-    const data = new Date();
-    const dateCalender = dateCalender.to;
-    return data.toLocaleTimeString("pt-br", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
   };
 
   // Criar Comanda
@@ -103,6 +93,9 @@ export default function CommandModal({ updateBoard }) {
         };
         await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
+
+      // updateBoard();
+
       //chamar toast
       toast.success(response.data.message, {
         position: "bottom-left",
@@ -143,13 +136,11 @@ export default function CommandModal({ updateBoard }) {
     setSelectedBeverages([]);
     setIceCreams([]);
     setSelectedPayment(null);
-
     // setAcai([]);
   };
 
   const handleQuantity = (id, list, operator) => {
     if (operator === "+") {
-      //se estiver adicionando
       const newItems = list.map((item) => {
         if (item.id === id) {
           return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 };
@@ -158,7 +149,6 @@ export default function CommandModal({ updateBoard }) {
       });
       return newItems;
     } else if (operator === "-") {
-      //se estiver removendo
       const newItems = list.map((item) => {
         if (item.id === id) {
           return { ...item, quantity: item.quantity ? item.quantity - 1 : 0 };
@@ -191,9 +181,8 @@ export default function CommandModal({ updateBoard }) {
     0
   );
 
-  // Chama a função de busca ao carregar o componente (quando a categoria for '?')
   useEffect(() => {
-    fetchProducts(); // Passa a categoria "?" para buscar os produtos
+    fetchProducts();
   }, []);
 
   const payment = [
@@ -217,6 +206,10 @@ export default function CommandModal({ updateBoard }) {
     {
       id: "6",
       label: "Cartão alimentação",
+    },
+    {
+      id: "7",
+      label: "Não definido",
     },
   ];
   return (
@@ -289,6 +282,7 @@ export default function CommandModal({ updateBoard }) {
             onChange={handleBeveragesChange}
             renderInput={(params) => <TextField {...params} label="Produtos" />}
             value={selectedBeverages}
+            noOptionsText={listItems.length === 0 ? "Nenhum produto encontrado." : "Nenhum produto disponível."}
           />
 
           <div

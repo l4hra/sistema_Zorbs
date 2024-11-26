@@ -237,7 +237,7 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "24px",
+          paddingTop: "60px",
           gap: "50px",
         }}
       >
@@ -245,9 +245,9 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
           variant="contained"
           onClick={createProduct}
           sx={{
-            backgroundColor: "#1976d2",
+            backgroundColor: "#46C001",
             "&:hover": {
-              backgroundColor: "#115293",
+              backgroundColor: "#3EA201",
             },
           }}
         >
@@ -257,9 +257,9 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
           variant="contained"
           onClick={closeEvent}
           sx={{
-            backgroundColor: "#1976d2",
+            backgroundColor: "#f8615b",
             "&:hover": {
-              backgroundColor: "#115293",
+              backgroundColor: "#FF0000",
             },
           }}
         >

@@ -25,7 +25,11 @@ const fetchUsers = async () => {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
       setError("Não foi possível conectar ao servidor. Verifique sua conexão com o banco de dados.");
     } else {
-      setError("Erro ao buscar usuários. Tente novamente mais tarde.")
+      <UsersList
+            users={users}
+            refreshUsers={refreshUsers}
+            />
+      // setError("Erro ao buscar usuários. Tente novamente mais tarde.")
     }
     console.error('Erro ao buscar produtos:', error);
   } finally {
@@ -62,11 +66,11 @@ const fetchUsers = async () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             // Envolver o UsersList com ErrorBoundary para capturar erros de renderização
-            <ErrorBoundary errorMessage={error}>
-          <UsersList
-          users={users}
-          refreshUsers={refreshUsers}
-          />
+          <ErrorBoundary errorMessage={error}>
+            <UsersList
+            users={users}
+            refreshUsers={refreshUsers}
+            />
           </ErrorBoundary>
           )}
 

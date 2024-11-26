@@ -8,7 +8,6 @@ import {
   TableHead,
   TableRow,
   TablePagination,
-  Divider,
   Button,
   Box,
   Stack,
@@ -19,8 +18,9 @@ import {
 import {
   AddCircle as AddCircleIcon,
   Edit as EditIcon,
-  DeleteForever as DeleteIcon,
 } from "@mui/icons-material";
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import Swal from "sweetalert2";
 import AddProducts from "../../components/CreateProducts/AddProducts";
 import EditProduct from "../../components/EditProducts/EditProduct";
@@ -76,22 +76,25 @@ export default function ProductsList() {
   const handleOpen = () => setAddOpen(true);
   const handleClose = () => setAddOpen(false);
 
-  const deleteProduct = async (id) => {
-    const result = await Swal.fire({
-      title: "Tem certeza?",
-      text: "Confirme para deletar o produto!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sim, deletar",
-    });
-    if (result.isConfirmed) {
-      await fetch(`http://localhost:5000/products/${id}`, { method: 'DELETE' });
-      Swal.fire("Deletado com sucesso!", "Seu produto foi deletado.", "success");
-      getProducts();
+  const toggleStatus = async (product) => {
+    try {
+        const newStatus = product.status === "Ativo" ? "Inativo" : "Ativo";
+        await fetch(`http://localhost:5000/products/${product.id}/status`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: product.status }),
+        });
+        Swal.fire(
+            "Sucesso!",
+            `Produto atualizado para ${newStatus}`,
+            "success"
+        );
+        getProducts(); // Atualiza a tabela
+    } catch (error) {
+        console.error("Erro ao atualizar status do produto:", error);
+        Swal.fire("Erro!", "Não foi possível atualizar o status.", "error");
     }
-  };
+};
 
   const formatPrice = (value) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
@@ -146,7 +149,7 @@ export default function ProductsList() {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                {["Nome", "Categoria", "Preço de Custo", "Preço de Venda", "Opções"].map((header) => (
+                {["Nome", "Categoria", "Preço de Custo", "Preço de Venda", "Status", "Opções"].map((header) => (
                   <TableCell
                     key={header}
                     align="center"
@@ -170,6 +173,7 @@ export default function ProductsList() {
                   <TableCell align="center" sx={{ fontSize: "17px" }}>{row.category}</TableCell>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>{formatPrice(row.preco_custo)}</TableCell>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>{formatPrice(row.preco_venda)}</TableCell>
+                  <TableCell align="center" sx={{ fontSize: "17px" }}>{row.status}</TableCell>
                   <TableCell align="center" sx={{ fontSize: "17px" }}>
                     <Stack direction="row" spacing={2} justifyContent="center">
                       <EditIcon
@@ -180,10 +184,17 @@ export default function ProductsList() {
                           
                         }}
                       />
-                      <DeleteIcon
-                        sx={{ fontSize: "20px", color: "#f8615b", cursor: "pointer" }}
-                        onClick={() => deleteProduct(row.id)}
-                      />
+                     {row.status === "Ativo" ? (
+                        <CancelRoundedIcon
+                          sx={{ fontSize: "20px", color: "#f8615b", cursor: "pointer" }}
+                            onClick={() => toggleStatus(row)}
+                        />
+                        ) : (
+                        <CheckCircleRoundedIcon
+                          sx={{ fontSize: "20px", color: "#4caf50", cursor: "pointer" }}
+                            onClick={() => toggleStatus(row)}
+                        />
+                      )}
                     </Stack>
                   </TableCell>
                 </TableRow>

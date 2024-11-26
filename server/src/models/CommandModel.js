@@ -10,7 +10,6 @@ export async function createCommand(command) {
     command.payment,
     command.incompleted,
   ];
-  console.log("batata", command);
   try {
     const [retorno] = await conexao.query(sql, params);
     return [
@@ -67,7 +66,7 @@ export async function getAllCommands(req, res) {
       db_zorbs.products.name AS product_name,
       db_zorbs.products.category AS product_category,
       db_zorbs.products.observacao AS product_observacao
-      FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
+    FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
     `
     );
     res.status(200).json(rows);
@@ -78,9 +77,13 @@ export async function getAllCommands(req, res) {
 }
 
 export async function getFilterCommands(req, res) {
-  const dateQuery = req.query["date"];
+  const { startDate, endDate } = req.query;
+  if (!startDate || !endDate) {
+    return res
+      .status(400)
+      .json({ message: "As datas de início e término são obrigatórias." });
+  }
   try {
-    // Consulta para obter as comandas detalhadas, agora com `DATETIME`
     const [rows] = await conexao.query(
       `
       SELECT 
@@ -91,28 +94,26 @@ export async function getFilterCommands(req, res) {
         completed,
         canceled
       FROM db_zorbs.commands
-      WHERE DATE(date_opening) = ?  -- Use DATE() para extrair a data
+      WHERE DATE(date_opening) BETWEEN ? AND ?
     `,
-      [dateQuery]
+      [startDate, endDate]
     );
-
-    // Consulta para contar as comandas 'complete', 'canceled' e somar o lucro separado
     const [statusCount] = await conexao.query(
       `
       SELECT 
-        SUM(completed = 1) AS complete,
+        SUM(completed = 1) AS completed,
         SUM(canceled = 1) AS canceled,
         SUM(CASE WHEN completed = 1 THEN totalPrice ELSE 0 END) AS completeProfit,
         SUM(CASE WHEN canceled = 1 THEN totalPrice ELSE 0 END) AS canceledProfit
       FROM db_zorbs.commands
-      WHERE DATE(date_opening) = ?  
+      WHERE DATE(date_opening) BETWEEN ? AND ?
     `,
-      [dateQuery]
+      [startDate, endDate]
     );
 
     res.status(200).json({
-      rows, // Dados das comandas
-      statusCount: statusCount[0], // Contagem, lucro das comandas 'completed' e 'canceled'
+      rows,
+      statusCount: statusCount[0],
     });
   } catch (error) {
     console.log(error);
@@ -128,12 +129,10 @@ export async function updateCommand(id, command) {
                  incompleted = ?
                WHERE id = ?`;
 
-  // Determina o estado da comanda
   const completed = command.completed ? 1 : 0;
   const canceled = command.canceled ? 1 : 0;
   const incompleted = command.incompleted ? 1 : 0;
 
-  // Garante que somente um status esteja ativo
   const params = [completed, canceled, incompleted, id];
 
   try {

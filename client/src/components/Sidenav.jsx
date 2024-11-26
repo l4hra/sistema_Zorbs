@@ -18,6 +18,8 @@ import casinha from "../../public/assets/casinha.svg";
 import loja from "../../public/assets/loja.svg";
 import carrinho from "../../public/assets/carrinho.svg";
 import users from "../../public/assets/adicionar-usuario.svg";
+import LogoutIcon from "@mui/icons-material/LogoutOutlined";
+import Swal from "sweetalert2";
 
 const drawerWidth = 240;
 
@@ -47,34 +49,44 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
+})(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        ...openedMixin(theme),
-        "& .MuiDrawer-paper": openedMixin(theme),
-      },
-    },
-    {
-      props: ({ open }) => !open,
-      style: {
-        ...closedMixin(theme),
-        "& .MuiDrawer-paper": closedMixin(theme),
-      },
-    },
-  ],
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
 }));
+
+const handleLogout = () => {
+  Swal.fire({
+    title: "Você tem certeza?",
+    text: "Deseja realmente sair do sistema?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, sair",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Lógica de logout
+      console.log("Usuário deslogado");
+      window.location.href = "/Login"; // Substitua pela lógica de navegação desejada
+    }
+  });
+};
 
 export default function Sidenav() {
   const theme = useTheme();
@@ -97,13 +109,289 @@ export default function Sidenav() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{ background: "#054f77", height: 100 + "vh", color: "#fff" }}>
+        <List
+          sx={{
+            background: "#054f77",
+            height: "100vh",
+            color: "#fff",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Lista principal */}
+          <Box sx={{ flexGrow: 1 }}>
+            <ListItem
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => {
+                navigate("/Home");
+              }}
+            >
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: "initial",
+                      }
+                    : {
+                        justifyContent: "center",
+                      },
+                ]}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  <img src={casinha} height={25} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Home"
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => {
+                navigate("/NewCommands");
+              }}
+            >
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: "initial",
+                      }
+                    : {
+                        justifyContent: "center",
+                      },
+                ]}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  <img src={loja} height={25} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Comandas"
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => {
+                navigate("/Produtos");
+              }}
+            >
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: "initial",
+                      }
+                    : {
+                        justifyContent: "center",
+                      },
+                ]}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  <img src={carrinho} height={25} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Produtos"
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => {
+                navigate("/Usuarios");
+              }}
+            >
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: "initial",
+                      }
+                    : {
+                        justifyContent: "center",
+                      },
+                ]}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  <img src={users} height={25} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Usuários"
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => {
+                navigate("/Companies");
+              }}
+            >
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: "initial",
+                      }
+                    : {
+                        justifyContent: "center",
+                      },
+                ]}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  <BuildingIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Usuários Zorbs"
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Box>
+
+          {/* Botão "Sair" */}
           <ListItem
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Home");
-            }}
+            onClick={handleLogout}
           >
             <ListItemButton
               sx={[
@@ -135,222 +423,10 @@ export default function Sidenav() {
                       },
                 ]}
               >
-                <img src={casinha} height={25} />
+                <LogoutIcon sx={{ color: "#fff" }} />
               </ListItemIcon>
               <ListItemText
-                primary="Home"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/NewCommands");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <img src={loja} height={25} />
-              </ListItemIcon>
-              <ListItemText
-                primary="Comandas"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Produtos");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <img src={carrinho} height={25} />
-              </ListItemIcon>
-              <ListItemText
-                primary="Produtos"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Usuarios");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <img src={users} height={25} />
-              </ListItemIcon>
-              <ListItemText
-                primary="Usuários"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/Companies");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <BuildingIcon sx={{ color: "#fff" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary="Usuários Zorbs"
+                primary="Sair"
                 sx={[
                   open
                     ? {
