@@ -57,18 +57,15 @@ dayjs.extend(timezone);
 
 export default function Command({ task, index }) {
   const formatTime = (datetime) => {
+    if (!datetime) return "Data inválida";
     try {
-      // Trate o horário como local (já no fuso de Brasília)
       const localTime = dayjs(datetime).tz("America/Sao_Paulo").format("HH:mm");
-
-      console.log("Horário original (salvo no banco):", datetime);
-      console.log("Horário exibido (fuso Brasília):", localTime);
       return localTime;
     } catch (error) {
       console.error("Erro ao formatar horário:", error);
       return "Erro no horário";
     }
-  };
+  };;
 
   return (
     <>

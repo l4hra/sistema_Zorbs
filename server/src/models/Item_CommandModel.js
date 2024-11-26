@@ -1,6 +1,3 @@
-import mysql from "mysql2/promise";
-import db from "../../conexao.js";
-
 import conexao from "../../conexao.js";
 
 // Função para cadastrar produtos
@@ -29,7 +26,7 @@ export async function createItemCommand(item) {
 
 export async function getAllItemCommands(req, res) {
   try {
-    const [rows] = await db.query(`
+    const [rows] = await conexao.query(`
         SELECT 
           item_command.id AS item_id,
           item_command.id_command,

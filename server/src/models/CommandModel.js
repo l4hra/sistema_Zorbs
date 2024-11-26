@@ -25,26 +25,8 @@ export async function createCommand(command) {
   }
 }
 
-// Itens ramon
-//   const sqlItemComanda = 'INSERT INTO item_command (id_command,id_products,qtd_products,value_item,und_medida,name) VALUES (?,?,?,?,?,?,?)';
-//   try {
-//     const [retorno] = await conexao.query(sql, params);
-//     // if(retorno.affectedRows > 0){
-//       const paramsItem = [retorno.insertId]
-//       const [retornoItem] = await conexao.query(sqlItemComanda,paramsItem)
-//     // }
-//     console.log("teste agora", retorno);
-//     return [201, insertId];
-//   } catch (error) {
-//     console.log(error);
-//     return [500, error];
-//   }
-// }
-
 // Função para visualizar produtos
-
 export async function getAllCommands(req, res) {
-  // console.log("olhando", req.query["date"]);
   try {
     const [rows] = await conexao.query(
       `

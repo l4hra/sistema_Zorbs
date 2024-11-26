@@ -21,13 +21,10 @@ export default function CommandModal({ updateBoard }) {
     setOpen(true);
   };
 
-  const fetchProducts = async (categoria) => {
+  const fetchProducts = async () => {
     try {
       const response = await axios.get(
         `http://localhost:5000/products`
-        // {
-        //   params: { categoria },  // Passa a categoria como parâmetro
-        // }
       );
       if (response.status === 200) {
         const activeProducts = response.data.filter((product) => product.status === "Ativo");
@@ -59,7 +56,7 @@ export default function CommandModal({ updateBoard }) {
 
     try {
       const commandData = {
-        date_opening: new Date(),
+        date_opening: new Date().toISOString().slice(0, 19).replace('T', ' '), // Formato compatível com MySQL
         totalPrice: total,
         payment: selectedPayment.label,
         incompleted: 1,
@@ -136,7 +133,6 @@ export default function CommandModal({ updateBoard }) {
     setSelectedBeverages([]);
     setIceCreams([]);
     setSelectedPayment(null);
-    // setAcai([]);
   };
 
   const handleQuantity = (id, list, operator) => {

@@ -1,3 +1,5 @@
+import cors from "cors";
+import express from "express";
 import {
   cadastroCommand,
   atualizaCommand,
@@ -13,7 +15,7 @@ import {
   criarItemCommand,
   atualizaItemCommand,
 } from "./src/controllers/Item_CommandController.js";
-import { getUsers } from "./src/models/UserModel.js";
+import { getUsers, login } from "./src/models/UserModel.js";
 import {
   getAllCommands,
   getFilterCommands,
@@ -24,8 +26,6 @@ import {
   excluirUsers,
   atualizaUsers,
 } from "./src/controllers/UserController.js";
-import cors from "cors";
-import express from "express";
 
 import {
   cadastroProduct,
@@ -33,6 +33,8 @@ import {
   listaProdutos,
   toggleProduct,
 } from "./src/controllers/ProductsController.js";
+import { authenticateToken } from "./src/middlewares/authMiddleware.js";
+import { checkAccessLevel } from "./src/middlewares/authMiddleware.js";
 
 const app = express();
 const port = 5000;
@@ -45,6 +47,8 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.post("/login", login);
 
 //Rotas Comandas
 app.post("/cadastroCommand", cadastroCommand);

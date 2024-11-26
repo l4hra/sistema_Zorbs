@@ -32,8 +32,6 @@ export async function addProducts(products) {
 
 // Função para vizualizar produtos
 export async function getProducts(categoria) {
-    console.log('ProductsModel getProducts');
-    console.log(categoria);
     let filtros = '';
     if (categoria){
         filtros = `WHERE category='${categoria}'`
@@ -42,7 +40,6 @@ export async function getProducts(categoria) {
     try {
         const [rows] = await conexao.query(`SELECT * FROM products ${filtros}`);
         return [200,rows];
-        //res.status(200).json(rows);
     } catch (error) {
         console.log(filtros);
         console.log(error);

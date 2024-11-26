@@ -13,6 +13,17 @@ import EditCompanies from "./components/EditCompanies/EditCompanies";
 import EditPerfil from "./components/EditPerfil/EditPerfil";
 import CreateCompanies from "./components/CreateCompanies/CreateCompanies";
 import { Toaster } from "react-hot-toast";
+import { Navigate } from "react-router-dom";
+
+const ProtectedRoute = ({ children, requiredAccess }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user || user.type_of_acess !== requiredAccess) {
+    return <Navigate to="/Login" />;
+  }
+
+  return children;
+};
 
 function App() {
   return (
@@ -22,7 +33,7 @@ function App() {
           <Route path="/" exact element={<LandingPage />}></Route>
           <Route path="/Login" exact element={<Login />}></Route>
           <Route path="/Home" exact element={<Dashboard />}></Route>
-          <Route path="/Usuarios" exact element={<Users />}></Route>
+          <Route path="/Usuarios" exact element={<ProtectedRoute requiredAccess="Funcionário"><Users /></ProtectedRoute>}></Route>
           <Route path="/Profile-settings" element={<ProfileSettings />}></Route>
           <Route path="/Produtos" exact element={<Products />}></Route>
           <Route path="/NewCommands" exact element={<NewCommands />}></Route>
@@ -33,7 +44,7 @@ function App() {
           <Route path="/EditPerfil" exact element={<EditPerfil />}></Route>
         </Routes>
       </BrowserRouter>
-         <Toaster/>
+      <Toaster />
     </>
   );
 }

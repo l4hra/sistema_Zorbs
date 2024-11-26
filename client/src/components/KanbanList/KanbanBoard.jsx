@@ -155,7 +155,6 @@ export default function Kanban() {
     }
   }
   dayjs.locale("pt-br");
-  console.log("alo", incomplete);
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>

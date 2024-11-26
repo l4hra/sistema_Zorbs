@@ -1,9 +1,7 @@
 import conexao from '../../conexao.js';
 import { validateCompanies } from '../validations/companiesValidation.js';
 
-export async function getCompanies(req, res) {
-    console.log('CompaniesController: getCompanies')
-
+export async function getCompanies(req, res) {   
     try {
         const [rows] = await conexao.query('SELECT * FROM companies');
         res.status(200).json(rows);

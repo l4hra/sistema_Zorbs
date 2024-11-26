@@ -2,17 +2,13 @@ import { addProducts, getProducts, updateProduct, toggleProductStatus } from "..
 import { validateProductData, validateProductId } from "../validations/productsValidation.js";
 
 export async function cadastroProduct(req, res){
-    console.log('ProductsController cadastroProduto');
+    console.log('ProductsController: cadastroProduto');
     const product = req.body;
-
-    // Validar os dados do produto antes de cadastrar
     const validationErrors = validateProductData(product);
     if (validationErrors.length > 0) {
         return res.status(400).json({ errors: validationErrors });
     }
-
     try {
-        //Declarando status com o codigo da resposta e resposta JSON
         const [status, resposta] = await addProducts(product);
         res.status(status).json(resposta);
     } catch (error) {
@@ -22,7 +18,7 @@ export async function cadastroProduct(req, res){
 }
 
 export async function listaProdutos(req,res) {
-        console.log('ProductsController :: listaProdutos')
+        console.log('ProductsController: listaProdutos')
         const {categoria} = req.params;
 
         try {
@@ -34,11 +30,9 @@ export async function listaProdutos(req,res) {
 }
 
 export async function atualizaProduct(req, res) {
-    console.log('ProductsController atualizaProduct');
+    console.log('ProductsController: atualizaProduct');
     const { id } = req.params;
     const product = req.body;
-
-    // Validar o ID e os dados do produto antes de atualizar
     const validationErrors = [
         ...validateProductId(Number(id)),
         ...validateProductData(product)
@@ -58,7 +52,7 @@ export async function atualizaProduct(req, res) {
 }
 
 export async function toggleProduct(req, res) {
-    console.log('ProductsController toggleProduct');
+    console.log('ProductsController: toggleProduct');
     const { id } = req.params;
     const { status } = req.body;
 
