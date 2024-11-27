@@ -86,13 +86,6 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     }
   };
 
-  // const handleChangeSetAccess = (event) => {
-  //   setAccess(event.target.value);
-  // };
-  // const handleChangeSetStatus = (event) => {
-  //   setStatus(event.target.value);
-  // };
-
   const typeAcess = [
     { value: "Funcionário", label: "Funcionário" },
     { value: "Administrador", label: "Administrador" },
@@ -147,26 +140,6 @@ export default function NewUsersModal({ closeEvent, refreshUser }) {
     event.preventDefault();
   };
 
-  // const formatPhone = (value) => {
-  //   // Remove tudo que não é número
-  //   value = value.replace(/\D/g, "");
-
-  //   // Aplica a formatação do telefone no padrão: +00 (00) 00000-0000
-  //   return value
-  //     .replace(/^(\d{2})(\d)/g, "+$1 $2") // Adiciona o código do país
-  //     .replace(/(\d{2})(\d)/, "($1) $2") // Adiciona o DDD entre parênteses
-  //     .replace(/(\d{5})(\d)/, "$1-$2"); // Adiciona o hífen no meio do número
-  // };
-
-  // const handleChangePhone = (e) => {
-  //   const formattedPhone = formatPhone(e.target.value);
-  //   setTelefone(formattedPhone);
-  //   const { value } = event.target;
-  //   const numericValue = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
-  //   if (numericValue.length <= 12) {
-  //     setTelefone(numericValue); // Atualiza apenas se tiver até 13 números
-  //   }
-  // };
   // Formatação de telefone
   const formatPhone = (value) => {
     value = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos

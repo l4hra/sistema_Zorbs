@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import Sidenav from "../Sidenav";
 import {
@@ -11,34 +10,94 @@ import {
     InputAdornment,
     IconButton,
     Divider,
+    CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 export default function EditPerfil() {
-    const [userData, setUserData] = useState({
-        nome: "Nome do Usuário",
-        email: "email@exemplo.com",
-        senha: "",
-        telefone: "11999999999",
-        cargo: "Administrador",
-    });
-
+    const [user, setUser] = useState(null); // Estado para armazenar o usuário
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [type_of_acess, setTypeOfAccess] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(true); // Estado para o carregamento
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUserData((prev) => ({ ...prev, [name]: value }));
-    };
+    useEffect(() => {
+        // Simula a busca do usuário logado
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (storedUser) {
+            setUser(storedUser);
+            setName(storedUser.name || "");
+            setPassword(storedUser.password || "");
+            setEmail(storedUser.email || "");
+            setTelefone(storedUser.telefone || "");
+            setTypeOfAccess(storedUser.type_of_acess || "");
+        }
+        setLoading(false); // Finaliza o carregamento
+    }, []);
 
-    const handleSubmit = () => {
-        // Lógica para salvar as alterações (chamada para API, por exemplo)
-        Swal.fire("Sucesso", "Perfil atualizado com sucesso!", "success");
+    const handleSubmit = async () => {
+        if (!name || !email || !telefone || !password) {
+            Swal.fire("Erro", "Por favor, preencha todos os campos obrigatórios!", "error");
+            return;
+        }
+
+        try {
+            setLoading(true); // Exibe o loader durante a requisição
+            const response = await fetch(`http://localhost:5000/updateUsers/${user?.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    password,
+                    email,
+                    telefone,
+                    type_of_acess,
+                    status: "Ativo",
+                }),
+            });
+
+            if (response.ok) {
+                Swal.fire("Sucesso", "Perfil atualizado com sucesso!", "success");
+                const updatedUser = { ...user, name, email, telefone, password, status: "Ativo", };
+                setUser(updatedUser);
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+            } else {
+                const errorData = await response.json();
+                Swal.fire("Erro!", errorData.message || "Erro ao atualizar o usuário.", "error");
+            }
+        } catch (error) {
+            Swal.fire("Erro", "Houve um problema ao se conectar com o servidor.", "error");
+        } finally {
+            setLoading(false); // Oculta o loader
+        }
     };
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    if (loading) {
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                }}
+            >
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (!user) return <Typography>Usuário não encontrado.</Typography>;
 
     return (
         <>
@@ -69,7 +128,6 @@ export default function EditPerfil() {
                             component="div"
                             sx={{
                                 fontWeight: "bold",
-                                color: "#fffff",
                                 paddingBottom: "16px",
                             }}
                         >
@@ -81,80 +139,58 @@ export default function EditPerfil() {
                             <div style={{ flex: "1 1 calc(50% - 20px)" }}>
                                 <TextField
                                     label="Nome"
-                                    name="nome"
-                                    value={userData.nome}
-                                    onChange={handleInputChange}
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     fullWidth
                                     required
                                     variant="outlined"
-                                    sx={{
-                                        backgroundColor: "#fafafa",
-                                        borderRadius: "4px",
-                                    }}
+                                    sx={{ backgroundColor: "#fafafa" }}
                                 />
                             </div>
                             <div style={{ flex: "1 1 calc(50% - 20px)" }}>
                                 <TextField
                                     label="E-mail"
-                                    name="email"
-                                    type="email"
-                                    value={userData.email}
-                                    onChange={handleInputChange}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     fullWidth
                                     required
                                     variant="outlined"
-                                    sx={{
-                                        backgroundColor: "#fafafa",
-                                        borderRadius: "4px",
-                                    }}
+                                    sx={{ backgroundColor: "#fafafa" }}
                                 />
                             </div>
                             <div style={{ flex: "1 1 calc(50% - 20px)" }}>
                                 <TextField
                                     label="Telefone"
-                                    name="telefone"
-                                    type="tel"
-                                    value={userData.telefone}
-                                    onChange={handleInputChange}
+                                    value={telefone}
+                                    onChange={(e) => setTelefone(e.target.value)}
                                     fullWidth
                                     required
                                     variant="outlined"
-                                    sx={{
-                                        backgroundColor: "#fafafa",
-                                        borderRadius: "4px",
-                                    }}
+                                    sx={{ backgroundColor: "#fafafa" }}
                                 />
                             </div>
                             <div style={{ flex: "1 1 calc(50% - 20px)" }}>
                                 <TextField
                                     label="Cargo"
-                                    name="cargo"
-                                    value={userData.cargo}
+                                    value={type_of_acess}
                                     InputProps={{
                                         readOnly: true,
                                     }}
                                     fullWidth
                                     variant="outlined"
-                                    sx={{
-                                        backgroundColor: "#fafafa",
-                                        borderRadius: "4px",
-                                    }}
+                                    sx={{ backgroundColor: "#fafafa" }}
                                 />
                             </div>
                             <div style={{ width: "100%" }}>
                                 <TextField
                                     label="Senha"
-                                    name="senha"
                                     type={showPassword ? "text" : "password"}
-                                    value={userData.senha}
-                                    onChange={handleInputChange}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     fullWidth
                                     required
                                     variant="outlined"
-                                    sx={{
-                                        backgroundColor: "#fafafa",
-                                        borderRadius: "4px",
-                                    }}
+                                    sx={{ backgroundColor: "#fafafa" }}
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
@@ -182,13 +218,10 @@ export default function EditPerfil() {
                                         width: "100%",
                                         padding: "12px",
                                         fontSize: "16px",
-                                        backgroundColor: "#3f51b5",
-                                        '&:hover': {
-                                            backgroundColor: "#303f9f",
-                                        },
                                     }}
+                                    disabled={loading}
                                 >
-                                    Salvar Alterações
+                                    {loading ? "Salvando..." : "Salvar Alterações"}
                                 </Button>
                             </div>
                         </div>

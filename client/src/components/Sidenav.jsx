@@ -69,7 +69,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-const handleLogout = () => {
+const handleLogout = (navigate) => {
   Swal.fire({
     title: "Você tem certeza?",
     text: "Deseja realmente sair do sistema?",
@@ -81,9 +81,10 @@ const handleLogout = () => {
     cancelButtonText: "Cancelar",
   }).then((result) => {
     if (result.isConfirmed) {
-      // Lógica de logout
-      console.log("Usuário deslogado");
-      window.location.href = "/Login"; // Substitua pela lógica de navegação desejada
+      // Limpa o armazenamento local e redireciona para login
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/Login");
     }
   });
 };
@@ -93,6 +94,7 @@ export default function Sidenav() {
   const navigate = useNavigate();
   const updateOpen = useAppStore((state) => state.updateOpen);
   const open = useAppStore((state) => state.dopen);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -127,51 +129,53 @@ export default function Sidenav() {
                 navigate("/Home");
               }}
             >
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
-              >
-                <ListItemIcon
+              {["Funcionário", "Administrador", "zorbs"].includes(user?.type_of_acess) && (
+                <ListItemButton
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: "center",
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: "initial",
                         }
                       : {
-                          mr: "auto",
+                          justifyContent: "center",
                         },
                   ]}
                 >
-                  <img src={casinha} height={25} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Home"
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: "center",
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: "auto",
+                          },
+                    ]}
+                  >
+                    <img src={casinha} height={25} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Home"
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              )}
             </ListItem>
             <ListItem
               disablePadding
@@ -286,51 +290,53 @@ export default function Sidenav() {
                 navigate("/Usuarios");
               }}
             >
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
-              >
-                <ListItemIcon
+              {["Administrador", "zorbs"].includes(user?.type_of_acess) && (
+                <ListItemButton
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: "center",
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: "initial",
                         }
                       : {
-                          mr: "auto",
+                          justifyContent: "center",
                         },
                   ]}
                 >
-                  <img src={users} height={25} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Usuários"
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: "center",
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: "auto",
+                          },
+                    ]}
+                  >
+                    <img src={users} height={25} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Usuários"
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              )}
             </ListItem>
             <ListItem
               disablePadding
@@ -339,51 +345,53 @@ export default function Sidenav() {
                 navigate("/Companies");
               }}
             >
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
-              >
-                <ListItemIcon
+              {user?.type_of_acess === "zorbs" && (
+                <ListItemButton
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: "center",
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: "initial",
                         }
                       : {
-                          mr: "auto",
+                          justifyContent: "center",
                         },
                   ]}
                 >
-                  <BuildingIcon sx={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Usuários Zorbs"
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: "center",
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: "auto",
+                          },
+                    ]}
+                  >
+                    <BuildingIcon sx={{ color: "#fff" }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Usuários Zorbs"
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              )}
             </ListItem>
           </Box>
 
@@ -391,7 +399,7 @@ export default function Sidenav() {
           <ListItem
             disablePadding
             sx={{ display: "block" }}
-            onClick={handleLogout}
+            onClick={() => handleLogout(navigate)}
           >
             <ListItemButton
               sx={[
