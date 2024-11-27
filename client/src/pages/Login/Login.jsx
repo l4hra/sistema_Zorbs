@@ -13,7 +13,7 @@ import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
-import zorbs from "../../../public/assets/ZORBS.png";
+import zorbs from "../../../src/assets/ZORBS.png";
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);

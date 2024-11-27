@@ -50,9 +50,15 @@ export default function IceCreamModal({ onDataChange }) {
     setWeight(event.target.value);
   };
 
-  // Função de tratamento para o campo de preço
   const handlePriceChange = (event) => {
     setPrice(event.target.value);
+  };
+
+  const truncateName = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    return text;
   };
 
   return (
@@ -97,12 +103,13 @@ export default function IceCreamModal({ onDataChange }) {
                 autoFocus
               />
             ) : (
-              <h2 style={{ margin: 0 }}>{name}</h2>
+              <h2 style={{ margin: 0 }}>{truncateName(name, 10)}</h2>
             )}
             <IconButton onClick={handleEditClick}>
               <CreateIcon />
             </IconButton>
           </div>
+
           <div>
             <div
               className="acai"
@@ -199,7 +206,6 @@ export default function IceCreamModal({ onDataChange }) {
               maxRows={3}
             />
           </div>
-
           <div
             className="buttons"
             style={{

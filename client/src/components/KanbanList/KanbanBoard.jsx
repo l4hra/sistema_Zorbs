@@ -22,9 +22,14 @@ export default function Kanban() {
   };
 
   async function carregaComanda() {
+    const today = new Date().toISOString().split("T")[0];
+
     try {
-      const response = await fetch(`http://localhost:5000/commands`);
+      const response = await fetch(
+        `http://localhost:5000/commands?date=${today}`
+      );
       const data = await response.json();
+
       const grouped = data.reduce((acc, item) => {
         const { id_command } = item;
 
@@ -60,6 +65,7 @@ export default function Kanban() {
       console.error("Erro ao buscar as comandas:", error);
     }
   }
+
   useEffect(() => {
     carregaComanda();
   }, []);
@@ -188,7 +194,7 @@ export default function Kanban() {
           />
         </div>
         <ModalPagamento open={openDialog} handleClose={handleClose} />
-        <CommandModal updateBoard={carregaComanda} />
+        {/* <CommandModal updateBoard={carregaComanda} /> */}
       </DragDropContext>
     </>
   );

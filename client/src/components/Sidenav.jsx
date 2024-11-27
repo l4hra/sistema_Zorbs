@@ -15,12 +15,12 @@ import ListItemText from "@mui/material/ListItemText";
 import BuildingIcon from "@mui/icons-material/DomainAddRounded";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../appStore";
-import casinha from "../../public/assets/casinha.svg";
-import dashboard from "../../public/assets/dashboard.svg";
-import loja from "../../public/assets/loja.svg";
-import config from "../../public/assets/config.svg";
-import carrinho from "../../public/assets/carrinho.svg";
-import users from "../../public/assets/adicionar-usuario.svg";
+import casinha from "../../src/assets/casinha.svg";
+import dashboard from "../../src/assets/dashboard.svg";
+import loja from "../../src/assets/loja.svg";
+import config from "../../src/assets/config.svg";
+import carrinho from "../../src/assets/carrinho.svg";
+import users from "../../src/assets/adicionar-usuario.svg";
 
 const drawerWidth = 240;
 
@@ -420,7 +420,7 @@ export default function Sidenav({ color }) {
               />
             </ListItemButton>
           </ListItem> */}
-          
+
           {/* <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={[
