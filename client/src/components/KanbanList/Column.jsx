@@ -14,7 +14,6 @@ export default function Columns({ title, tasks, id, color, icon }) {
           overflowY: "scroll",
           scrollbarWidth: "none",
           padding: "8px",
-          // border: "2px solid #fb9383",
         }}
       >
         <h3

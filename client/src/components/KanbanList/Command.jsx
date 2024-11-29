@@ -3,9 +3,9 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditCommand from "../EditCommand/EditcommandModal";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+
+import moment from "moment";
+
 
 function NotaFiscalButton({ task }) {
   // Função para gerar o conteúdo da nota fiscal
@@ -52,17 +52,17 @@ function NotaFiscalButton({ task }) {
   );
 }
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+
 
 export default function Command({ task, index }) {
+
   const formatTime = (datetime) => {
     if (!datetime) return "Data inválida";
     try {
-      const localTime = dayjs(datetime).tz("America/Sao_Paulo").format("HH:mm");
+      const localTime = moment(datetime).format("HH:mm");
       return localTime;
     } catch (error) {
-      console.error("Erro ao formatar horário:", error);
+      console.error("Erro ao formatar horário:", error.message || error);
       return "Erro no horário";
     }
   };;
@@ -70,7 +70,7 @@ export default function Command({ task, index }) {
   return (
     <>
       <Draggable
-        draggableId={`${task.id_command}`} // use apenas se id for único
+        draggableId={`${task.id_command}`}
         key={task.id_command}
         index={index}
       >
@@ -130,18 +130,19 @@ export default function Command({ task, index }) {
                   alignItems: "center",
                 }}
               >
-                {/* <p>{task.produtos.join(",")}</p> */}
               </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
                 <NotaFiscalButton task={task} />
-                <EditCommand
-                  id={task.id_command}
-                  nameCommand={task.name}
-                  items={task.items}
-                  totalPrice={task.totalPrice}
-                  qtdProduct={task.qtd_products}
-                />
+                {task?.incompleted && (
+                  <EditCommand
+                    id={task.id_command}
+                    nameCommand={task.name}
+                    items={task.items}
+                    totalPrice={task.totalPrice}
+                    qtdProduct={task.qtd_products}
+                  />
+                ) || null}
               </div>
             </div>
             {provided.placeholder}

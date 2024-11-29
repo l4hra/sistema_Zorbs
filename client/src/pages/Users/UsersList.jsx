@@ -22,7 +22,6 @@ import DeleteIcon from "@mui/icons-material/DeleteForever";
 import EditUsers from "../../components/EditUser/EditUsers";
 import Swal from "sweetalert2";
 
-
 const columns = [
   { id: "code", label: "Código", minWidth: 170 },
   { id: "name", label: "Nome", minWidth: 100 },
@@ -39,9 +38,8 @@ export default function UsersList() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false); // Estado para o modal de edição
   const [editParms, setEditParms] = useState(null);
-  
+  const loggedUserId = localStorage.getItem("id"); // Recuperando o ID do usuário logado
 
-  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -53,14 +51,14 @@ export default function UsersList() {
     getUser();
   }, []);
 
-  const filteredRows = rows.filter((row) =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const getUser = async () => {
     const response = await fetch('http://localhost:5000/users');
     const data = await response.json();
-    setRows(data);
+  
+    // Filtra a lista de usuários para excluir o logado
+    const filteredData = data.filter((user) => user.id !== loggedUserId);
+    
+    setRows(filteredData);
   }
 
   const deleteUser = async (id) => {
@@ -73,14 +71,13 @@ export default function UsersList() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Sim, deletar",
     })
-      if (result.isConfirmed) {
-        await fetch(`http://localhost:5000/deleteUser/${id}`, { method: 'DELETE' });
-        Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
-        getUser();
-        location.reload(true);
-      }
-    };
-  
+    if (result.isConfirmed) {
+      await fetch(`http://localhost:5000/deleteUser/${id}`, { method: 'DELETE' });
+      Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
+      getUser();
+    }
+  };
+
   // Funções para editar produtos
   const handleEditOpen = (user) => {
     setEditParms(user);
@@ -92,26 +89,28 @@ export default function UsersList() {
     setEditParms(null);
   };
 
+  // Filtrando os dados exibidos com base no termo de pesquisa
+  const filteredRows = rows.filter((row) =>
+    row.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
-       <Modal
-            open={editOpen}
-            aria-labelledby="modal-title"
-            style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                
-            }}
-        >
-         
-         <EditUsers
-         user={editParms} 
-         closeEvent={handleEditClose} 
-         refreshUser={getUser} />
-         
-
-        </Modal>
+      <Modal
+        open={editOpen}
+        aria-labelledby="modal-title"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <EditUsers
+          user={editParms} 
+          closeEvent={handleEditClose} 
+          refreshUser={getUser} 
+        />
+      </Modal>
 
       <Dialog
         open={open}
@@ -122,7 +121,7 @@ export default function UsersList() {
         <NewUsersModal closeEvent={handleClose} refreshUser={getUser} />
       </Dialog>
 
-        <Paper sx={{ width: "100%", padding: "16px", boxShadow: "0px 0px 3px rgba(0,0,0,0.50)" }}>
+      <Paper sx={{ width: "100%", padding: "16px", boxShadow: "0px 0px 3px rgba(0,0,0,0.50)" }}>
         <Typography variant="h5" sx={{ paddingBottom: "10px", fontWeight: "bold" }}>
           Usuários Cadastrados
         </Typography>
@@ -135,7 +134,6 @@ export default function UsersList() {
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 300 }}
           />
-
           <Button
             variant="contained"
             onClick={handleClickOpen}
@@ -173,12 +171,12 @@ export default function UsersList() {
               {filteredRows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
-                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.id}</TableCell>
-                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.name}</TableCell>
-                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.type_of_acess}</TableCell>
-                    <TableCell align="center" sx={{fontSize: "17px"}}>{row.status}</TableCell>
-                    <TableCell align="center" sx={{fontSize: "17px"}}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.id}</TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.name}</TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.type_of_acess}</TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.status}</TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>
                       <Stack direction="row" spacing={2} justifyContent="center">
                         <EditIcon
                           style={{

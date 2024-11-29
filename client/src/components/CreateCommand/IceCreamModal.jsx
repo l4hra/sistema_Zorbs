@@ -50,15 +50,25 @@ export default function IceCreamModal({ onDataChange }) {
     setWeight(event.target.value);
   };
 
-  // Função de tratamento para o campo de preço
   const handlePriceChange = (event) => {
     setPrice(event.target.value);
+  };
+
+  const truncateName = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    return text;
   };
 
   return (
     <>
       <IconButton
-        style={{ backgroundColor: "#9FD6D2", borderRadius: "5px" }}
+        sx={{
+          backgroundColor: "#578eda", ":hover": { backgroundColor: "#174aa4" },
+          borderRadius: "5px",
+          color: "#fff"
+        }}
         onClick={handleOpenChild}
       >
         <AddIcon />
@@ -97,12 +107,16 @@ export default function IceCreamModal({ onDataChange }) {
                 autoFocus
               />
             ) : (
-              <h2 style={{ margin: 0 }}>{name}</h2>
+              <h2 style={{ margin: 0 }}>{truncateName(name, 10)}</h2>
             )}
-            <IconButton onClick={handleEditClick}>
+            <IconButton 
+            onClick={handleEditClick}
+            sx={{ color: "#578eda", cursor: "pointer"}}
+            >
               <CreateIcon />
             </IconButton>
           </div>
+
           <div>
             <div
               className="acai"
@@ -191,7 +205,7 @@ export default function IceCreamModal({ onDataChange }) {
             <TextField
               sx={{ width: "100%" }}
               id="outlined-multiline-flexible"
-              label="Obs"
+              label="Observação"
               value={observation}
               onChange={handleObservationChange}
               multiline
@@ -199,7 +213,6 @@ export default function IceCreamModal({ onDataChange }) {
               maxRows={3}
             />
           </div>
-
           <div
             className="buttons"
             style={{
@@ -210,7 +223,13 @@ export default function IceCreamModal({ onDataChange }) {
             }}
           >
             <Button
-              style={{ backgroundColor: "#F9A7AB", color: "#fff" }}
+              sx={{
+                backgroundColor: "#46C001",
+                "&:hover": {
+                  backgroundColor: "#3EA201",
+                }, 
+                color: "#fff"
+              }}
               onClick={handleCreateClick}
             >
               Criar
@@ -218,7 +237,10 @@ export default function IceCreamModal({ onDataChange }) {
 
             <Button
               onClick={handleClose}
-              style={{ backgroundColor: "#C64444", color: "#fff" }}
+              sx={{ backgroundColor: "#f8615b",
+                "&:hover": {
+                  backgroundColor: "#FF0000",
+                }, color: "#fff" }}
             >
               Cancelar
             </Button>

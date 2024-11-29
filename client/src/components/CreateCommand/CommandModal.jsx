@@ -8,15 +8,18 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { TextField, Divider } from "@mui/material";
 import TableComponent from "./TableCommand";
 import IceCreamModal from "./IceCreamModal";
-// import AcaiModal from "./AcaiModal";
 import axios from "axios";
+import {
+  AddCircle as AddCircleIcon,
+} from "@mui/icons-material";
 
-export default function CommandModal({ updateBoard }) {
+export default function CommandModal() {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [listItems, setListItems] = useState([]);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -28,7 +31,7 @@ export default function CommandModal({ updateBoard }) {
       );
       if (response.status === 200) {
         const activeProducts = response.data.filter((product) => product.status === "Ativo");
-        setListItems(activeProducts); // Atualiza o estado com os produtos recebidos
+        setListItems(activeProducts);
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -61,10 +64,12 @@ export default function CommandModal({ updateBoard }) {
         payment: selectedPayment.label,
         incompleted: 1,
       };
+
       const response = await axios.post(
         "http://localhost:5000/cadastroCommand",
         commandData
       );
+
       for (const product of selectedBeverages) {
         const productData = {
           id_products: product.id,
@@ -79,6 +84,7 @@ export default function CommandModal({ updateBoard }) {
           productData
         );
       }
+
       for (const ice of iceCreams) {
         const iceData = {
           id_products: null, //sorvete não tem id por enquanto..
@@ -91,15 +97,14 @@ export default function CommandModal({ updateBoard }) {
         await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
 
-      // updateBoard();
-
+      
       //chamar toast
       toast.success(response.data.message, {
         position: "bottom-left",
         duration: 5000,
       });
-
       handleClose();
+      location.reload(true); // improvisado para mostrar as comandas tem que arrumar isso 
     } catch (error) {
       toast.error("Erro ao criar a comanda", {
         position: "bottom-left",
@@ -220,19 +225,20 @@ export default function CommandModal({ updateBoard }) {
         }}
       >
         <Button
+        endIcon={<AddCircleIcon />}
           onClick={handleOpen}
           sx={{
-            backgroundColor: "#054f77",
+            backgroundColor: "#578eda", ":hover": { backgroundColor: "#174aa4" } ,
             color: "#fff",
-            width: "10%",
+            width: "200px",
             padding: "10px",
+            fontWeight: "bold",
           }}
         >
-          + Nova comanda
+          Nova comanda
         </Button>
-
-        {/* <h2>Comandas</h2> */}
       </div>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -344,8 +350,11 @@ export default function CommandModal({ updateBoard }) {
             }}
           >
             <Button
-              style={{
-                backgroundColor: "#F9A7AB",
+              sx={{
+                backgroundColor: "#46C001",
+                "&:hover": {
+                  backgroundColor: "#3EA201",
+                },
                 color: "#fff",
                 width: "15%",
               }}
@@ -356,10 +365,14 @@ export default function CommandModal({ updateBoard }) {
 
             <Button
               onClick={handleClose}
-              style={{
-                backgroundColor: "#C64444",
+              sx={{
                 color: "#fff",
                 width: "15%",
+                backgroundColor: "#f8615b",
+                "&:hover": {
+                  backgroundColor: "#FF0000",
+                },
+                
               }}
             >
               Cancelar

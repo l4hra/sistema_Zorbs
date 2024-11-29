@@ -1,4 +1,6 @@
 import { styled, useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { useAppStore } from "../appStore";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -12,12 +14,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import BuildingIcon from "@mui/icons-material/DomainAddRounded";
-import { useNavigate } from "react-router-dom";
-import { useAppStore } from "../appStore";
-import casinha from "../../public/assets/casinha.svg";
-import loja from "../../public/assets/loja.svg";
-import carrinho from "../../public/assets/carrinho.svg";
-import users from "../../public/assets/adicionar-usuario.svg";
+import casinha from "../assets/casinha.svg"
+import loja from "../assets/loja.svg";
+import carrinho from "../assets/carrinho.svg";
+import users from "../assets/adicionar-usuario.svg";
 import LogoutIcon from "@mui/icons-material/LogoutOutlined";
 import Swal from "sweetalert2";
 
@@ -91,10 +91,9 @@ const handleLogout = (navigate) => {
 
 export default function Sidenav() {
   const theme = useTheme();
-  const navigate = useNavigate();
-  const updateOpen = useAppStore((state) => state.updateOpen);
   const open = useAppStore((state) => state.dopen);
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -446,7 +445,7 @@ export default function Sidenav() {
                 ]}
               />
             </ListItemButton>
-          </ListItem>
+          </ListItem> 
         </List>
       </Drawer>
     </Box>

@@ -23,7 +23,7 @@ export default function TableComponent({
           <TableRow>
             <TableCell
               colSpan={3}
-              style={{ backgroundColor: "pink", borderRadius: "5px" }}
+              style={{ backgroundColor: "#054f77", borderRadius: "5px" }}
             >
               <Typography
                 variant="h6"
@@ -37,7 +37,7 @@ export default function TableComponent({
         </TableHead>
         {/* Corpo da tabela com rolagem */}
         <TableBody
-        
+
         >
           {allSelectedProducts &&
             allSelectedProducts.map((item) => (
@@ -83,7 +83,7 @@ export default function TableComponent({
         </TableBody>
       </Table>
 
-      
+
       <Table>
         <TableBody>
           <TableRow>

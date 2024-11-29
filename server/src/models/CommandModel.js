@@ -28,29 +28,35 @@ export async function createCommand(command) {
 // Função para visualizar produtos
 export async function getAllCommands(req, res) {
   try {
-    const [rows] = await conexao.query(
-      `
+    const dateFilter = req.query.date;
+    const query = `
       SELECT 
-      db_zorbs.commands.id,
-      db_zorbs.commands.date_opening,
-      db_zorbs.commands.totalPrice,
-      db_zorbs.commands.payment,
-      db_zorbs.commands.completed,
-      db_zorbs.commands.incompleted,
-      db_zorbs.commands.canceled,
-      db_zorbs.item_command.id AS item_command_id,
-      db_zorbs.item_command.id_command,
-      db_zorbs.item_command.name AS item_name,
-      db_zorbs.item_command.qtd_products,
-      db_zorbs.item_command.und_medida,
-      db_zorbs.item_command.value_item,
-      db_zorbs.products.id AS product_id,
-      db_zorbs.products.name AS product_name,
-      db_zorbs.products.category AS product_category,
-      db_zorbs.products.observacao AS product_observacao
-    FROM db_zorbs.commands LEFT JOIN db_zorbs.item_command ON commands.id = item_command.id_command LEFT JOIN db_zorbs.products ON products.id = item_command.id_products
-    `
-    );
+        commands.id,
+        CONVERT_TZ(commands.date_opening, '+00:00', '-03:00') AS date_opening,
+        commands.totalPrice,
+        commands.payment,
+        commands.completed,
+        commands.incompleted,
+        commands.canceled,
+        item_command.id AS item_command_id,
+        item_command.id_command,
+        item_command.name AS item_name,
+        item_command.qtd_products,
+        item_command.und_medida,
+        item_command.value_item,
+        products.id AS product_id,
+        products.name AS product_name,
+        products.category AS product_category,
+        products.observacao AS product_observacao
+      FROM commands
+      LEFT JOIN item_command ON commands.id = item_command.id_command
+      LEFT JOIN products ON products.id = item_command.id_products
+      ${dateFilter ? `WHERE DATE(commands.date_opening) = ?` : ""}
+    `;
+
+    const values = dateFilter ? [dateFilter] : [];
+    const [rows] = await conexao.query(query, values);
+
     res.status(200).json(rows);
   } catch (error) {
     console.log(error);

@@ -4,9 +4,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
 
 export default function ModalPagamento({ open, handleClose }) {

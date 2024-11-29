@@ -185,10 +185,8 @@ export default function Navbar() {
               },
             }}
           >
-            <div
-              
-            >
-              <h2 style={{ fontFamily: "Electrolize", color: "#ffff" }}>
+            <div>
+              <h2 style={{ fontFamily: "Electrolize", color: "black" }}>
                 {formatTime(time)}
               </h2>
             </div>
@@ -215,6 +213,15 @@ export default function Navbar() {
               <AccountCircleRoundedIcon />
             </IconButton>
 
+            {/* <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <LogoutIcon />
+            </IconButton> */}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
