@@ -25,10 +25,10 @@ export default function ModalPagamento({ open, handleClose }) {
           }}
         >
           <DialogTitle style={{ display: "flex", justifyContent: "center" }}>
-            Confirme o pagamento
+          Defina a forma de pagmento
           </DialogTitle>
           <DialogContent>
-            <p>Tem certeza que essa comanda foi paga?</p>
+            <p>É importante que as comandas sejam salvas com a forma de pagamento correta.</p>
           </DialogContent>
           <DialogActions style={{ display: "flex", justifyContent: "center" }}>
             <Button>Confirmar</Button>
