@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
-export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
+export default function CommandModal({ id, items, totalPrice, qtdProduct, paymentIs}) {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
@@ -39,7 +39,11 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
         weight: item.qtd_products || item.weight || 1,
       }))
     );
-  }, [items]);
+
+    const initialPayment = payment.find((option) => option.label === paymentIs);
+    setSelectedPayment(initialPayment || null);
+
+  }, [items, paymentIs]);
 
   const fetchProducts = async (categoria) => {
     try {
@@ -63,7 +67,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
 
 
     if (!selectedPayment) {
-      toast.error("Selecione uma forma de pagamento.", {
+      toast.error("Selecione uma forma de pagamento para atualizar o pedido.", {
         position: "bottom-left",
         duration: 5000,
       });
@@ -85,6 +89,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct }) {
 
       await axios.put(`http://localhost:5000/itemCommands/${id}`, {
         items: commandData,
+        payment:  selectedPayment.label,
       });
       toast.success("Comanda atualizada com sucesso!", {
         position: "bottom-left",

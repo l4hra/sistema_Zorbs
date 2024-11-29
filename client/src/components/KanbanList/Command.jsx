@@ -139,6 +139,7 @@ console.log('task', task)
                 <EditCommand
                   id={task.id_command}
                   nameCommand={task.name}
+                  paymentIs={task.payment}
                   items={task.items}
                   totalPrice={task.totalPrice}
                   qtdProduct={task.qtd_products}
