@@ -58,12 +58,6 @@ export async function deleteUser(id) {
 }
 
 export async function updateUsers(id, users) {
-  // const idErrors = validateUsers(id);
-  // const errors = [...idErrors];
-
-  // if (errors.length > 0) {
-  //     return [400, errors];
-  // }
 
   const sql = `UPDATE users SET 
   name = ?,

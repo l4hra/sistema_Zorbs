@@ -26,7 +26,6 @@ import {
   excluirUsers,
   atualizaUsers,
 } from "./src/controllers/UserController.js";
-
 import {
   cadastroProduct,
   atualizaProduct,
