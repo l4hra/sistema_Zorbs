@@ -1,17 +1,16 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import {  DataGrid,
+import {
+  DataGrid,
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarExport,
-  GridToolbarDensitySelector, } from "@mui/x-data-grid";
+  GridToolbarDensitySelector,
+} from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import { useState } from "react";
 import { useEffect } from "react";
-
-
-
 
 function CustomToolbar() {
   return (
@@ -19,19 +18,18 @@ function CustomToolbar() {
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
       <GridToolbarDensitySelector
-        slotProps={{ tooltip: { title: 'Change density' } }}
+        slotProps={{ tooltip: { title: "Change density" } }}
       />
       <Box sx={{ flexGrow: 1 }} />
       <GridToolbarExport
         slotProps={{
-          tooltip: { title: 'Export data' },
-          button: { variant: 'outlined' },
+          tooltip: { title: "Export data" },
+          button: { variant: "outlined" },
         }}
       />
     </GridToolbarContainer>
   );
 }
-
 
 export default function TableDashboard({ startDate, endDate }) {
   const [rows, setRows] = useState([]);
@@ -90,6 +88,23 @@ export default function TableDashboard({ startDate, endDate }) {
         return <span>{status}</span>;
       },
     },
+    {
+      field: "date_opening",
+      headerName: "Data de criação",
+      width: 250,
+      renderCell: (params) => {
+        const rawDate = params.row.date_opening;
+        if (!rawDate) return <span>-</span>;
+
+        const formattedDate = new Date(rawDate).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+
+        return <span>{formattedDate}</span>;
+      },
+    },
   ];
 
   return (
@@ -97,10 +112,9 @@ export default function TableDashboard({ startDate, endDate }) {
       <Box sx={{ height: 400, width: "85%" }}>
         <DataGrid
           sx={{
-            padding: '5px',
+            padding: "5px",
             boxShadow: 2,
-            border: 'none',
-         
+            border: "none",
           }}
           rows={rows}
           columns={columns}
