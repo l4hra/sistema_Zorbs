@@ -102,10 +102,18 @@ export default function Kanban() {
         updatedIncomplete.push(task);
         break;
       case "2":
+        if (task.payment === "Não definido") {
+          toast.error("Forma de pagamento não definida! Verifique a comanda.", {
+            position: "bottom-left",
+            duration: 5000,
+          });
+          setOpenDialog(true);
+          return; 
+        }
         status = "completed";
         updatedCompleted.push(task);
         break;
-      case "3":
+      case "3": // Cancelado
         status = "canceled";
         updatedCanceled.push(task);
         break;
@@ -195,7 +203,8 @@ export default function Kanban() {
             icon={<ClearIcon />}
           />
         </div>
-        <ModalPagamento open={openDialog} handleClose={handleClose} />
+        {/* <ModalPagamento open={openDialog} handleClose={handleClose} /> */}
+        {/* <CommandModal updateBoard={carregaComanda} /> */}
       </DragDropContext>
     </>
   );

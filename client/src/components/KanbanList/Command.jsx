@@ -135,14 +135,15 @@ export default function Command({ task, index }) {
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
                 <NotaFiscalButton task={task} />
                 {task?.incompleted && (
-                  <EditCommand
-                    id={task.id_command}
-                    nameCommand={task.name}
-                    items={task.items}
-                    totalPrice={task.totalPrice}
-                    qtdProduct={task.qtd_products}
-                  />
-                ) || null}
+                <EditCommand
+                  id={task.id_command}
+                  nameCommand={task.name}
+                  paymentIs={task.payment}
+                  items={task.items}
+                  totalPrice={task.totalPrice}
+                  qtdProduct={task.qtd_products}
+                />
+              ) || null}
               </div>
             </div>
             {provided.placeholder}

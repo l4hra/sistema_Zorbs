@@ -62,12 +62,38 @@ export async function getAllItemCommands(req, res) {
 
 // Função para editar produtos
 export async function updateItemCommand(idCommand, item) {
+  // Atualizar o campo "payment" na tabela "command"
+  if (item.payment !== undefined) {
+    const paymentUpdateResult = await updatePaymentInCommand(idCommand, item.payment);
+    if (paymentUpdateResult[0] !== 200) {
+      return paymentUpdateResult; 
+    }
+  }
+
   await deleteItemCommandByIdCommand(idCommand);
-  for(const iterator of item.items) {
+  for (const iterator of item.items) {
     await createItemCommand(iterator);
   }
 
-  return [200, "Comanda atualizada"];
+  return [200, "Comanda e pagamento atualizados"];
+}
+
+export async function updatePaymentInCommand(idCommand, payment) {
+  const sql = `UPDATE commands SET payment = ? WHERE id = ?`;
+  const params = [payment, idCommand];
+
+  try {
+    const [result] = await conexao.query(sql, params);
+    if (result.affectedRows > 0) {
+      console.log("Pagamento da comanda atualizado");
+      return [200, "Pagamento atualizado com sucesso"];
+    } else {
+      return [404, "Comanda não encontrada"];
+    }
+  } catch (error) {
+    console.log(error);
+    return [500, error];
+  }
 }
 
 export async function deleteItemCommandByIdCommand(idCommand) {

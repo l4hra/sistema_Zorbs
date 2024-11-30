@@ -56,7 +56,9 @@ export default function UsersList() {
     const data = await response.json();
   
     // Filtra a lista de usuários para excluir o logado
-    const filteredData = data.filter((user) => user.id !== loggedUserId);
+    const loggedUserIdNum = parseInt(loggedUserId, 5);
+
+    const filteredData = data.filter((user) => user.id !== loggedUserIdNum);
     
     setRows(filteredData);
   }
