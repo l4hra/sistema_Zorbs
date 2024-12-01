@@ -254,15 +254,17 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             },
           }}
         >
-          Atualizar
+          Editar
         </Button>
         <Button
           variant="contained"
           onClick={closeEvent}
           sx={{
-            backgroundColor: "#1976d2",
+            color: "#fff",
+            width: "15%",
+            backgroundColor: "#f8615b",
             "&:hover": {
-              backgroundColor: "#115293",
+              backgroundColor: "#FF0000",
             },
           }}
         >

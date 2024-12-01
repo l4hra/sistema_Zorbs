@@ -338,8 +338,11 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
             }}
           >
             <Button
-              style={{
-                backgroundColor: "#F9A7AB",
+              sx={{
+                backgroundColor: "#1976d2",
+                "&:hover": {
+                  backgroundColor: "#115293",
+                },
                 color: "#fff",
                 width: "15%",
               }}
@@ -350,10 +353,13 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
 
             <Button
               onClick={handleClose}
-              style={{
-                backgroundColor: "#C64444",
+              sx={{
                 color: "#fff",
                 width: "15%",
+                backgroundColor: "#f8615b",
+                "&:hover": {
+                  backgroundColor: "#FF0000",
+                },
               }}
             >
               Cancelar

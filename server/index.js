@@ -15,7 +15,7 @@ import {
   criarItemCommand,
   atualizaItemCommand,
 } from "./src/controllers/Item_CommandController.js";
-import { getUsers, login } from "./src/models/UserModel.js";
+import { getUsers, login, forgotPassword } from "./src/models/UserModel.js";
 import {
   getAllCommands,
   getFilterCommands,
@@ -47,7 +47,9 @@ app.use(
 );
 app.use(express.json());
 
+//Rotas Login
 app.post("/login", login);
+app.post("/forgot-password", forgotPassword);
 
 //Rotas Comandas
 app.post("/cadastroCommand", cadastroCommand);

@@ -84,6 +84,7 @@ const handleLogout = (navigate) => {
       // Limpa o armazenamento local e redireciona para login
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      localStorage.removeItem("id");
       navigate("/Login");
     }
   });

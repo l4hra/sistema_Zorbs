@@ -372,7 +372,6 @@ export default function CommandModal() {
                 "&:hover": {
                   backgroundColor: "#FF0000",
                 },
-                
               }}
             >
               Cancelar

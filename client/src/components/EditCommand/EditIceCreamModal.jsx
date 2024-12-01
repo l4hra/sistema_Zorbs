@@ -58,7 +58,11 @@ export default function IceCreamModal({ onDataChange }) {
   return (
     <>
       <IconButton
-        style={{ backgroundColor: "#9FD6D2", borderRadius: "5px" }}
+        sx={{
+          backgroundColor: "#578eda", ":hover": { backgroundColor: "#174aa4" },
+          borderRadius: "5px",
+          color: "#fff"
+        }}
         onClick={handleOpenChild}
       >
         <AddIcon />
@@ -99,7 +103,7 @@ export default function IceCreamModal({ onDataChange }) {
             ) : (
               <h2 style={{ margin: 0 }}>{name}</h2>
             )}
-            <IconButton onClick={handleEditClick}>
+            <IconButton sx={{ color: "#578eda", cursor: "pointer"}} onClick={handleEditClick}>
               <CreateIcon />
             </IconButton>
           </div>
@@ -210,7 +214,13 @@ export default function IceCreamModal({ onDataChange }) {
             }}
           >
             <Button
-              style={{ backgroundColor: "#F9A7AB", color: "#fff" }}
+              sx={{
+                backgroundColor: "#46C001",
+                "&:hover": {
+                  backgroundColor: "#3EA201",
+                }, 
+                color: "#fff"
+              }}
               onClick={handleCreateClick}
             >
               Criar
@@ -218,7 +228,10 @@ export default function IceCreamModal({ onDataChange }) {
 
             <Button
               onClick={handleClose}
-              style={{ backgroundColor: "#C64444", color: "#fff" }}
+              sx={{ backgroundColor: "#f8615b",
+                "&:hover": {
+                  backgroundColor: "#FF0000",
+                }, color: "#fff" }}
             >
               Cancelar
             </Button>

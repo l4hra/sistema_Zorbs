@@ -52,16 +52,16 @@ export default function UsersList() {
   }, []);
 
   const getUser = async () => {
-    const response = await fetch('http://localhost:5000/users');
+    const response = await fetch("http://localhost:5000/users");
     const data = await response.json();
-  
+
     // Filtra a lista de usuários para excluir o logado
-    const loggedUserIdNum = parseInt(loggedUserId, 5);
+    const loggedUserIdNum = loggedUserId ? parseInt(loggedUserId, 10) : null;
 
     const filteredData = data.filter((user) => user.id !== loggedUserIdNum);
-    
+
     setRows(filteredData);
-  }
+  };
 
   const deleteUser = async (id) => {
     const result = await Swal.fire({
@@ -72,9 +72,11 @@ export default function UsersList() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Sim, deletar",
-    })
+    });
     if (result.isConfirmed) {
-      await fetch(`http://localhost:5000/deleteUser/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/deleteUser/${id}`, {
+        method: "DELETE",
+      });
       Swal.fire("Deletado com sucesso!", "Usuário foi deletado.", "success");
       getUser();
     }
@@ -108,9 +110,9 @@ export default function UsersList() {
         }}
       >
         <EditUsers
-          user={editParms} 
-          closeEvent={handleEditClose} 
-          refreshUser={getUser} 
+          user={editParms}
+          closeEvent={handleEditClose}
+          refreshUser={getUser}
         />
       </Modal>
 
@@ -123,11 +125,26 @@ export default function UsersList() {
         <NewUsersModal closeEvent={handleClose} refreshUser={getUser} />
       </Dialog>
 
-      <Paper sx={{ width: "100%", padding: "16px", boxShadow: "0px 0px 3px rgba(0,0,0,0.50)" }}>
-        <Typography variant="h5" sx={{ paddingBottom: "10px", fontWeight: "bold" }}>
+      <Paper
+        sx={{
+          width: "100%",
+          padding: "16px",
+          boxShadow: "0px 0px 3px rgba(0,0,0,0.50)",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ paddingBottom: "10px", fontWeight: "bold" }}
+        >
           Usuários Cadastrados
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: 2,
+          }}
+        >
           <TextField
             variant="outlined"
             label="Pesquisar Usuários"
@@ -174,12 +191,24 @@ export default function UsersList() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.id}</TableCell>
-                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.name}</TableCell>
-                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.type_of_acess}</TableCell>
-                    <TableCell align="center" sx={{ fontSize: "17px" }}>{row.status}</TableCell>
                     <TableCell align="center" sx={{ fontSize: "17px" }}>
-                      <Stack direction="row" spacing={2} justifyContent="center">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>
+                      {row.type_of_acess}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>
+                      {row.status}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "17px" }}>
+                      <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="center"
+                      >
                         <EditIcon
                           style={{
                             fontSize: "20px",

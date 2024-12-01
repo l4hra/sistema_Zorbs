@@ -10,6 +10,7 @@ import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import zorbs from "../../assets/ZORBS.png";
 
 export default function Login() {
@@ -17,7 +18,9 @@ export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
-  const navigate = useNavigate(); // Para redirecionar após login bem-sucedido
+  const [forgotPasswordEmail, setForgotPasswordEmail] = React.useState("");
+  const [isForgotPassword, setIsForgotPassword] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -38,8 +41,6 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      
-
       const data = await response.json();
 
       if (!response.ok) {
@@ -47,11 +48,42 @@ export default function Login() {
       }
 
       // Sucesso: Armazene o token JWT no localStorage
+      localStorage.setItem("id", data.user.id);
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
       navigate("/home"); // Redireciona para o dashboard
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleForgotPassword = async (event) => {
+    event.preventDefault();
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:5000/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: forgotPasswordEmail }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Erro ao recuperar a senha.");
+      }
+
+      toast.success("A senha foi enviada para o seu e-mail.", {
+        position: "bottom-left",
+        duration: 5000,
+      });
+
+      setIsForgotPassword(false);
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -60,61 +92,84 @@ export default function Login() {
       <div className={styles.bc}>
         <img src={zorbs} alt="esquilo" width={400} />
         <div className={styles.texts}>
-          <h1 style={{ marginBottom: "2rem", marginTop: "2rem" }}>Login</h1>
+          <h1 style={{ marginBottom: "2rem", marginTop: "2rem" }}>
+            {isForgotPassword ? "Recuperar Senha" : "Login"}
+          </h1>
           <div className={styles.secondBox}>
             <div>
-              <form onSubmit={handleLogin}>
+              <form onSubmit={isForgotPassword ? handleForgotPassword : handleLogin}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email">E-mail:</InputLabel>
-                  <TextField
-                    required
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-
-                  <InputLabel htmlFor="password">Senha:</InputLabel>
-                  <OutlinedInput
-                    id="password"
-                    required
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-
-                  {error && (
-                    <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+                  {isForgotPassword ? (
+                    <>
+                      <InputLabel htmlFor="email">E-mail:</InputLabel>
+                      <TextField
+                        required
+                        id="email"
+                        type="email"
+                        value={forgotPasswordEmail}
+                        sx={{ width: "400px"}}
+                        onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                      />
+                      {error && <p style={{ color: "red" }}>{error}</p>}
+                      <Button type="submit" style={{ marginTop: "2rem" }}>
+                        Enviar Senha
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <InputLabel htmlFor="email">E-mail:</InputLabel>
+                      <TextField
+                        required
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <InputLabel htmlFor="password">Senha:</InputLabel>
+                      <OutlinedInput
+                        id="password"
+                        required
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+                      <Button type="submit" style={{ marginTop: "2rem" }}>
+                        Login
+                      </Button>
+                    </>
                   )}
-
-                  <Button type="submit" style={{ marginTop: "2rem" }}>
-                    Login
-                  </Button>
                 </Stack>
               </form>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  marginTop: "20px",
-                }}
-              >
-                <Link style={{ color: "black" }}>Esqueceu sua senha?</Link>
-              </div>
+              {!isForgotPassword && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Link
+                    style={{ color: "black", cursor: "pointer" }}
+                    onClick={() => setIsForgotPassword(true)}
+                  >
+                    Esqueceu sua senha?
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
