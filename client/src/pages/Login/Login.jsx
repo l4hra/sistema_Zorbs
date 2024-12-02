@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../Login/Login.module.css";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -9,17 +10,16 @@ import Visibility from "@mui/icons-material/Visibility";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import zorbs from "../../assets/ZORBS.png";
 
 export default function Login() {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [forgotPasswordEmail, setForgotPasswordEmail] = React.useState("");
-  const [isForgotPassword, setIsForgotPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

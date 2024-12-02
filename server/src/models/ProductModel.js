@@ -22,10 +22,8 @@ export async function addProducts(products) {
 
     try {
         const [retorno] = await conexao.query(sql, params);
-        console.log('Prouto cadastrado');
         return [201, 'Produto cadastrado']
     } catch (error) {
-        console.log(error);
         return [500, error]
     }
 }
@@ -36,12 +34,10 @@ export async function getProducts(categoria) {
     if (categoria){
         filtros = `WHERE category='${categoria}'`
     }
-    console.log(filtros);
     try {
         const [rows] = await conexao.query(`SELECT * FROM products ${filtros}`);
         return [200,rows];
     } catch (error) {
-        console.log(filtros);
         console.log(error);
         res.status(500).json({ message: 'Erro ao buscar produtos', error });
     }

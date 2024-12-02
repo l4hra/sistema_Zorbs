@@ -4,9 +4,7 @@ import Columns from "../KanbanList/Column";
 import AlarmIcon from "@mui/icons-material/Alarm";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
-import ModalPagamento from "./CommandPaga";
 import toast from "react-hot-toast";
-import CommandModal from "../CreateCommand/CommandModal";
 
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
@@ -15,11 +13,6 @@ export default function Kanban() {
   const [completed, setCompleted] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
   const [canceled, setcanceled] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
 
   async function carregaComanda() {
     const today = new Date().toISOString().split("T")[0];
@@ -31,7 +24,14 @@ export default function Kanban() {
       const data = await response.json();
 
       const grouped = data.reduce((acc, item) => {
-        const { id_command } = item;
+        const { id_command, date_opening, incompleted } = item;
+
+        if (
+          !incompleted &&
+          new Date(date_opening).toISOString().split("T")[0] !== today
+        ) {
+          return acc;
+        }
 
         if (!acc[id_command]) {
           acc[id_command] = {
@@ -58,9 +58,21 @@ export default function Kanban() {
       }, {});
 
       const result = Object.values(grouped);
-      setCompleted(result.filter((pedido) => pedido.completed));
-      setIncomplete(result.filter((pedido) => pedido.incompleted));
-      setcanceled(result.filter((pedido) => pedido.canceled));
+      setCompleted(
+        result.filter(
+          (pedido) => pedido.completed
+        )
+      );
+      setIncomplete(
+        result.filter(
+          (pedido) => pedido.incompleted
+        )
+      );
+      setcanceled(
+        result.filter(
+          (pedido) => pedido.canceled
+        )
+      );
     } catch (error) {
       console.error("Erro ao buscar as comandas:", error);
     }
@@ -108,7 +120,7 @@ export default function Kanban() {
             duration: 5000,
           });
           setOpenDialog(true);
-          return; 
+          return;
         }
         status = "completed";
         updatedCompleted.push(task);
@@ -165,12 +177,11 @@ export default function Kanban() {
       console.error("Erro na requisição PUT:", error);
     }
   }
+
   dayjs.locale("pt-br");
+
   return (
     <>
-
-      
-
       <DragDropContext onDragEnd={handleDragEnd}>
         <div
           style={{

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import { useAppStore } from "../appStore";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,17 +10,9 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import { useAppStore } from "../appStore";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
-const AppBar = styled(
-  MuiAppBar,
-  {}
-)(({ theme }) => ({
+const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
 }));
 
@@ -28,9 +20,13 @@ export default function Navbar() {
   const [time, setTime] = useState(new Date());
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([
+    { id: 1, message: "Você tem uma nova mensagem.", read: false },
+    { id: 2, message: "Atualização disponível.", read: false },
+  ]);
+
   const updateOpen = useAppStore((state) => state.updateOpen);
   const dopen = useAppStore((state) => state.dopen);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,53 +42,30 @@ export default function Navbar() {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
-    navigate("/EditPerfil");
-    // setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileClick = () => {
-    handleMenuClose();
-    navigate("/profile-settings");
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+  const handleDeleteNotification = (id) => {
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter((notification) => notification.id !== id)
+    );
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+  const addNotification = (message) => {
+    const newNotification = {
+      id: Date.now(),
+      message,
+      read: false,
+    };
+    setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
   };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleProfileClick}>Meu Perfil</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Configurações</MenuItem>
-    </Menu>
-  );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -112,43 +85,47 @@ export default function Navbar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={3} color="error">
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={notifications.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+    </Menu>
+  );
 
-      {/* <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <LogoutIcon />
-        </IconButton>
-        <p>Logout</p>
-      </MenuItem> */}
-
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+  const renderNotificationsMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      keepMounted
+      open={Boolean(anchorEl)}
+      onClose={() => setAnchorEl(null)}
+    >
+      {notifications.length > 0 ? (
+        notifications.map((notification) => (
+          <MenuItem key={notification.id}>
+            <Typography variant="body2" sx={{ flexGrow: 1 }}>
+              {notification.message}
+            </Typography>
+            <IconButton
+              size="small"
+              color="error"
+              onClick={() => handleDeleteNotification(notification.id)}
+            >
+              ✕
+            </IconButton>
+          </MenuItem>
+        ))
+      ) : (
+        <MenuItem>
+          <Typography variant="body2">Sem notificações.</Typography>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -175,70 +152,24 @@ export default function Navbar() {
             ZORBS
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box
-            sx={{
-              display: {
-                xs: "none",
-                md: "flex",
-
-                alignItems: "center",
-              },
-            }}
-          >
-            <div>
-              <h2 style={{ fontFamily: "Electrolize", color: "black" }}>
-                {formatTime(time)}
-              </h2>
-            </div>
-
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h6" sx={{ mr: 2 }}>
+              {formatTime(time)}
+            </Typography>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
               color="inherit"
+              onClick={(event) => setAnchorEl(event.currentTarget)}
             >
-              <Badge badgeContent={3} color="error">
+              <Badge badgeContent={notifications.length} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
-
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircleRoundedIcon />
-            </IconButton>
-
-            {/* <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <LogoutIcon />
-            </IconButton> */}
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      {renderNotificationsMenu}
     </Box>
   );
 }

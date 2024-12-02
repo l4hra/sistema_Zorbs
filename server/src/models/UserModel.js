@@ -36,7 +36,6 @@ export async function addUser(users) {
 
   try {
     const [retorno] = await conexao.query(sql, params);
-    console.log("Usuário cadastrado");
     return [201, "Usuário cadastrado"];
   } catch (error) {
     console.log(error);

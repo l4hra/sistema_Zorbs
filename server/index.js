@@ -1,37 +1,18 @@
 import cors from "cors";
 import express from "express";
-import {
-  cadastroCommand,
-  atualizaCommand,
-  editarCommand,
-} from "./src/controllers/CommandController.js";
-import { getCompanies } from "./src/models/CompaniesModel.js";
-import {
-  createCompanies,
-  excluirCompanies,
-  atualizaCompanies,
-} from "./src/controllers/CompaniesController.js";
-import {
-  criarItemCommand,
-  atualizaItemCommand,
-} from "./src/controllers/Item_CommandController.js";
+//Importações usuário
+import { cadastroUser, excluirUsers, atualizaUsers, } from "./src/controllers/UserController.js";
 import { getUsers, login, forgotPassword } from "./src/models/UserModel.js";
-import {
-  getAllCommands,
-  getFilterCommands,
-} from "./src/models/CommandModel.js";
+//Importações Comandas
+import { cadastroCommand, atualizaCommand, editarCommand, } from "./src/controllers/CommandController.js";
+import { getAllCommands, getFilterCommands, } from "./src/models/CommandModel.js";
+import { criarItemCommand, atualizaItemCommand, } from "./src/controllers/Item_CommandController.js";
 import { getAllItemCommands } from "./src/models/Item_CommandModel.js";
-import {
-  cadastroUser,
-  excluirUsers,
-  atualizaUsers,
-} from "./src/controllers/UserController.js";
-import {
-  cadastroProduct,
-  atualizaProduct,
-  listaProdutos,
-  toggleProduct,
-} from "./src/controllers/ProductsController.js";
+//Importações empresas
+import { getCompanies } from "./src/models/CompaniesModel.js";
+import { createCompanies, excluirCompanies, atualizaCompanies, } from "./src/controllers/CompaniesController.js";
+//Importações produtos
+import { cadastroProduct, atualizaProduct, listaProdutos, toggleProduct, } from "./src/controllers/ProductsController.js";
 import { authenticateToken } from "./src/middlewares/authMiddleware.js";
 import { checkAccessLevel } from "./src/middlewares/authMiddleware.js";
 

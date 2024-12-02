@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import {  DataGrid,
   GridToolbarContainer,
@@ -9,8 +9,6 @@ import {  DataGrid,
 import { ptBR } from "@mui/x-data-grid/locales";
 import { useState } from "react";
 import { useEffect } from "react";
-
-
 
 
 function CustomToolbar() {

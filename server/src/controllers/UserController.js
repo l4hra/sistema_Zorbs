@@ -1,10 +1,11 @@
 import { addUser, deleteUser, updateUsers } from "../models/UserModel.js";
 
 export async function cadastroUser(req, res){
-    console.log('UserController cadastroUsuario');
+    console.log('UserController: cadastroUsuario');
     const user = req.body;
     try {
         const [status, resposta] = await addUser(user);
+        console.log('UserControler: usuárioCadastrado', user)
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error)
@@ -17,6 +18,7 @@ export async function excluirUsers(req, res) {
     const { id } = req.params;
     try {
         const [status, resposta] = await deleteUser((id));
+        console.log('UserController: usuárioDeletado', id)
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error);
