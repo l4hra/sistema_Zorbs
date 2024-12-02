@@ -80,7 +80,7 @@ export default function Login() {
         position: "bottom-left",
         duration: 5000,
       });
-
+      setForgotPasswordEmail("");
       setIsForgotPassword(false);
     } catch (error) {
       setError(error.message);
