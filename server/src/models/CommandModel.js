@@ -76,7 +76,7 @@ export async function getFilterCommands(req, res) {
       `
       SELECT 
         id,
-        date_opening,
+        CONVERT_TZ(commands.date_opening, '+00:00', '-03:00') AS date_opening,
         totalPrice,
         payment,
         completed,

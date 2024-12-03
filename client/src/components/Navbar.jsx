@@ -15,6 +15,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useAppStore } from "../appStore";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import logo from "../assets/donana2.png";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
@@ -179,14 +181,8 @@ export default function Navbar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            ZORBS
-          </Typography>
+
+          <img src={logo} alt="logodonana" width={150} />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Typography variant="h6" sx={{ mr: 2, paddingTop: "10px" }}>
