@@ -6,11 +6,8 @@ import EditCommand from "../EditCommand/EditcommandModal";
 
 import moment from "moment";
 
-
 function NotaFiscalButton({ task }) {
-  // Função para gerar o conteúdo da nota fiscal
   const gerarConteudoNotaFiscal = () => {
-    // Gerando a lista de produtos dinamicamente
     const listaDeProdutos = task.items
       .map((item, index) => {
         return `${item.qtd_products}}. ${item.name} -  ${item.und_medida}`;
@@ -19,7 +16,7 @@ function NotaFiscalButton({ task }) {
 
     // Construindo o texto da nota fiscal
     const notaFiscal = `
-       Sorveteria Zorbs   
+       Sorveteria Dona Ana   
     
     ----------------------------------------     
       Produtos:  
@@ -52,18 +49,15 @@ function NotaFiscalButton({ task }) {
   );
 }
 
-
-
 export default function Command({ task, index }) {
-
-console.log('task', task)
+  console.log("task", task);
   const formatTime = (datetime) => {
     try {
       const localTime = moment(datetime).format("HH:mm");
       return localTime;
     } catch (error) {
       console.error("Erro ao formatar horário:", error.message || error);
-      return "Erro no horário"; 
+      return "Erro no horário";
     }
   };
 
@@ -135,16 +129,17 @@ console.log('task', task)
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
                 <NotaFiscalButton task={task} />
-                {task?.incompleted && (
-                <EditCommand
-                  id={task.id_command}
-                  nameCommand={task.name}
-                  paymentIs={task.payment}
-                  items={task.items}
-                  totalPrice={task.totalPrice}
-                  qtdProduct={task.qtd_products}
-                />
-              ) || null}
+                {(task?.incompleted && (
+                  <EditCommand
+                    id={task.id_command}
+                    nameCommand={task.name}
+                    paymentIs={task.payment}
+                    items={task.items}
+                    totalPrice={task.totalPrice}
+                    qtdProduct={task.qtd_products}
+                  />
+                )) ||
+                  null}
               </div>
             </div>
             {provided.placeholder}

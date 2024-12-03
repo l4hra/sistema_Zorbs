@@ -12,21 +12,69 @@ import { ptBR } from "@mui/x-data-grid/locales";
 import { useState } from "react";
 import { useEffect } from "react";
 
-function CustomToolbar() {
+function CustomToolbar({ columns, rows }) {
+  const processRow = (row) => {
+    return {
+      "Nome comanda": `Pedido N°00${row.id || ""}`,
+      Total: `R$${(parseFloat(row.totalPrice) || 0).toFixed(2)}`,
+      "Forma de pagamento": row.payment,
+      Status: row.completed
+        ? "Finalizada"
+        : row.canceled
+        ? "Cancelada"
+        : "Pendente",
+      "Data de criação": row.date_opening
+        ? new Date(row.date_opening).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+        : "-",
+    };
+  };
+
+  const handleExport = () => {
+    const processedRows = rows.map(processRow);
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        Object.keys(processedRows[0]).join(","),
+        ...processedRows.map((row) => Object.values(row).join(",")),
+      ].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "dados_comandas.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <GridToolbarContainer>
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
-      <GridToolbarDensitySelector
-        slotProps={{ tooltip: { title: "Change density" } }}
-      />
+      <GridToolbarDensitySelector />
       <Box sx={{ flexGrow: 1 }} />
-      <GridToolbarExport
-        slotProps={{
-          tooltip: { title: "Export data" },
-          button: { variant: "outlined" },
+      <button
+        onClick={handleExport}
+        style={{
+          padding: "10px 20px",
+          borderRadius: "8px",
+          backgroundColor: "#054f77",
+          color: "#fff",
+          border: "none",
+          fontSize: "16px",
+          fontWeight: "bold",
+          cursor: "pointer",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          transition: "all 0.3s ease",
         }}
-      />
+        onMouseEnter={(e) => (e.target.style.backgroundColor = "#0678a2")} // Hover Effect
+        onMouseLeave={(e) => (e.target.style.backgroundColor = "#054f77")} // Remove Hover Effect
+      >
+        Exportar
+      </button>
     </GridToolbarContainer>
   );
 }
@@ -126,14 +174,8 @@ export default function TableDashboard({ startDate, endDate }) {
             },
           }}
           pageSizeOptions={[25]}
-          checkboxSelection
           slots={{
-            toolbar: CustomToolbar,
-          }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-            },
+            toolbar: () => <CustomToolbar rows={rows} columns={columns} />,
           }}
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           disableRowSelectionOnClick

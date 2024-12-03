@@ -13,7 +13,13 @@ import IconButton from "@mui/material/IconButton";
 // import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
-export default function CommandModal({ id, items, totalPrice, qtdProduct, paymentIs}) {
+export default function CommandModal({
+  id,
+  items,
+  totalPrice,
+  qtdProduct,
+  paymentIs,
+}) {
   const [open, setOpen] = useState(false);
   const [iceCreams, setIceCreams] = useState([]);
   const [selectedBeverages, setSelectedBeverages] = useState([]);
@@ -24,8 +30,13 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
   };
 
   useEffect(() => {
-    const initialBeverages = items.filter((item) => !item.weight); // Bebidas
-    const initialIceCreams = items.filter((item) => item.weight); // Sorvetes
+    const initialBeverages = items.filter(
+      (item) => item.und_medida !== "kg" // Bebidas
+    );
+    const initialIceCreams = items.filter(
+      (item) => item.und_medida === "kg" // Sorvetes
+    );
+
     setSelectedBeverages(
       initialBeverages.map((item) => ({
         ...item,
@@ -42,7 +53,6 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
 
     const initialPayment = payment.find((option) => option.label === paymentIs);
     setSelectedPayment(initialPayment || null);
-
   }, [items, paymentIs]);
 
   const fetchProducts = async (categoria) => {
@@ -65,7 +75,6 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
       return;
     }
 
-
     if (!selectedPayment) {
       toast.error("Selecione uma forma de pagamento para atualizar o pedido.", {
         position: "bottom-left",
@@ -82,14 +91,19 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
           id_command: id,
           name: item.name || null,
           qtd_products: isIceCream ? item.weight : item.quantity,
-          value_item: (item.preco_venda || item.price || item.value_item || "0.00").toString(),
+          value_item: (
+            item.preco_venda ||
+            item.price ||
+            item.value_item ||
+            "0.00"
+          ).toString(),
           und_medida: item.und_medida || (isIceCream ? "kg" : "unidade"),
         };
       });
 
       await axios.put(`http://localhost:5000/itemCommands/${id}`, {
         items: commandData,
-        payment:  selectedPayment.label,
+        payment: selectedPayment.label,
       });
       toast.success("Comanda atualizada com sucesso!", {
         position: "bottom-left",
@@ -167,23 +181,21 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
     setIceCreams(updatedIceCreams);
   };
 
-  
   const handlePaymentChange = (event, value) => {
     setSelectedPayment(value);
   };
 
-  
   const total = allSelectedProducts.reduce(
     (acc, item) =>
-      acc + (item.preco_venda || item.price || item.value_item || 0) * (item?.quantity ?? 1),
+      acc +
+      (item.preco_venda || item.price || item.value_item || 0) *
+        (item?.quantity ?? 1),
     0
   );
 
   useEffect(() => {
     fetchProducts();
   }, []);
-
-
 
   const payment = [
     { id: "1", label: "Pix" },
@@ -213,6 +225,7 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
     },
   ];
 
+  console.log("queeeeeeem", allSelectedProducts);
   return (
     <>
       <div
@@ -266,7 +279,9 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
             sx={{ width: "100%" }}
             id="tags-outlined"
             options={listItems.filter(
-              (item) => !selectedBeverages.some((e) => e.id === item.id)
+              (item) =>
+                item.und_medida !== "kg" && // Não deve ser sorvete
+                !selectedBeverages.some((e) => e.id === item.id) // Não deve já estar selecionado
             )}
             getOptionLabel={(option) => option.name}
             filterSelectedOptions
@@ -290,11 +305,15 @@ export default function CommandModal({ id, items, totalPrice, qtdProduct, paymen
               style={{ display: "flex", gap: "5px", alignItems: "center" }}
             >
               <Autocomplete
-                sx={{ width: "90%" }}
                 multiple
+                sx={{ width: "90%" }}
                 id="tags-outlined"
+                options={listItems.filter(
+                  (item) =>
+                    item.und_medida === "kg" && // Deve ser sorvete
+                    !iceCreams.some((e) => e.id === item.id) // Não deve já estar selecionado
+                )}
                 getOptionLabel={(option) => option.name}
-                options={iceCreams}
                 filterSelectedOptions
                 onChange={handleIceCreamsChange}
                 noOptionsText="Nenhum sorvete"
