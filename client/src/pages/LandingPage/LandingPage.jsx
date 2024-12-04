@@ -6,6 +6,7 @@ import acessa from "../../../src/assets/acessa.png";
 import zorbs from "../../../src/assets/ZORBS.png";
 import waves from "../../../src/assets/waves.svg";
 import donaAna from "../../../src/assets/donana.png";
+import ll from "../../../src/assets/ll.png";
 
 import HttpsIcon from "@mui/icons-material/Https";
 import { Button } from "@mui/material";
@@ -32,7 +33,7 @@ export default function LandingPage() {
       <div className={styles.background}>
         <img src={waves}></img>
         <header className={styles.header}>
-          <img src={zorbs} alt="" style={{width: '150px'}} />
+          <img src={zorbs} alt="" style={{ width: "150px" }} />
           <nav>
             <ul>
               <li>
@@ -64,19 +65,20 @@ export default function LandingPage() {
       </div>
 
       <div id="home" className={styles.section}>
-        <h1>Bem-vindo à Zorbs!</h1>
+        <h1>Bem-vindo à Zorbs</h1>
         <h4>O sistema ideal pra sua empresa só pode acontecer aqui!</h4>
       </div>
 
       <container id="clients">
-      <div className={styles.card}>
+        <div className={styles.card}>
           <div className={styles.imgBox}>
             <img src={donaAna} alt="Dona Ana" />
           </div>
           <div className={styles.content}>
             <h2>Dona Ana</h2>
             <p>
-              O projeto veio com o interesse de Dona Ana em mudar a realidade da sua sorveteria self-service.
+              O projeto veio com o interesse de Dona Ana em mudar a realidade da
+              sua sorveteria self-service.
             </p>
           </div>
         </div>
@@ -87,7 +89,12 @@ export default function LandingPage() {
           <div className={styles.content}>
             <h2>Acessa+</h2>
             <p>
-              O projeto veio de uma dor da Prefeitura de Jaraguá do Sul, onde precisavam melhorar sua forma de identificar civis PCD e as condições onde vivem. A Zorbs atuou criando o Acessa+, um sistema capaz de cadastrar pessoas com deficiência e ter um relatório filtrando por região, situação financeira entre outros tópicos importantes para o cliente. 
+              O projeto veio de uma dor da Prefeitura de Jaraguá do Sul, onde
+              precisavam melhorar sua forma de identificar civis PCD e as
+              condições onde vivem. Atuamos criando o Acessa+, um sistema capaz
+              de cadastrar pessoas com deficiência e ter um relatório filtrando
+              por região, situação financeira entre outros tópicos importantes
+              para o cliente.
             </p>
           </div>
         </div>
@@ -98,22 +105,23 @@ export default function LandingPage() {
           <div className={styles.content}>
             <h2>WStorage</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Temporibus molestias minus porro. Deserunt dolore eligendi
-              sapiente hic totam.
+              O projeto tem como objetivo automatizar serviços manuais, gerando
+              eficiência e menor custo de operações para as empresas. Além da
+              praticidade e segurança, o sistema auxiliará principalmente no
+              quesito de manutenção em máquinas, onde solicitará manutenções
+              práticas no controle de estoque de peças e ferramentas.
             </p>
           </div>
         </div>
         <div className={styles.card}>
           <div className={styles.imgBox}>
-            <img src={wstorage} alt="LL Suport" />
+            <img src={ll} alt="LL Suport" />
           </div>
           <div className={styles.content}>
             <h2>LL Suport</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Temporibus molestias minus porro. Deserunt dolore eligendi
-              sapiente hic totam.
+              O sistema LL Suporte é voltado para auxiliar o suporte de uma
+              empresa que desenvolve software para cartórios.
             </p>
           </div>
         </div>
@@ -123,11 +131,9 @@ export default function LandingPage() {
         <h2>Sobre Nós</h2>
         <p>
           A Zorbs é uma empresa capixaba apaixonada por inovação! Iniciamos
-          nossas atividades em 2024 e já contamos com mais de 3 empresas <br />
-          atendidas. Nosso proprosito é dar ao seu négocio o software que ele{" "}
-          <br />
-          precisa, e junto do software entregamos diagramas, documentações e{" "}
-          <br />
+          nossas atividades em 2024 e já contamos com mais de 3 projetos
+          desenvolvidos. Nosso proprosito é dar ao seu négocio o software que
+          ele precisa, e junto do software entregamos diagramas, documentações e{" "}
           suporte aos nossos clientes além de termos o preço mais justo do
           mercado. Vem crescer com a gente!
         </p>
@@ -137,8 +143,7 @@ export default function LandingPage() {
         <h2>Contato</h2>
         <p>
           Ficou interessado em desenvolver sua ideia com a gente? <br /> A nossa
-          equipe pode te responder atraves do nosso email
-          empresazorbs@gmail.com
+          equipe pode te responder atraves do nosso email empresazorbs@gmail.com
         </p>
       </div>
     </>

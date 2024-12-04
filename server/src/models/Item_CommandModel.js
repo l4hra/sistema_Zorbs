@@ -13,7 +13,7 @@ export async function createItemCommand(item) {
     item.name,
     item.qtd_products,
     item.value_item,
-    item.und_medida, // Corrigido aqui
+    item.und_medida,
   ];
 
   try {
@@ -67,9 +67,12 @@ export async function getAllItemCommands(req, res) {
 export async function updateItemCommand(idCommand, item) {
   // Atualizar o campo "payment" na tabela "command"
   if (item.payment !== undefined) {
-    const paymentUpdateResult = await updatePaymentInCommand(idCommand, item.payment);
+    const paymentUpdateResult = await updatePaymentInCommand(
+      idCommand,
+      item.payment
+    );
     if (paymentUpdateResult[0] !== 200) {
-      return paymentUpdateResult; 
+      return paymentUpdateResult;
     }
   }
 
