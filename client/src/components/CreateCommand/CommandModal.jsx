@@ -20,6 +20,8 @@ export default function CommandModal() {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [listItems, setListItems] = useState([]);
   const [commands, setCommands] = useState([]);
+  const [amountGiven, setAmountGiven] = useState("");
+  const [change, setChange] = useState(0);
 
   const handleOpen = () => {
     setOpen(true);
@@ -66,7 +68,7 @@ export default function CommandModal() {
       return;
     }
 
-    try {   
+    try {
       const commandData = {
         date_opening: new Date().toISOString().slice(0, 19).replace('T', ' '), // Formato compatível com MySQL
         totalPrice: total,
@@ -130,6 +132,21 @@ export default function CommandModal() {
 
   const handlePaymentChange = (event, value) => {
     setSelectedPayment(value);
+    if (value?.label !== "Dinheiro") {
+      setAmountGiven("");
+      setChange(0);
+    }
+  };
+
+  const handleAmountGivenChange = (event) => {
+    const value = parseFloat(event.target.value);
+    setAmountGiven(event.target.value);
+
+    if (!isNaN(value) && value >= total) {
+      setChange(value - total);
+    } else {
+      setChange(0);
+    }
   };
 
   const handleBeveragesChange = (event, value) => {
@@ -149,6 +166,8 @@ export default function CommandModal() {
     setSelectedBeverages([]);
     setIceCreams([]);
     setSelectedPayment(null);
+    setAmountGiven("");
+    setChange(0);
   };
 
   const handleQuantity = (id, list, operator) => {
@@ -236,10 +255,10 @@ export default function CommandModal() {
         }}
       >
         <Button
-        endIcon={<AddCircleIcon />}
+          endIcon={<AddCircleIcon />}
           onClick={handleOpen}
           sx={{
-            backgroundColor: "#578eda", ":hover": { backgroundColor: "#174aa4" } ,
+            backgroundColor: "#578eda", ":hover": { backgroundColor: "#174aa4" },
             color: "#fff",
             width: "200px",
             padding: "10px",
@@ -344,6 +363,24 @@ export default function CommandModal() {
               )}
             />
           </div>
+   
+          {selectedPayment?.label === "Dinheiro" && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", paddingBottom: "15px"}}>
+              <TextField
+                type="number"
+                label="Valor recebido"
+                value={amountGiven}
+                onChange={handleAmountGivenChange}
+                sx={{ width: "90%" }}
+                inputProps={{
+                  min: 0,
+                }}
+              />
+              <Typography variant="body1">
+                Troco: R$ {change.toFixed(2)}
+              </Typography>
+            </div>
+          )}
 
           <TableComponent
             allSelectedProducts={allSelectedProducts}
@@ -388,6 +425,7 @@ export default function CommandModal() {
               Cancelar
             </Button>
           </div>
+
         </Box>
       </Modal>
     </>
