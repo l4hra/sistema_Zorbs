@@ -19,6 +19,7 @@ export default function CommandModal() {
   const [selectedBeverages, setSelectedBeverages] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [listItems, setListItems] = useState([]);
+  const [commands, setCommands] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -38,6 +39,15 @@ export default function CommandModal() {
     }
   };
 
+  const fetchCommands = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/commands");
+      setCommands(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar comandas:", error);
+    }
+  };
+
   // Criar Comanda
   const fetchCommand = async () => {
     if (selectedBeverages.length === 0 && iceCreams.length === 0) {
@@ -45,7 +55,6 @@ export default function CommandModal() {
         position: "bottom-left",
         duration: 5000,
       });
-
       return;
     }
 
@@ -57,7 +66,7 @@ export default function CommandModal() {
       return;
     }
 
-    try {
+    try {   
       const commandData = {
         date_opening: new Date().toISOString().slice(0, 19).replace('T', ' '), // Formato compatível com MySQL
         totalPrice: total,
@@ -97,14 +106,16 @@ export default function CommandModal() {
         await axios.post("http://localhost:5000/createItemCommand", iceData);
       }
 
-      
       //chamar toast
       toast.success(response.data.message, {
         position: "bottom-left",
         duration: 5000,
       });
+      await fetchCommands();
       handleClose();
-      location.reload(true); // improvisado para mostrar as comandas tem que arrumar isso 
+      setTimeout(() => {
+        location.reload(true);
+      }, 1000); // improvisado para mostrar as comandas tem que arrumar isso 
     } catch (error) {
       toast.error("Erro ao criar a comanda", {
         position: "bottom-left",

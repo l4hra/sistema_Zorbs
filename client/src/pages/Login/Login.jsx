@@ -18,6 +18,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [errorForgot, setErrorForgot] = useState("");
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function Login() {
 
   const handleForgotPassword = async (event) => {
     event.preventDefault();
-    setError("");
+    setErrorForgot("");
 
     try {
       const response = await fetch("http://localhost:5000/forgot-password", {
@@ -82,8 +83,8 @@ export default function Login() {
       });
       setForgotPasswordEmail("");
       setIsForgotPassword(false);
-    } catch (error) {
-      setError(error.message);
+    } catch (errorForgot) {
+      setErrorForgot(errorForgot.message);
     }
   };
 
@@ -110,7 +111,7 @@ export default function Login() {
                         sx={{ width: "400px"}}
                         onChange={(e) => setForgotPasswordEmail(e.target.value)}
                       />
-                      {error && <p style={{ color: "red" }}>{error}</p>}
+                      {errorForgot && <p style={{ color: "red" }}>{errorForgot}</p>}
                       <Button type="submit" style={{ marginTop: "2rem" }}>
                         Enviar Senha
                       </Button>

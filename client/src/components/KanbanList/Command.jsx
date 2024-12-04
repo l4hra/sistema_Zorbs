@@ -50,7 +50,6 @@ function NotaFiscalButton({ task }) {
 }
 
 export default function Command({ task, index }) {
-  console.log("task", task);
   const formatTime = (datetime) => {
     if (!datetime) return "Data inválida";
     try {

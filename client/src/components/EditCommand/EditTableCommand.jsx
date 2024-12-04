@@ -43,7 +43,6 @@ export default function TableComponent({
                   {item.name} | R$
                   {item.preco_venda || item.price || item.value_item}
                 </TableCell>
-                {console.log("quem", item)}
                 {!item.weight ? (
                   <TableCell align="right">
                     <Button

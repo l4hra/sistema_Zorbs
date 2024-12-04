@@ -109,7 +109,13 @@ export default function CommandModal({
         position: "bottom-left",
         duration: 5000,
       });
+
       handleClose();
+
+      setTimeout(() => {
+        location.reload(true);
+      }, 1000); // improvisado para mostrar as comandas tem que arrumar isso 
+      
     } catch (error) {
       console.error("Erro ao atualizar a comanda:", error);
       toast.error("Erro ao atualizar a comanda.", {
@@ -225,7 +231,6 @@ export default function CommandModal({
     },
   ];
 
-  console.log("queeeeeeem", allSelectedProducts);
   return (
     <>
       <div

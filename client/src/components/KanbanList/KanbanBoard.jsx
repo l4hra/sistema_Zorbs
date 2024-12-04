@@ -5,7 +5,7 @@ import AlarmIcon from "@mui/icons-material/Alarm";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import toast from "react-hot-toast";
-
+import CommandModal from '../CreateCommand/CommandModal.jsx'
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
 
@@ -76,7 +76,7 @@ export default function Kanban() {
     } catch (error) {
       console.error("Erro ao buscar as comandas:", error);
     }
-  }
+  };
 
   useEffect(() => {
     carregaComanda();
@@ -214,8 +214,6 @@ export default function Kanban() {
             icon={<ClearIcon />}
           />
         </div>
-        {/* <ModalPagamento open={openDialog} handleClose={handleClose} /> */}
-        {/* <CommandModal updateBoard={carregaComanda} /> */}
       </DragDropContext>
     </>
   );
