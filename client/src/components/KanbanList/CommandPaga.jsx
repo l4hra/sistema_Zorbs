@@ -31,7 +31,7 @@ export default function ModalPagamento({ open, handleClose }) {
             <p>É importante que as comandas sejam salvas com a forma de pagamento correta.</p>
           </DialogContent>
           <DialogActions style={{ display: "flex", justifyContent: "center" }}>
-            <Button>Confirmar</Button>
+            <Button>-</Button>
             <Button>Cancelar</Button>
           </DialogActions>
         </Dialog>
