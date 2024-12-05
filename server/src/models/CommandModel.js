@@ -28,7 +28,8 @@ export async function createCommand(command) {
 // Função para visualizar produtos
 export async function getAllCommands(req, res) {
   try {
-    const dateFilter = req.query.date;
+    const dateFilter = req.query.date; 
+
     const query = `
       SELECT 
         commands.id,
@@ -51,15 +52,18 @@ export async function getAllCommands(req, res) {
       FROM commands
       LEFT JOIN item_command ON commands.id = item_command.id_command
       LEFT JOIN products ON products.id = item_command.id_products
-      ${dateFilter ? `WHERE DATE(commands.date_opening) = ?` : ""}
+      ${
+        dateFilter
+          ? `WHERE DATE(CONVERT_TZ(commands.date_opening, '+00:00', '-03:00')) = ?`
+          : ""
+      }
     `;
-
     const values = dateFilter ? [dateFilter] : [];
     const [rows] = await conexao.query(query, values);
 
     res.status(200).json(rows);
   } catch (error) {
-    console.log(error);
+    console.error("Erro ao buscar comandas:", error);
     res.status(500).json({ message: "Erro ao buscar comandas", error });
   }
 }
@@ -71,21 +75,24 @@ export async function getFilterCommands(req, res) {
       .status(400)
       .json({ message: "As datas de início e término são obrigatórias." });
   }
+
   try {
+  
     const [rows] = await conexao.query(
       `
       SELECT 
         id,
-        CONVERT_TZ(commands.date_opening, '+00:00', '-03:00') AS date_opening,
+        CONVERT_TZ(date_opening, '+00:00', '-03:00') AS date_opening,
         totalPrice,
         payment,
         completed,
         canceled
       FROM db_zorbs.commands
-      WHERE DATE(date_opening) BETWEEN ? AND ?
+      WHERE DATE(CONVERT_TZ(date_opening, '+00:00', '-03:00')) BETWEEN ? AND ?
     `,
       [startDate, endDate]
     );
+
     const [statusCount] = await conexao.query(
       `
       SELECT 
@@ -94,7 +101,7 @@ export async function getFilterCommands(req, res) {
         SUM(CASE WHEN completed = 1 THEN totalPrice ELSE 0 END) AS completeProfit,
         SUM(CASE WHEN canceled = 1 THEN totalPrice ELSE 0 END) AS canceledProfit
       FROM db_zorbs.commands
-      WHERE DATE(date_opening) BETWEEN ? AND ?
+      WHERE DATE(CONVERT_TZ(date_opening, '+00:00', '-03:00')) BETWEEN ? AND ?
     `,
       [startDate, endDate]
     );
@@ -104,10 +111,11 @@ export async function getFilterCommands(req, res) {
       statusCount: statusCount[0],
     });
   } catch (error) {
-    console.log(error);
+    console.error("Erro ao buscar comandas:", error);
     res.status(500).json({ message: "Erro ao buscar comandas", error });
   }
 }
+
 
 export async function updateCommand(id, command) {
   const sql = `UPDATE commands 

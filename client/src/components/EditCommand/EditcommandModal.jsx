@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
-import { TextField, Divider } from "@mui/material";
+import { TextField, Divider, InputAdornment } from "@mui/material";
 import TableComponent from "./EditTableCommand";
 import IceCreamModal from "./EditIceCreamModal";
 import EditIcon from "@mui/icons-material/Edit";
@@ -375,7 +375,12 @@ export default function CommandModal({
                 label="Valor recebido"
                 value={amountGiven}
                 onChange={handleAmountGivenChange}
-                sx={{ width: "90%" }}
+                sx={{ width: "100%" }}
+                slotProps={{
+                  input: {
+                    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                  },
+                }}
                 inputProps={{
                   min: 0,
                 }}

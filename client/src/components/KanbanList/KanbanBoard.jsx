@@ -14,8 +14,8 @@ export default function Kanban() {
   const [canceled, setcanceled] = useState([]);
 
   async function carregaComanda() {
-    const today = new Date().toISOString().split("T")[0];
-
+    const today = dayjs().format("YYYY-MM-DD");
+    console.log('dia de hoje', today)
     try {
       const response = await fetch(
         `http://localhost:5000/commands?date=${today}`

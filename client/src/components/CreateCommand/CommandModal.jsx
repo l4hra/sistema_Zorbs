@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
-import { TextField, Divider } from "@mui/material";
+import { TextField, Divider, InputAdornment } from "@mui/material";
 import TableComponent from "./TableCommand";
 import IceCreamModal from "./IceCreamModal";
 import axios from "axios";
@@ -370,7 +370,12 @@ export default function CommandModal() {
                 label="Valor recebido"
                 value={amountGiven}
                 onChange={handleAmountGivenChange}
-                sx={{ width: "90%" }}
+                slotProps={{
+                  input: {
+                    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                  },
+                }}
+                sx={{ width: "100%" }}
                 inputProps={{
                   min: 0,
                 }}
