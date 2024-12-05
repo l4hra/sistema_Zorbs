@@ -37,8 +37,10 @@ export default function IceCreamModal({ onDataChange }) {
   };
 
   const handleCreateClick = () => {
-    onDataChange({ name, weight, price, observation, quantity });
+    const formattedWeight = parseFloat(weight); // Converte para número com casas decimais
+    onDataChange({ name, weight: formattedWeight, price, observation, quantity });
     handleClose(true);
+    // Reset dos campos
     setObservation("");
     setPrice(0);
     setQuantity(1);

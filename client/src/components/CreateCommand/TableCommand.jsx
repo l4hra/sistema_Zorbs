@@ -75,15 +75,13 @@ export default function TableComponent({
                   </TableCell>
                 ) : (
                   <TableCell align="right">
-                    Peso do sorvete {item.weight}kg
+                    Peso do sorvete {Number(item.weight).toFixed(3)} kg
                   </TableCell>
                 )}
               </TableRow>
             ))}
         </TableBody>
       </Table>
-
-
       <Table>
         <TableBody>
           <TableRow>

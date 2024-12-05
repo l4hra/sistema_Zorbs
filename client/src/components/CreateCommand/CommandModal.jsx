@@ -140,10 +140,10 @@ export default function CommandModal() {
 
   const handleAmountGivenChange = (event) => {
     const value = parseFloat(event.target.value);
-    setAmountGiven(event.target.value);
+    setAmountGiven(parseFloat(value.toFixed(3)));
 
     if (!isNaN(value) && value >= total) {
-      setChange(value - total);
+      setChange(parseFloat((value - total).toFixed(2)));
     } else {
       setChange(0);
     }
@@ -152,7 +152,7 @@ export default function CommandModal() {
   const handleBeveragesChange = (event, value) => {
     setSelectedBeverages(
       value.map((item) => {
-        return { ...item, quantity: item?.quantity ?? 1 };
+        return { ...item, quantity: Math.round(item?.quantity ?? 1) };
       })
     );
   };
@@ -174,7 +174,7 @@ export default function CommandModal() {
     if (operator === "+") {
       const newItems = list.map((item) => {
         if (item.id === id) {
-          return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 };
+          return { ...item, quantity: Math.round(item.quantity ? item.quantity + 1 : 1) };
         }
         return item;
       });
@@ -182,7 +182,7 @@ export default function CommandModal() {
     } else if (operator === "-") {
       const newItems = list.map((item) => {
         if (item.id === id) {
-          return { ...item, quantity: item.quantity ? item.quantity - 1 : 0 };
+          return { ...item, quantity: Math.round(item.quantity ? item.quantity - 1 : 0) };
         }
         return item;
       });
@@ -215,7 +215,6 @@ export default function CommandModal() {
   useEffect(() => {
     fetchProducts();
   }, []);
-
   const payment = [
     { id: "1", label: "Pix" },
     {
@@ -377,13 +376,16 @@ export default function CommandModal() {
                 }}
               />
               <Typography variant="body1">
-                Troco: R$ {change.toFixed(2)}
+              Troco: R$ {parseFloat(change.toFixed(2))}
               </Typography>
             </div>
           )}
 
           <TableComponent
-            allSelectedProducts={allSelectedProducts}
+            allSelectedProducts={allSelectedProducts.map(product => ({
+              ...product,
+              quantity: Math.round(product.quantity),
+            }))}
             handleQuantityChange={handleQuantityChange}
             total={total}
           />

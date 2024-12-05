@@ -59,7 +59,7 @@ export default function Command({ task, index }) {
       console.error("Erro ao formatar horário:", error.message || error);
       return "Erro no horário";
     }
-  };;
+  };
 
   return (
     <>
@@ -110,21 +110,19 @@ export default function Command({ task, index }) {
               <h5>
                 Produtos:
                 {task.items.map((item, index) => {
+                  // Define a quantidade com base na unidade de medida
+                  const quantidade =
+                    item.und_medida === "kg"
+                      ? parseFloat(item.qtd_products).toFixed(3) // Decimal para 'kg'
+                      : parseInt(item.qtd_products, 10); // Inteiro para 'unidade'
+
                   return (
                     <div key={index}>
-                      {item.name} ({item.qtd_products} {item.und_medida})
+                      {item.name} ({quantidade} {item.und_medida})
                     </div>
                   );
                 })}
               </h5>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-              </div>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
                 <NotaFiscalButton task={task} />

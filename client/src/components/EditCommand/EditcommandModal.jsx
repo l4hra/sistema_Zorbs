@@ -10,7 +10,6 @@ import TableComponent from "./EditTableCommand";
 import IceCreamModal from "./EditIceCreamModal";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-// import AcaiModal from "./AcaiModal";
 import axios from "axios";
 
 export default function CommandModal({
@@ -25,6 +24,9 @@ export default function CommandModal({
   const [selectedBeverages, setSelectedBeverages] = useState([]);
   const [listItems, setListItems] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [amountGiven, setAmountGiven] = useState("");
+  const [change, setChange] = useState(0);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -114,8 +116,7 @@ export default function CommandModal({
 
       setTimeout(() => {
         location.reload(true);
-      }, 1000); // improvisado para mostrar as comandas tem que arrumar isso 
-      
+      }, 1000); // improvisado para mostrar as comandas tem que arrumar isso
     } catch (error) {
       console.error("Erro ao atualizar a comanda:", error);
       toast.error("Erro ao atualizar a comanda.", {
@@ -155,19 +156,17 @@ export default function CommandModal({
 
   const handleQuantity = (id, list, operator) => {
     if (operator === "+") {
-      //se estiver adicionando
       const newItems = list.map((item) => {
-        if ((item.id || item.item_command_id) === id) {
-          return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 };
+        if (item.id === id) {
+          return { ...item, quantity: Math.round(item.quantity ? item.quantity + 1 : 1) };
         }
         return item;
       });
       return newItems;
     } else if (operator === "-") {
-      //se estiver removendo
       const newItems = list.map((item) => {
-        if ((item.id || item.item_command_id) === id) {
-          return { ...item, quantity: item.quantity ? item.quantity - 1 : 0 };
+        if (item.id === id) {
+          return { ...item, quantity: Math.round(item.quantity ? item.quantity - 1 : 0) };
         }
         return item;
       });
@@ -189,6 +188,21 @@ export default function CommandModal({
 
   const handlePaymentChange = (event, value) => {
     setSelectedPayment(value);
+    if (value?.label !== "Dinheiro") {
+      setAmountGiven("");
+      setChange(0);
+    }
+  };
+
+  const handleAmountGivenChange = (event) => {
+    const value = parseFloat(event.target.value);
+    setAmountGiven(event.target.value);
+
+    if (!isNaN(value) && value >= total) {
+      setChange(value - total);
+    } else {
+      setChange(0);
+    }
   };
 
   const total = allSelectedProducts.reduce(
@@ -347,8 +361,36 @@ export default function CommandModal({
             />
           </div>
 
+          {selectedPayment?.label === "Dinheiro" && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                paddingBottom: "15px",
+              }}
+            >
+              <TextField
+                type="number"
+                label="Valor recebido"
+                value={amountGiven}
+                onChange={handleAmountGivenChange}
+                sx={{ width: "90%" }}
+                inputProps={{
+                  min: 0,
+                }}
+              />
+              <Typography variant="body1">
+                Troco: R$ {change.toFixed(2)}
+              </Typography>
+            </div>
+          )}
+
           <TableComponent
-            allSelectedProducts={[...selectedBeverages, ...iceCreams]}
+            allSelectedProducts={allSelectedProducts.map((product) => ({
+              ...product,
+              quantity: Math.round(product.quantity),
+            }))}
             handleQuantityChange={handleQuantityChange}
             total={total}
           />
