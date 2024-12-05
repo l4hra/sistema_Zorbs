@@ -7,31 +7,22 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
     const [type_of_acess, setTypeOfAccess] = useState(user?.type_of_acess || "");
     const [status, setStatus] = useState(user?.status || "");
     const [name, setName] = useState(user?.name || "");
-    const [password, setPassword] = useState(user?.password || "");
-    const [confirm_ps, setConfirmPs] = useState(user?.confirm_ps || "");
     const [email, setEmail] = useState(user?.email || "");
     const [telefone, setTelefone] = useState(user?.telefone || "");
 
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPs, setShowConfirmPs] = useState(false);
-
     const [errors, setErrors] = useState({
         name: false,
-        password: false,
-        confirm_ps: false,
         email: false,
         telefone: false,
         type_of_acess: false,
         status: false,
-      });
+    });
 
     useEffect(() => {
         if (user) {
             setTypeOfAccess(user.type_of_acess);
             setStatus(user.status);
             setName(user.name);
-            setPassword(user.password);
-            setConfirmPs(user.confirm_ps);
             setEmail(user.email);
             setTelefone(user.telefone);
         }
@@ -39,19 +30,16 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
 
     const updateUser = async () => {
         if (!handleValidation()) {
-            Swal.fire("Erro!", "Verifique os campos obrigatórios.", "error");
             return;
         }
 
-        const response = await fetch(`http://localhost:5000/updateUsers/${user.id}`, {
+        const response = await fetch(`http://localhost:5000/atualizaUsers/${user.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 name,
-                password,
-                confirm_ps,
                 email,
                 telefone,
                 type_of_acess,
@@ -71,8 +59,6 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
     const handleValidation = () => {
         const newErrors = {
             name: !name,
-            password: !validatePassword(password),
-            confirm_ps: confirm_ps !== password,
             email: !email || !validateEmail(email),
             telefone: !telefone || telefone.length < 19,
             type_of_acess: !type_of_acess,
@@ -88,41 +74,6 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
     const validateEmail = (value) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(value);
-    };
-
-    const handlePasswordChange = (e) => {
-        const value = e.target.value;
-        setPassword(value);
-        setErrors(prevErrors => ({
-            ...prevErrors,
-            password: !validatePassword(value),
-            confirm_ps: confirm_ps && confirm_ps !== value,
-        }));
-    };
-
-    // Validação de senha
-    const validatePassword = (value) => {
-        return value.length >= 8;
-    };
-
-    const handleConfirmPasswordChange = (e) => {
-        const value = e.target.value;
-        setConfirmPs(value);
-        setErrors(prevErrors => ({
-            ...prevErrors,
-            confirm_ps: password !== value,
-        }));
-    };
-
-    const handleClickShowPassword = () => {
-        setShowPassword((prev) => !prev);
-    };
-
-    const handleClickShowConfirmPs = () => {
-        setShowConfirmPs((prev) => !prev);
-    };
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
     };
 
     // Formatação de telefone
@@ -173,64 +124,6 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
             />
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "0.9em" }}>
-                <TextField
-                    required
-                    margin="dense"
-                    id="user-password"
-                    name="senha"
-                    label="Senha"
-                    type={showPassword ? "text" : "password"}
-                    fullWidth
-                    variant="outlined"
-                    error={errors.password}
-                    helperText={errors.password && "Use 8 caracteres ou mais para sua senha"}
-                    onChange={handlePasswordChange}
-                    value={password || ""}
-                    inputProps={{ maxLength: 15 }} // Limite de 15 caracteres para a senha
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-
-                <TextField
-                    required
-                    margin="dense"
-                    id="user-confirm-password"
-                    name="confirmacaoSenha"
-                    label="Confirmar senha"
-                    type={showConfirmPs ? "text" : "password"}
-                    fullWidth
-                    variant="outlined"
-                    error={errors.confirm_ps}
-                    helperText={errors.confirm_ps && "As senhas não são iguais. Tente novamente."}
-                    onChange={handleConfirmPasswordChange}
-                    value={confirm_ps || ""}
-                    inputProps={{ maxLength: 15 }} // Limite de 15 caracteres para a senha
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    onClick={handleClickShowConfirmPs}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showConfirmPs ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-
                 <TextField
                     required
                     margin="dense"
@@ -313,9 +206,9 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                         width: 150,
                         color: "white",
                         mr: 1,
-                        backgroundColor: "#F90808",
+                        backgroundColor: "#f8615b",
                         "&:hover": {
-                            backgroundColor: "#115293",
+                            backgroundColor: "#FF0000",
                         },
                     }}
                 >

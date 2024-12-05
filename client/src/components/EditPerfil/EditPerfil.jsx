@@ -47,7 +47,7 @@ export default function EditPerfil() {
 
         try {
             setLoading(true); // Exibe o loader durante a requisição
-            const response = await fetch(`http://localhost:5000/updateUsers/${user?.id}`, {
+            const response = await fetch(`http://localhost:5000/atualizaPerfil/${user?.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

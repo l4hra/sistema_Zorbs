@@ -15,7 +15,6 @@ export default function Kanban() {
 
   async function carregaComanda() {
     const today = dayjs().format("YYYY-MM-DD");
-    console.log('dia de hoje', today)
     try {
       const response = await fetch(
         `http://localhost:5000/commands?date=${today}`

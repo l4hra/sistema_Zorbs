@@ -1,4 +1,4 @@
-import { addUser, deleteUser, updateUsers } from "../models/UserModel.js";
+import { addUser, deleteUser, updateUser, updatePerfil } from "../models/UserModel.js";
 
 export async function cadastroUser(req, res){
     console.log('UserController: cadastroUsuario');
@@ -26,12 +26,27 @@ export async function excluirUsers(req, res) {
     }
 }
 
+export async function atualizaPerfil(req, res) {
+    console.log('UserController: editandoPerfil');
+    const { id } = req.params;
+    const users = req.body;
+    try {
+        const [status, resposta] = await updatePerfil((id), users);
+        console.log('UserController: perfilEditado', users)
+        res.status(status).json(resposta);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Erro ao atualizar usuário', error });
+    }
+}
+
 export async function atualizaUsers(req, res) {
     console.log('UserController: editandoUsuario');
     const { id } = req.params;
     const users = req.body;
     try {
-        const [status, resposta] = await updateUsers((id), users);
+        const [status, resposta] = await updateUser((id), users);
+        console.log('UserController: usuárioEditado', users)
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error);

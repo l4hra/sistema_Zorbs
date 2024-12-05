@@ -11,6 +11,7 @@ import {
   Alert,
 } from "@mui/material";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 export default function EditProduct({ closeEvent, refreshProducts, product }) {
   const [name, setName] = useState(product?.name || "");
@@ -101,10 +102,13 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
       refreshProducts(); // Atualiza a lista de produtos
       closeEvent();
     } 
-    // else {
-    //   setErrorMessage("Não foi possível adicionar o produto.");
-    //   setOpenSnackbar(true);
-    // }
+    else {
+      toast.error("Erro ao atualizar produto.", {
+        position: "bottom-left",
+        duration: 5000,
+      });
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCloseSnackbar = () => {

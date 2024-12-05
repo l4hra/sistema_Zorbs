@@ -60,7 +60,34 @@ export async function deleteUser(id) {
   }
 }
 
-export async function updateUsers(id, users) {
+export async function updateUser(id, users) {
+  const sql = `UPDATE users SET 
+    name = ?, email = ?, telefone = ?, 
+    type_of_acess = ?, status = ? WHERE id = ?`;
+    const params = [
+      users.name,
+      users.email,
+      users.telefone,
+      users.type_of_acess,
+      users.status,
+      id,
+    ];
+
+    try {
+      const [result] = await conexao.query(sql, params);
+      if (result.affectedRows > 0) {
+        return [200, "Usuário atualizado com sucesso"];
+      } else {
+        return [404, "Usuário não encontrado"];
+      }
+    } catch (error) {
+      console.log(error);
+      return [500, "Erro ao atualizar usuário"];
+    }
+    
+}
+
+export async function updatePerfil(id, users) {
   const sql = `UPDATE users SET 
     name = ?, password = ?, email = ?, telefone = ?, 
     type_of_acess = ?, status = ? WHERE id = ?`;
@@ -77,7 +104,6 @@ export async function updateUsers(id, users) {
   try {
     const [result] = await conexao.query(sql, params);
     if (result.affectedRows > 0) {
-      console.log("Usuário atualizado");
       return [200, "Usuário atualizado com sucesso"];
     } else {
       return [404, "Usuário não encontrado"];

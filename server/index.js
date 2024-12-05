@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 //Importações usuário
-import { cadastroUser, excluirUsers, atualizaUsers, } from "./src/controllers/UserController.js";
+import { cadastroUser, excluirUsers, atualizaPerfil, atualizaUsers} from "./src/controllers/UserController.js";
 import { getUsers, login, forgotPassword } from "./src/models/UserModel.js";
 //Importações Comandas
 import { cadastroCommand, atualizaCommand, editarCommand, } from "./src/controllers/CommandController.js";
@@ -60,7 +60,8 @@ app.put("/updateCompanies/:id", atualizaCompanies);
 app.get("/users", getUsers);
 app.post("/cadastroUser", cadastroUser);
 app.delete("/deleteUser/:id", excluirUsers);
-app.put("/updateUsers/:id", atualizaUsers);
+app.put("/atualizaPerfil/:id", atualizaPerfil);
+app.put("/atualizaUsers/:id", atualizaUsers);
 
 app.get("/", (req, res) => {
   res.send("API funcionando");

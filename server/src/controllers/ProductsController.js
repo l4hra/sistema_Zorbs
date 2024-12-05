@@ -10,6 +10,7 @@ export async function cadastroProduct(req, res){
     }
     try {
         const [status, resposta] = await addProducts(product);
+        console.log('ProductsController: productCadastrado', product);
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error)

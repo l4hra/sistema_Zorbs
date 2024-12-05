@@ -97,6 +97,11 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
     { value: "Picolé", label: "Picolé" },
   ];
 
+  const und_medidas = [
+    { value: "kg", label: "kg"},
+    { value: "unidade", label: "unidade"},
+  ];
+
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
@@ -153,12 +158,20 @@ export default function AddProducts({ closeEvent, refreshProducts }) {
             variant="outlined"
             size="small"
             fullWidth
+            select
             inputProps={{ maxLength: 10 }}
             error={errors.unidade_medida}
             helperText={errors.unidade_medida && "Campo obrigatório"}
             onChange={(e) => setUnidade_medida(e.target.value)}
             value={unidade_medida}
-          />
+          >
+            {und_medidas.map((option) => (
+              <MenuItem key={option.label} value={option.value}>
+                {option.label}
+              </MenuItem>
+            )
+          )}
+          </TextField>
         </div>
 
         <div style={{ gridColumn: "span 1" }}>
