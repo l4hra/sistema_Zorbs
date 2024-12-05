@@ -113,11 +113,11 @@ export default function CommandModal() {
         position: "bottom-left",
         duration: 5000,
       });
-      await fetchCommands();
+      fetchCommands();
       handleClose();
       setTimeout(() => {
         location.reload(true);
-      }, 1000); // improvisado para mostrar as comandas tem que arrumar isso 
+      }, 500); // improvisado para mostrar as comandas tem que arrumar isso 
     } catch (error) {
       toast.error("Erro ao criar a comanda", {
         position: "bottom-left",

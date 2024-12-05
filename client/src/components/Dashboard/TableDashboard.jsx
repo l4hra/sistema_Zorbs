@@ -20,12 +20,13 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale,
 
 function CustomToolbar({ apiRef }) {
   const handleExportToExcel = () => {
-    const visibleRows = Array.from(apiRef.current.getSortedRowIds()).map((id) =>
-      apiRef.current.getRow(id)
-    );
-
-    if (!visibleRows.length) return;
-
+    // Obter linhas atualmente exibidas na tabela
+    const visibleSortedRowIds = apiRef.current.getSortedRowIds(); // IDs das linhas visíveis e ordenadas
+    const visibleRows = visibleSortedRowIds.map((id) => apiRef.current.getRow(id));
+  
+    if (!visibleRows.length) return; // Se não houver linhas visíveis, não faz nada
+  
+    // Processar as linhas visíveis para exportação
     const processedRows = visibleRows.map((row) => ({
       "Nome comanda": `Pedido N°00${row.id || ""}`,
       Total: `R$${(parseFloat(row.totalPrice) || 0).toFixed(2)}`,
@@ -33,21 +34,23 @@ function CustomToolbar({ apiRef }) {
       Status: row.completed
         ? "Finalizada"
         : row.canceled
-          ? "Cancelada"
-          : "Pendente",
+        ? "Cancelada"
+        : "Pendente",
       "Data de criação": row.date_opening
         ? new Date(row.date_opening).toLocaleDateString("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
         : "-",
     }));
-
+  
+    // Criar e exportar a planilha
     const worksheet = XLSX.utils.json_to_sheet(processedRows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Comandas");
-
+  
+    // Definir larguras das colunas
     const columnWidths = [
       { wch: 30 },
       { wch: 15 },
@@ -56,7 +59,8 @@ function CustomToolbar({ apiRef }) {
       { wch: 20 },
     ];
     worksheet["!cols"] = columnWidths;
-
+  
+    // Salvar arquivo
     XLSX.writeFile(workbook, "Relatorio_Comandas.xlsx");
   };
 
@@ -247,14 +251,14 @@ export default function TableDashboard({ startDate, endDate }) {
                 {
                   label: "Total de vendas",
                   data: paymentData.map((item) => item.total),
-                  backgroundColor: ["#54a3ff", "#67ff6a", "#ff9a00", "#ff5757", "#2d4059"],
+                  backgroundColor: ["#54a3ff", "#67ff6a", "#ff9a00", "#ff5757", "#2d4059", "#ce00ff", "#f0ff00"],
                   borderColor: "#fff",
                   borderWidth: 2,
                 },
               ],
             }}
-            height={100}
-            width={100}
+            height={50}
+            width={50}
           />
         ) : (
           <Bar
@@ -264,14 +268,14 @@ export default function TableDashboard({ startDate, endDate }) {
                 {
                   label: "Total de vendas",
                   data: paymentData.map((item) => item.total),
-                  backgroundColor: ["#54a3ff", "#67ff6a", "#ff9a00", "#ff5757", "#2d4059"],
+                  backgroundColor: ["#54a3ff", "#67ff6a", "#ff9a00", "#ff5757", "#2d4059", "#ce00ff", "#f0ff00"],
                   borderColor: "#fff",
                   borderWidth: 2,
                 },
               ],
             }}
-            height={100}
-            width={100}
+            height={50}
+            width={50}
           />
         )}
       </Box>

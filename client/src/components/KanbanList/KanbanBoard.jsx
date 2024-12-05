@@ -7,6 +7,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import toast from "react-hot-toast";
 import "dayjs/locale/pt-br"; // Importação do locale do Dayjs
 import dayjs from "dayjs";
+import CommandModal from "../CreateCommand/CommandModal";
 
 export default function Kanban() {
   const [completed, setCompleted] = useState([]);

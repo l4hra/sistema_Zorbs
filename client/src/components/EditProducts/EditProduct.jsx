@@ -39,6 +39,11 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
     { value: "Picolé", label: "Picolé" },
   ];
 
+  const und_medidas = [
+    { value: "kg", label: "kg"},
+    { value: "unidade", label: "unidade"},
+  ]
+
   const handleValidation = () => {
     const precoCustoNum = preco_custo ? Number(preco_custo.replace(",", ".")) : 0;
     const precoVendaNum = preco_venda ? Number(preco_venda.replace(",", ".")) : 0;
@@ -167,12 +172,19 @@ export default function EditProduct({ closeEvent, refreshProducts, product }) {
             variant="outlined"
             size="small"
             fullWidth
+            select
             inputProps={{ maxLength: 10 }}
             error={errors.unidade_medida}
             helperText={errors.unidade_medida && "Campo obrigatório"}
             onChange={(e) => setUnidade_medida(e.target.value)}
             value={unidade_medida || ""}
-          />
+          >
+            {und_medidas.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
         </div>
 
         <div style={{ gridColumn: 'span 1' }}>
