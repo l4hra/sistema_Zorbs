@@ -209,7 +209,7 @@ export default function CommandModal({
     (acc, item) =>
       acc +
       (item.preco_venda || item.price || item.value_item || 0) *
-        (item?.quantity ?? 1),
+      (item?.quantity ?? 1),
     0
   );
 
@@ -410,16 +410,16 @@ export default function CommandModal({
           >
             <Button
               sx={{
-                backgroundColor: "#1976d2",
+                backgroundColor: "#46C001",
                 "&:hover": {
-                  backgroundColor: "#115293",
+                  backgroundColor: "#3EA201",
                 },
                 color: "#fff",
                 width: "15%",
               }}
               onClick={fetchUpdateCommand}
             >
-              Editar
+              Salvar
             </Button>
 
             <Button

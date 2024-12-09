@@ -201,24 +201,11 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
 
             <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
                 <Button
-                    onClick={closeEvent}
-                    sx={{
-                        width: 150,
-                        color: "white",
-                        mr: 1,
-                        backgroundColor: "#f8615b",
-                        "&:hover": {
-                            backgroundColor: "#FF0000",
-                        },
-                    }}
-                >
-                    Cancelar
-                </Button>
-                <Button
                     onClick={updateUser}
                     sx={{
                         width: 150,
                         color: "white",
+                        mr: 1,
                         backgroundColor: "#09A176",
                         "&:hover": {
                             backgroundColor: "#388e3c",
@@ -226,6 +213,19 @@ export default function EditUsers({ closeEvent, refreshUser, user }) {
                     }}
                 >
                     Atualizar
+                </Button>
+                <Button
+                    onClick={closeEvent}
+                    sx={{
+                        width: 150,
+                        color: "white",
+                        backgroundColor: "#f8615b",
+                        "&:hover": {
+                            backgroundColor: "#FF0000",
+                        },
+                    }}
+                >
+                    Cancelar
                 </Button>
             </Box>
         </Box>
