@@ -1,6 +1,6 @@
 # Sistema Zorbs
 
-![Sistema Zorbs](https://via.placeholder.com/1200x400?text=Sistema+Zorbs)
+![ZORBS](https://github.com/user-attachments/assets/88cf699e-26b0-49b1-bf11-7250d8b4b4dd)
 
 ## Sobre o Projeto
 
